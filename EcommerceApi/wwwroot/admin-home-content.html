@@ -1,0 +1,606 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Contenu Home</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <style>
+        .homeTabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .homeTabBtn {
+            min-height: 46px;
+            padding: 0 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,.08);
+            background: #0f172a;
+            color: #e5e7eb;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+            .homeTabBtn:hover {
+                border-color: rgba(34,197,94,.30);
+                transform: translateY(-1px);
+            }
+
+            .homeTabBtn.active {
+                background: linear-gradient(135deg, #22c55e, #16a34a);
+                color: #05210e;
+                border-color: transparent;
+                box-shadow: 0 10px 24px rgba(34,197,94,.28);
+            }
+
+        .adminBlock {
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            padding: 16px;
+            background: rgba(15,23,42,.45);
+            margin-bottom: 14px;
+        }
+
+        .adminBlockTitle {
+            font-size: 15px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            color: #f8fafc;
+        }
+
+        .adminGrid2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            gap: 12px;
+        }
+
+        .adminGrid3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0,1fr));
+            gap: 12px;
+        }
+
+        .adminActionsRow {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .adminCheck {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .adminSubmitRow {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .adminHint {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 980px) {
+            .adminGrid2,
+            .adminGrid3 {
+                grid-template-columns: 1fr;
+            }
+
+            .homeTabBtn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .eventCard {
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            background: #0f172a;
+        }
+
+        .eventCardHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .eventBadges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .eventBadge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #1f2937;
+        }
+
+        #appHeader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 3000;
+            background: #0f172a;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            box-shadow: 0 8px 24px rgba(0,0,0,.22);
+        }
+
+        body {
+            padding-top: 92px;
+        }
+    </style>
+</head>
+
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">
+                            Gestion complète du contenu de la page d’accueil
+                        </p>
+                    </section>
+
+
+
+
+
+                    <div class="homeTabs">
+                        <button class="homeTabBtn active" id="tabPromo">Bannière promo</button>
+                        <button class="homeTabBtn" id="tabReviews">Avis clients</button>
+                        <button class="homeTabBtn" id="tabSections">Sections home</button>
+                        <button class="homeTabBtn" id="tabSectionItems">Items de section</button>
+                        <button class="homeTabBtn" id="tabEvents">Fêtes & événements</button>
+                    </div>
+
+
+                    <!-- ================= PROMO BANNER ================= -->
+                    <!-- ================= PROMO BANNER ================= -->
+
+                    <section id="promoPanel">
+
+                        <div class="box" style="margin-bottom:16px">
+
+                            <div style="font-weight:800;margin-bottom:12px">Bannière promo home</div>
+
+                            <div style="display:grid;gap:10px;max-width:650px">
+
+                                <input id="promoTitle" class="input" placeholder="Titre principal">
+
+                                <textarea id="promoSubtitle" class="input" placeholder="Sous-titre"></textarea>
+
+                                <textarea id="promoDescription" class="input" placeholder="Description courte"></textarea>
+
+                                <input id="promoCode" class="input" placeholder="Code promo">
+
+                                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+
+                                    <select id="promoLinkType" class="input">
+                                        <option value="promo">Page promotions</option>
+
+                                        <option value="promo-search">Promo + recherche</option>
+                                        <option value="promo-category">Promo + catégorie</option>
+                                        <option value="custom">Lien personnalisé</option>
+                                    </select>
+
+                                    <input id="promoCategoryValue" class="input" placeholder="Slug catégorie (ex: femme, chaussures)" style="display:none;">
+
+                                    <input id="promoSearchValue" class="input" placeholder="Mot-clé recherche (ex: robe, basket)" style="display:none;">
+
+                                </div>
+
+                                <input id="promoBtn1Text" class="input" placeholder="Bouton principal">
+                                <input id="promoBtn1Url" class="input" placeholder="Lien bouton principal">
+
+                                <input id="promoBtn2Text" class="input" placeholder="Bouton secondaire">
+                                <input id="promoBtn2Url" class="input" placeholder="Lien bouton secondaire">
+
+                                <hr>
+
+                                <input id="promoSideTitle" class="input" placeholder="Titre bloc droit">
+                                <textarea id="promoSideText" class="input" placeholder="Texte bloc droit"></textarea>
+
+                                <input id="promoBackgroundImageUrl" class="input" placeholder="Image de fond URL">
+                                <input id="promoBackgroundFile" type="file" accept=".jpg,.jpeg,.png,.webp" class="input">
+                                <button type="button" class="btn btnGhost" id="btnUploadPromoBg">Uploader image fond</button>
+
+                                <select id="promoTheme" class="input">
+                                    <option value="promo">Promo</option>
+                                    <option value="flash">Flash</option>
+                                    <option value="brand">Brand</option>
+                                    <option value="light">Light</option>
+                                    <option value="luxury">Luxury</option>
+                                </select>
+
+                                <input id="promoAccentColor" class="input" placeholder="Couleur accent (ex: #22c55e)">
+
+                                <select id="promoPosition" class="input">
+                                    <option value="after-hero">Après le hero</option>
+                                    <option value="top">Haut de page</option>
+                                    <option value="mid-home">Milieu de home</option>
+                                </select>
+
+                                <input id="promoPriority" type="number" min="1" value="1" class="input" placeholder="Priorité">
+
+                                <label style="font-size:13px;color:#9ca3af;">Début campagne</label>
+                                <input id="promoStartAt" type="datetime-local" class="input">
+
+                                <label style="font-size:13px;color:#9ca3af;">Fin campagne</label>
+                                <input id="promoEndAt" type="datetime-local" class="input">
+
+                                <label style="display:flex;gap:8px;align-items:center">
+                                    <input type="checkbox" id="promoIsActive">
+                                    <span>Activer</span>
+                                </label>
+
+                                <button class="btn" id="btnSavePromo">Sauvegarder</button>
+
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <!-- ================= REVIEWS ================= -->
+
+                    <section id="reviewsPanel" style="display:none">
+
+                        <div class="box" style="margin-bottom:16px">
+
+                            <div style="font-weight:800;margin-bottom:12px">Nouvel avis client</div>
+
+                            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+
+                                <input id="reviewCustomerName" class="input" placeholder="Nom client">
+
+                                <input id="reviewCustomerRole" class="input" placeholder="Profil">
+
+                                <input id="reviewCity" class="input" class="input" placeholder="Ville">
+
+                                <input id="reviewAvatarUrl" class="input" placeholder="Avatar URL">
+
+                                <input id="reviewAvatarFile" type="file" accept=".jpg,.jpeg,.png,.webp" class="input">
+
+                                <button type="button" class="btn btnGhost" id="btnUploadAvatar">Uploader avatar</button>
+
+                                <input id="reviewRating" type="number" min="1" max="5" value="5" class="input" placeholder="Note">
+
+                                <input id="reviewDisplayOrder" type="number" value="1" class="input" placeholder="Ordre">
+
+                            </div>
+
+<textarea id="reviewText" class="input" placeholder="Texte de l'avis" style="margin-top:10px"></textarea>
+
+                            <label style="display:flex;gap:8px;margin-top:10px">
+                                <input type="checkbox" id="reviewIsVerified">
+                                <span>Avis vérifié</span>
+                            </label>
+
+                            <label style="display:flex;gap:8px;margin-top:10px">
+                                <input type="checkbox" id="reviewIsActive" checked>
+                                <span>Activer</span>
+                            </label>
+
+                            <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap;">
+                                <button class="btn" id="btnSaveReview">Enregistrer</button>
+                                <button class="btn btnGhost" id="btnCancelReviewEdit" type="button" style="display:none;">Annuler modification</button>
+                            </div>
+
+                        </div>
+
+                        <div class="box">
+
+                            <div style="font-weight:800;margin-bottom:12px">Liste des avis</div>
+
+                            <div id="reviewList"></div>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- ================= SECTIONS ================= -->
+
+                    <section id="sectionsPanel" style="display:none">
+
+                        <div class="box" style="margin-bottom:16px">
+
+                            <div style="font-weight:800;margin-bottom:12px">Nouvelle section</div>
+
+                            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+
+                                <input id="sectionKey" class="input" placeholder="SectionKey (ex: why-choose-us)">
+
+                                <input id="sectionTitle" class="input" placeholder="Titre">
+
+                                <input id="sectionSubTitle" class="input" placeholder="Sous-titre">
+
+                                <input id="sectionDisplayOrder" type="number" class="input" value="1">
+
+                                <select id="sectionLayoutType" class="input">
+                                    <option value="services-grid">Grille services</option>
+                                    <option value="double-blocks">2 blocs promo</option>
+                                </select>
+
+                            </div>
+
+<textarea id="sectionDescription" class="input" placeholder="Description" style="margin-top:10px"></textarea>
+
+                            <label style="display:flex;gap:8px;margin-top:10px">
+                                <input type="checkbox" id="sectionIsActive" checked>
+                                <span>Activer</span>
+                            </label>
+
+                            <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap;">
+                                <button class="btn" id="btnSaveSection">Enregistrer</button>
+                                <button class="btn btnGhost" id="btnCancelSectionEdit" type="button" style="display:none;">Annuler modification</button>
+                            </div>
+
+                        </div>
+
+                        <div class="box">
+
+                            <div style="font-weight:800;margin-bottom:12px">Liste des sections</div>
+                            <div id="sectionAdminHint" style="margin-bottom:12px;"></div>
+
+                            <div id="sectionList"></div>
+
+                        </div>
+
+                    </section>
+
+
+                    <section id="sectionItemsPanel" style="display:none">
+
+                        <div class="box" style="margin-bottom:16px">
+                            <div style="font-weight:800;margin-bottom:12px">Nouvel item de section</div>
+
+                            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+                                <select id="itemSectionId" class="input"></select>
+
+                                <input id="itemTitle" class="input" placeholder="Titre">
+                                <input id="itemSubTitle" class="input" placeholder="Sous-titre">
+                                <input id="itemDisplayOrder" type="number" class="input" value="1" placeholder="Ordre">
+
+                                <input id="itemImageUrl" class="input" placeholder="Image URL">
+                                <input id="itemButtonText" class="input" placeholder="Texte bouton">
+                                <input id="itemButtonLink" class="input" placeholder="Lien bouton">
+
+                                <input id="itemBadgeText" class="input" placeholder="Badge">
+                                <input id="itemPriceText" class="input" placeholder="Texte prix">
+                                <input id="itemMetaText" class="input" placeholder="Texte meta">
+
+                                <input id="itemImageFile" type="file" accept=".jpg,.jpeg,.png,.webp" class="input">
+                                <button type="button" class="btn btnGhost" id="btnUploadSectionItemImage">Uploader image</button>
+                            </div>
+
+                            <textarea id="itemDescription" class="input" placeholder="Description" style="margin-top:10px"></textarea>
+
+                            <label style="display:flex;gap:8px;margin-top:10px">
+                                <input type="checkbox" id="itemIsActive" checked>
+                                <span>Activer</span>
+                            </label>
+
+                            <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap;">
+                                <button class="btn" id="btnSaveSectionItem">Enregistrer</button>
+                                <button class="btn btnGhost" id="btnCancelSectionItemEdit" type="button" style="display:none;">Annuler modification</button>
+
+
+                            </div>
+                        </div>
+
+                        <div class="box">
+                            <div style="font-weight:800;margin-bottom:12px">Liste des items</div>
+                            <div id="sectionItemList"></div>
+                        </div>
+
+                    </section>
+
+                    <section id="eventsPanel" style="display:none">
+
+                        <div class="box" style="margin-bottom:16px">
+                            <div style="font-weight:800;margin-bottom:16px">Nouvelle campagne événementielle</div>
+
+                            <div class="adminBlock">
+                                <div class="adminBlockTitle">Contenu</div>
+                                <div class="adminGrid3">
+                                    <input id="eventTitle" class="input" placeholder="Titre (ex: Ramadan 2026)">
+                                    <input id="eventSubtitle" class="input" placeholder="Sous-titre">
+                                    <input id="eventBadgeText" class="input" placeholder="Badge (ex: Ramadan)">
+                                </div>
+                            </div>
+
+                            <div class="adminBlock">
+                                <div class="adminBlockTitle">Saisonnier</div>
+
+                                <div class="adminGrid3">
+                                    <label class="adminCheck">
+                                        <input type="checkbox" id="eventIsSeasonal">
+                                        <span>Campagne saisonnière</span>
+                                    </label>
+
+                                    <label class="adminCheck">
+                                        <input type="checkbox" id="eventAutoActivate" checked>
+                                        <span>Activation automatique</span>
+                                    </label>
+
+                                    <div>
+                                        <label>Priorité</label>
+                                        <input id="eventPriority" type="number" class="input" value="1">
+                                    </div>
+                                </div>
+
+
+                                <div class="adminGrid3" id="eventSeasonalFields" style="margin-top:12px;display:none;">
+                                    <select id="eventSeasonKey" class="input">
+                                        <option value="">Choisir un événement</option>
+                                        <option value="ramadan">Ramadan</option>
+                                        <option value="tabaski">Tabaski</option>
+                                        <option value="noel">Noël</option>
+                                        <option value="back_to_school">Back to School</option>
+                                        <option value="saint_valentin">Saint Valentin</option>
+                                        <option value="black_friday">Black Friday</option>
+                                    </select>
+
+                                    <select id="eventAutoScheduleType" class="input">
+                                        <option value="">Type calendrier</option>
+                                        <option value="manual-range">Dates manuelles</option>
+                                        <option value="yearly-fixed">Dates fixes annuelles</option>
+                                    </select>
+
+                                    <div></div>
+                                </div>
+
+                                <div class="adminGrid2" id="eventFixedDateFields" style="margin-top:12px;display:none;">
+                                    <input id="eventMonthStart" type="number" min="1" max="12" class="input" placeholder="Mois début (1-12)">
+                                    <input id="eventDayStart" type="number" min="1" max="31" class="input" placeholder="Jour début (1-31)">
+                                    <input id="eventMonthEnd" type="number" min="1" max="12" class="input" placeholder="Mois fin (1-12)">
+                                    <input id="eventDayEnd" type="number" min="1" max="31" class="input" placeholder="Jour fin (1-31)">
+                                </div>
+
+                                <div class="adminHint" style="margin-top:8px">
+                                    Ramadan et Tabaski = dates manuelles. Noël / Back to School / Saint Valentin = dates fixes annuelles.
+                                </div>
+                            </div>
+
+
+                            <div class="adminBlock">
+                                <div class="adminBlockTitle">Action</div>
+                                <div class="adminGrid3">
+                                    <input id="eventButtonText" class="input" placeholder="Texte bouton">
+                                    <input id="eventButtonLink" class="input" placeholder="Lien bouton">
+
+                                    <select id="eventTargetType" class="input">
+                                        <option value="url">Lien personnalisé</option>
+                                        <option value="category">Catégorie</option>
+                                        <option value="products">Produits</option>
+                                    </select>
+
+                                    <select id="eventCategoryId" class="input">
+                                        <option value="">Choisir une catégorie (optionnel)</option>
+                                    </select>
+
+                                    <input id="eventDisplayOrder" type="number" class="input" value="1" placeholder="Ordre affichage">
+                                    <input id="eventBackgroundColor" class="input" placeholder="Couleur fond (ex: #0f172a)">
+                                    <input id="eventTextColor" class="input" placeholder="Couleur texte (ex: #ffffff)">
+                                </div>
+                            </div>
+
+                            <div class="adminBlock">
+                                <div class="adminBlockTitle">Visuels</div>
+
+                                <div class="adminGrid2">
+                                    <div>
+                                        <input id="eventDesktopImageUrl" class="input" placeholder="Image desktop URL">
+                                        <div class="adminHint">Image principale affichée sur desktop</div>
+
+                                        <input id="eventDesktopImageFile" type="file" accept=".jpg,.jpeg,.png,.webp" class="input">
+
+                                        <button type="button" class="btn btnGhost" id="btnUploadEventDesktop">
+                                            Uploader image desktop
+                                        </button>
+
+                                        <img id="eventFormPreviewImage"
+                                             style="margin-top:12px;border-radius:10px;max-width:320px;display:none;border:1px solid rgba(255,255,255,.1)">
+                                    </div>
+
+                                    <div>
+                                        <input id="eventMobileImageUrl" class="input" placeholder="Image mobile URL">
+                                        <div class="adminHint">Image optimisée pour mobile</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="adminBlock" id="eventPublicationBlock">
+                                <div class="adminBlockTitle">Publication</div>
+
+                                <div class="adminGrid2">
+                                    <div>
+                                        <label style="font-size:13px;color:#9ca3af;">Début campagne</label>
+                                        <input id="eventStartDate" type="datetime-local" class="input">
+                                    </div>
+
+                                    <div>
+                                        <label style="font-size:13px;color:#9ca3af;">Fin campagne</label>
+                                        <input id="eventEndDate" type="datetime-local" class="input">
+                                    </div>
+                                </div>
+
+                                <div class="adminActionsRow">
+                                    <label class="adminCheck">
+                                        <input type="checkbox" id="eventIsActive" checked>
+                                        <span>Activer</span>
+                                    </label>
+
+                                    <label class="adminCheck">
+                                        <input type="checkbox" id="eventIsFeatured">
+                                        <span>Mettre en avant</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="adminSubmitRow">
+                                <button class="btn" id="btnSaveEvent">Enregistrer</button>
+                                <button class="btn btnGhost" id="btnCancelEventEdit" type="button" style="display:none;">
+                                    Annuler modification
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="box">
+                            <div style="font-weight:800;margin-bottom:12px">Liste des campagnes</div>
+
+                            <div style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start;">
+                                <div id="eventList"></div>
+
+                                <div class="box" id="eventSidePreviewBox" style="display:none;position:sticky;top:90px;">
+                                    <div style="font-weight:800;margin-bottom:12px">Aperçu image</div>
+                                    <img id="eventSidePreviewImage"
+                                         style="width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.08);display:none;object-fit:cover;max-height:320px;">
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+
+                </div> <!-- container -->
+            </div> <!-- page-admin -->
+        </main>
+
+    </div> <!-- admin-shell -->
+
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/admin-home-content.js?v=7"></script>
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Vendor - Mes paiements</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+  
+
+    <style>
+        :root {
+            --bg: #0b1220;
+            --card: #111827;
+            --bd: #1f2937;
+            --txt: #e5e7eb;
+            --mut: #94a3b8;
+            --acc: #22c55e;
+            --warn: #fbbf24;
+            --bad: #fca5a5;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--txt);
+            font-family: Arial;
+            margin: 0
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 18px 16px 40px
+        }
+
+        h1 {
+            margin: 8px 0 16px;
+            font-weight: 900
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: 16px;
+            padding: 14px
+        }
+
+        .grid {
+            display: grid;
+            gap: 12px
+        }
+
+        .grid-3 {
+            grid-template-columns: 2fr 1fr 1fr
+        }
+
+        @media (max-width:900px) {
+            .grid-3 {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .mut {
+            color: var(--mut)
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .input, select {
+            background: #0f172a;
+            color: var(--txt);
+            border: 1px solid var(--bd);
+            border-radius: 12px;
+            padding: 10px 12px;
+            outline: none
+        }
+
+        .btn {
+            background: linear-gradient(180deg,#22c55e,#16a34a);
+            color: #06110a;
+            border: 0;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-weight: 800;
+            cursor: pointer
+        }
+
+            .btn.ghost {
+                background: #0f172a;
+                color: var(--txt);
+                border: 1px solid var(--bd)
+            }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px
+        }
+
+        th {
+            color: var(--mut);
+            text-align: left;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 0 10px
+        }
+
+        td {
+            background: #0f172a;
+            border: 1px solid var(--bd);
+            padding: 12px 10px
+        }
+
+        tr td:first-child {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px
+        }
+
+        tr td:last-child {
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 12px;
+            border: 1px solid var(--bd)
+        }
+
+            .badge.paid {
+                background: rgba(34,197,94,.12);
+                color: #86efac;
+                border-color: rgba(34,197,94,.25)
+            }
+
+            .badge.pending {
+                background: rgba(251,191,36,.12);
+                color: #fde68a;
+                border-color: rgba(251,191,36,.25)
+            }
+
+        .money {
+            font-weight: 900
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,.55);
+            padding: 18px;
+            z-index: 999
+        }
+
+            .modal .box {
+                max-width: 900px;
+                width: 100%
+            }
+
+        .close {
+            float: right;
+            cursor: pointer;
+            color: var(--mut);
+            font-weight: 900
+        }
+
+        .mini {
+            font-size: 12px;
+            color: var(--mut)
+        }
+
+        /* ====== TOP BAR (comme Commandes) ====== */
+        .v-top {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+            background: rgba(15,23,42,.65);
+            border-bottom: 1px solid rgba(148,163,184,.18);
+        }
+
+        .v-top-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(34,197,94,.55);
+        }
+
+            .logo img {
+                width: 80%;
+                height: 80%;
+                object-fit: contain;
+                display: block;
+            }
+
+        .who b {
+            display: block;
+            font-size: 14px;
+        }
+
+        .who span {
+            display: block;
+            color: var(--mut);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+            .nav a {
+                text-decoration: none;
+                color: var(--txt);
+                background: rgba(2,6,23,.45);
+                border: 1px solid rgba(148,163,184,.18);
+                padding: 9px 12px;
+                border-radius: 999px;
+                font-size: 13px;
+            }
+
+                .nav a.active {
+                    border-color: rgba(34,197,94,.55);
+                    box-shadow: 0 0 0 3px rgba(34,197,94,.12);
+                }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btnTop {
+            background: rgba(2,6,23,.45);
+            color: var(--txt);
+            border: 1px solid rgba(148,163,184,.22);
+            padding: 9px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+            .btnTop.primary {
+                border-color: rgba(34,197,94,.55);
+            }
+
+            .btnTop.danger {
+                border-color: rgba(239,68,68,.55);
+            }
+
+        @media(max-width:560px) {
+            .nav {
+                display: none;
+            }
+        }
+
+        .badge.refund {
+            background: rgba(239,68,68,.15);
+            color: #fca5a5;
+            border-color: rgba(239,68,68,.25);
+        }
+    </style>
+</head>
+
+<body class="admin-body">
+
+    <!-- NAV pleine largeur -->
+    <div id="vendorNav"></div>
+
+    <!-- CONTENU centré -->
+    <div class="wrap">
+
+
+        <div class="card" style="margin-top:12px">
+            <div class="row" style="justify-content:space-between;align-items:flex-end">
+                <div>
+                    <div class="mut" style="font-weight:800">Période</div>
+                    <div id="period" style="font-size:16px;font-weight:900;margin-top:6px">—</div>
+                    <div class="mini">Total payé (semaine) : <b id="totalWeek">—</b></div>
+                </div>
+
+                <div class="row">
+                    <select id="selWeek" class="input">
+                        <option value="0">Cette semaine</option>
+                        <option value="1">Semaine -1</option>
+                        <option value="2">Semaine -2</option>
+                        <option value="3">Semaine -3</option>
+                    </select>
+                    <button class="btn ghost" id="btnReload" type="button">Rafraîchir</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIST -->
+        <div class="card" style="margin-top:12px">
+            <div class="row" style="justify-content:space-between">
+                <div>
+                    <div style="font-weight:900">Historique des paiements</div>
+                    <div class="mut" style="font-size:13px">Chaque ligne correspond à une livraison payée.</div>
+                </div>
+                <div class="row">
+                    <input id="txtSearch" class="input" placeholder="Rechercher (OrderItem:123, date…)" />
+                    <span class="badge pending" id="count">0</span>
+                </div>
+            </div>
+
+            <div id="msg" class="mut" style="margin-top:10px">Chargement…</div>
+
+            <div style="overflow:auto;margin-top:10px">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Référence</th>
+                            <th>Montant</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DETAIL -->
+    <div class="modal" id="modal">
+        <div class="box card">
+            <div class="close" id="btnClose">✕</div>
+            <div style="font-weight:900;font-size:18px">Détail paiement</div>
+            <div class="mut" id="mSub" style="margin-top:4px">—</div>
+
+            <div class="grid" style="margin-top:10px">
+                <div class="card" style="padding:12px">
+                    <div class="row" style="justify-content:space-between">
+                        <div>
+                            <div class="mut" style="font-weight:800">Montant crédité</div>
+                            <div class="money" id="mAmount">—</div>
+                        </div>
+                        <div>
+                            <div class="mut" style="font-weight:800">Référence</div>
+                            <div id="mRef">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="padding:12px">
+                    <div class="row" style="justify-content:space-between;align-items:flex-start;gap:14px">
+                        <div style="flex:1;min-width:260px">
+                            <div style="font-weight:900">Produit / Livraison</div>
+                            <div class="mut" id="mProd">—</div>
+
+                            <div class="row" style="margin-top:8px;gap:14px">
+                                <div><span class="mut">Qté:</span> <b id="mQty">—</b></div>
+                                <div><span class="mut">PU:</span> <b id="mPrice">—</b></div>
+                                <div><span class="mut">Commission:</span> <b id="mFee">—</b></div>
+                                <div><span class="mut">Net vendeur:</span> <b id="mNet">—</b></div>
+                            </div>
+
+                            <div class="mini" id="mDates" style="margin-top:10px">—</div>
+                        </div>
+
+                        <div style="width:140px;flex:0 0 140px">
+                            <img id="mImg" alt="Produit"
+                                 style="width:140px;height:140px;border-radius:14px;object-fit:cover;border:1px solid rgba(255,255,255,.12);background:#0f172a;display:none" />
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- .grid -->
+        </div> <!-- .box card -->
+    </div> <!-- .modal -->
+    <!-- scripts -->
+	<script src="/assets/js/vendor-nav.js?v=100000"></script>
+    <script src="/assets/js/vendor-payments.js?v=2002"></script>
+    <script>
+        VendorNav.initVendorPage({ active: "/vendor-payments.html" });
+        window.initVendorPaymentsPage && window.initVendorPaymentsPage();
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Utilisateurs</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+</head>
+
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+ 
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">Gestion des comptes administrateurs et des rôles</p>
+                    </section>
+
+
+
+                    <section class="card">
+                        <h2>Ajouter un utilisateur</h2>
+
+                        <div class="form-grid">
+                            <div class="field">
+                                <label>Nom d’utilisateur</label>
+                                <input id="txtUsername" placeholder="ex: admin" />
+                            </div>
+
+                            <div class="field">
+                                <label>Mot de passe</label>
+                                <input id="txtPassword" type="password" placeholder="••••••" />
+                            </div>
+
+                            <div class="field">
+                                <label>Rôle</label>
+                                <select id="selRole"></select>
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <button class="btn btn-primary" id="btnCreate" type="button">Créer</button>
+                            <button class="btn" id="btnReset" type="button">Réinitialiser</button>
+                        </div>
+                    </section>
+
+                    <section class="card">
+                        <div class="list-head">
+                            <h2>Liste</h2>
+                            <input class="search" id="txtSearch" placeholder="Rechercher..." />
+                        </div>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Utilisateur</th>
+                                        <th>Rôle</th>
+                                        <th>Actif</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersBody"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+
+    <script src="/assets/js/app.js?v=3000" defer></script>
+    <script src="/assets/js/admin-users.js?v=1000" defer></script>
+
+
+
+
+</body>
+</html>

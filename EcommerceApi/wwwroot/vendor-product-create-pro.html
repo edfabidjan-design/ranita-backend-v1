@@ -1,0 +1,583 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Vendor - Nouveau produit (PRO)</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+ 
+
+
+    <style>
+        :root {
+            --bg: #0b1220;
+            --card: #111827;
+            --bd: #1f2937;
+            --txt: #e5e7eb;
+            --mut: #94a3b8;
+            --acc: #22c55e;
+            --bad: #fca5a5;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--txt);
+            font-family: Arial;
+            margin: 0;
+        }
+
+        .vp-wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 18px 16px 40px;
+        }
+
+        .vp-muted {
+            color: var(--mut);
+            font-size: 13px;
+        }
+
+        .vp-h1 {
+            margin: 10px 0 6px;
+            font-size: 34px;
+            font-weight: 900;
+        }
+
+        .vp-grid {
+            display: grid;
+            grid-template-columns: 1.15fr .85fr;
+            gap: 14px;
+            margin-top: 12px;
+            align-items: start;
+        }
+
+        @media(max-width:980px) {
+            .vp-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vp-card {
+            background: rgba(17,24,39,.75);
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 18px;
+            padding: 16px;
+            overflow: hidden;
+        }
+
+        .vp-sectionTitle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 6px 0 0;
+        }
+
+            .vp-sectionTitle h2 {
+                margin: 0;
+                font-size: 15px;
+            }
+
+        .vp-pill {
+            font-size: 12px;
+            color: var(--mut);
+        }
+
+        .vp-hr {
+            height: 1px;
+            background: rgba(148,163,184,.12);
+            margin: 14px 0;
+        }
+
+        .vp-label {
+            display: block;
+            font-size: 13px;
+            color: rgba(229,231,235,.9);
+            margin: 10px 0 6px;
+        }
+
+        .vp-input, .vp-textarea, .vp-select {
+            width: 100%;
+            box-sizing: border-box;
+            background: rgba(2,6,23,.45);
+            color: var(--txt);
+            border: 1px solid rgba(148,163,184,.22);
+            border-radius: 12px;
+            padding: 10px 12px;
+            outline: none;
+        }
+
+        .vp-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media(max-width:700px) {
+            .vp-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vp-btns {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .vp-btn {
+            background: rgba(2,6,23,.45);
+            color: var(--txt);
+            border: 1px solid rgba(148,163,184,.22);
+            padding: 10px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .vp-btnPrimary {
+            border-color: rgba(34,197,94,.55);
+        }
+
+        .vp-btnDanger {
+            border-color: rgba(239,68,68,.45);
+        }
+
+        .vp-msg {
+            margin-top: 10px;
+            font-size: 13px;
+            display: none;
+        }
+
+            .vp-msg.ok {
+                color: #86efac;
+            }
+
+            .vp-msg.err {
+                color: var(--bad);
+            }
+
+        /* DYN ATTRS */
+        .vp-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        @media(max-width:700px) {
+            .vp-fields {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* VARIANTS */
+        .vp-tagsBox {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px;
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 12px;
+            background: rgba(2,6,23,.25);
+        }
+
+            .vp-tagsBox input {
+                width: auto;
+                flex: 1;
+                min-width: 140px;
+                border: 0;
+                background: transparent;
+                padding: 6px 6px;
+                outline: none;
+                color: var(--txt);
+            }
+
+        .vp-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,.22);
+            background: rgba(2,6,23,.35);
+            font-size: 13px;
+        }
+
+            .vp-tag button {
+                border: 0;
+                background: transparent;
+                color: var(--mut);
+                cursor: pointer;
+                font-size: 16px;
+                line-height: 1;
+            }
+
+        .vp-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+            .vp-table th, .vp-table td {
+                border-bottom: 1px solid rgba(148,163,184,.12);
+                padding: 10px 8px;
+                text-align: left;
+                font-size: 13px;
+            }
+
+            .vp-table th {
+                color: rgba(229,231,235,.85);
+                font-weight: 700;
+            }
+
+        .vp-hint {
+            margin-top: 8px;
+            color: var(--mut);
+            font-size: 13px;
+        }
+
+        /* IMAGES */
+        .vp-gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .vp-queueTop {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .vp-mainPrev {
+            width: 100%;
+            aspect-ratio: 16/11;
+            object-fit: contain;
+            background: rgba(2,6,23,.25);
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 14px;
+        }
+
+        .vp-qGrid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 10px;
+        }
+
+        @media(max-width:500px) {
+            .vp-qGrid {
+                grid-template-columns: repeat(2,1fr);
+            }
+        }
+
+        .vp-qCard {
+            position: relative;
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 14px;
+            overflow: hidden;
+            background: rgba(2,6,23,.25);
+        }
+
+            .vp-qCard img {
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+                display: block;
+            }
+
+        .vp-qDel {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,.22);
+            background: rgba(2,6,23,.55);
+            color: var(--txt);
+            cursor: pointer;
+        }
+
+        .vp-qBadge {
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(34,197,94,.45);
+            background: rgba(34,197,94,.12);
+            color: #86efac;
+        }
+
+        /* Preview */
+        .vp-prevTitle {
+            font-weight: 900;
+            font-size: 16px;
+        }
+
+        .vp-prevPrice {
+            font-weight: 900;
+        }
+
+        .vp-prevMeta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            color: var(--mut);
+            font-size: 13px;
+        }
+
+        .vp-prevDesc {
+            color: rgba(229,231,235,.9);
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+
+        /* fix saisie invisible */
+        /* ✅ Texte saisi */
+        .vp-input,
+        .vp-textarea,
+        .vp-select {
+            color: var(--txt) !important;
+            caret-color: var(--txt) !important;
+            -webkit-text-fill-color: var(--txt) !important;
+        }
+
+            /* ✅ Placeholder (gris) — force WebKit */
+            .vp-input::placeholder,
+            .vp-textarea::placeholder {
+                color: rgba(148,163,184,.55) !important;
+                opacity: 1 !important;
+                font-weight: 400 !important;
+                -webkit-text-fill-color: rgba(148,163,184,.55) !important;
+            }
+
+            /* ✅ Compat Chrome (ancien pseudo) */
+            .vp-input::-webkit-input-placeholder,
+            .vp-textarea::-webkit-input-placeholder {
+                color: rgba(148,163,184,.55) !important;
+                -webkit-text-fill-color: rgba(148,163,184,.55) !important;
+            }
+
+        /* TOPBAR */
+        .vp-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(148,163,184,.12);
+            background: rgba(2,6,23,.6);
+            backdrop-filter: blur(6px);
+        }
+
+        .vp-topbar-left,
+        .vp-topbar-right {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="vp-wrap">
+
+        <div class="vp-topbar">
+            <div class="vp-topbar-left">
+                <button class="vp-btn" id="btnDashboard" type="button">
+                    ↩ Dashboard
+                </button>
+            </div>
+
+            <div class="vp-topbar-right">
+                <button class="vp-btn" id="btnBack" type="button">
+                    ← Mes produits
+                </button>
+            </div>
+        </div>
+
+
+        <div class="vp-h1">Nouveau produit (PRO)</div>
+        <div class="vp-muted">
+            Création vendor → <b>Pending</b> (validation admin). Variantes, attributs et images inclus.
+        </div>
+
+        <div class="vp-grid">
+            <!-- LEFT -->
+            <div class="vp-card">
+                <div class="vp-sectionTitle">
+                    <h2>Infos produit</h2>
+                    <span class="vp-pill">SKU obligatoire</span>
+                </div>
+
+                <div class="vp-row">
+                    <div>
+                        <label class="vp-label">Catégorie (leaf)</label>
+                        <select id="selProdCategory" class="vp-select"></select>
+                        <div class="vp-muted">
+                            Choisis une sous-catégorie finale (ex: Mode &gt; Homme &gt; Chaussures &gt; Basket).
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="vp-label">SKU *</label>
+                        <input id="sku" class="vp-input" placeholder="Ex: RN-BASK-001" />
+                    </div>
+                </div>
+
+                <label class="vp-label">Nom du produit *</label>
+                <input id="name" class="vp-input" maxlength="60" placeholder="Ex: Basket Nike Air..." />
+                <div class="vp-muted" id="nameCount">0 / 60</div>
+
+                <!-- Prix / Promo / Stock -->
+                <div class="vp-row">
+                    <div>
+                        <label class="vp-label">Prix (FCFA) *</label>
+                        <input id="price" class="vp-input" type="number" min="0" step="1" placeholder="Ex: 25000" />
+                    </div>
+
+                    <div>
+                        <label class="vp-label">Prix promo (FCFA)</label>
+                        <input id="pricePromo" class="vp-input" type="number" min="0" step="1" placeholder="Ex: 19900" />
+                        <div class="vp-muted">Optionnel. Doit être inférieur au prix.</div>
+                    </div>
+                </div>
+
+                <div class="vp-row" style="margin-top:10px">
+                    <div>
+                        <label class="vp-label">Stock *</label>
+                        <input id="stock" class="vp-input" type="number" min="0" step="1" placeholder="Ex: 10" />
+                        <div class="vp-muted">Si variantes, le stock total est calculé automatiquement.</div>
+                    </div>
+                    <div>
+                        <label class="vp-label">Marque</label>
+                        <input id="brand" class="vp-input" placeholder="Ex: HP, Dell, Nike..." />
+                        <div class="vp-muted">Optionnel.</div>
+                    </div>
+                </div>
+
+                <!-- IMAGES -->
+                <div class="vp-hr"></div>
+                <div class="vp-sectionTitle">
+                    <h2>Images</h2>
+                    <span class="vp-pill"><span id="galCount">0 / 6</span></span>
+                </div>
+
+                <div class="vp-gallery" id="prodGallery">
+                    <div class="vp-queueTop">
+                        <div class="vp-muted">Sélectionne jusqu’à 6 images (la 1ère = principale).</div>
+                        <input id="fileProdImages" type="file" accept="image/*" multiple />
+                    </div>
+
+                    <img id="prevImg" class="vp-mainPrev" src="/assets/placeholder.png" alt="preview" />
+                    <div class="vp-qGrid" id="imgQueue"></div>
+                </div>
+
+                <div class="vp-hr"></div>
+
+                <label class="vp-label">Description courte</label>
+                <textarea id="txtProdShort" class="vp-textarea" rows="2" placeholder="Résumé court (1–2 lignes)"></textarea>
+
+                <label class="vp-label">Description</label>
+                <textarea id="txtProdDesc" class="vp-textarea" rows="4" placeholder="Description détaillée..."></textarea>
+
+                <label class="vp-label">Highlights (points clés)</label>
+                <textarea id="txtProdHighlights" class="vp-textarea" rows="3" placeholder="- Point 1&#10;- Point 2"></textarea>
+
+                <div class="vp-hr"></div>
+
+                <!-- DYNAMIC ATTRS -->
+                <div class="vp-sectionTitle">
+                    <h2>Attributs (fiche produit)</h2>
+                    <span class="vp-pill">Selon catégorie</span>
+                </div>
+                <div id="dynAttrsBox" class="vp-fields" style="margin-top:10px">
+                    <div class="vp-muted">Choisis une catégorie…</div>
+                </div>
+
+                <div class="vp-hr"></div>
+
+                <!-- VARIANTS -->
+                <div class="vp-sectionTitle">
+                    <h2>Variantes</h2>
+                    <span class="vp-pill">Max 2 (IsVariant=true)</span>
+                </div>
+
+                <div style="margin-top:8px">
+                    <div id="variantsHint" class="vp-hint">Choisis une catégorie…</div>
+
+                    <div id="sizesBlock" style="display:none;margin-top:10px">
+                        <label class="vp-label" id="lblSizes">Option 1</label>
+                        <div class="vp-tagsBox" id="sizesBox">
+                            <input id="inpSize" list="dlSizes" placeholder="Entrer + Enter" />
+                        </div>
+                        <datalist id="dlSizes"></datalist>
+                    </div>
+
+                    <div id="colorsBlock" style="display:none;margin-top:10px">
+                        <label class="vp-label" id="lblColors">Option 2</label>
+                        <div class="vp-tagsBox" id="colorsBox">
+                            <input id="inpColor" list="dlColors" placeholder="Entrer + Enter" />
+                        </div>
+                        <datalist id="dlColors"></datalist>
+                    </div>
+
+                    <div class="vp-btns" style="margin-top:10px">
+                        <button class="vp-btn" id="btnGenVariants" type="button">⚙️ Générer variantes</button>
+                        <button class="vp-btn vp-btnDanger" id="btnClearVariants" type="button">🧹 Vider variantes</button>
+                    </div>
+
+                    <table class="vp-table" id="variantsTableWrap" style="display:none">
+                        <thead>
+                            <tr>
+                                <th id="thVar1">Option 1</th>
+                                <th id="thVar2">Option 2</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody id="variantsTbody"></tbody>
+                    </table>
+                </div>
+
+                <div id="msg" class="vp-msg"></div>
+
+                <div class="vp-btns">
+                    <button class="vp-btn" id="btnBack" type="button">← Retour</button>
+                    <button class="vp-btn" id="btnReset" type="button">↺ Réinitialiser</button>
+                    <button class="vp-btn vp-btnPrimary" id="btnSave" type="button">✅ Créer</button>
+                </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="vp-card">
+                <div class="vp-sectionTitle">
+                    <h2>Aperçu</h2>
+                    <span class="vp-pill">Live preview</span>
+                </div>
+
+                <div style="margin-top:12px;display:grid;gap:10px">
+                    <div class="vp-prevTitle" id="prevName">Nom du produit</div>
+                    <div class="vp-prevPrice" id="prevPrice">0 FCFA</div>
+                    <div class="vp-prevMeta">
+                        <span id="prevCat">Catégorie: …</span>
+                        <span id="prevStock">Stock: 0</span>
+                        <span id="prevBrand">Marque: —</span>
+                        <span id="prevSku">SKU: …</span>
+                    </div>
+                    <div class="vp-prevDesc" id="prevDesc">Description…</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/assets/js/vendor-app.js?v=20260221_99"></script>
+    <script src="/assets/js/vendor-product-create-pro.js?v=20260416_3"></script>
+
+
+
+
+</body>
+</html>

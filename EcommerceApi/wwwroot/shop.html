@@ -1,0 +1,177 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita - Boutique</title>
+    <link rel="stylesheet" href="/css/base.css?v=1" />
+
+    <style>
+        /* ✅ SHOP: texte des cartes en BLANC (titre + liens) */
+        .products-grid a,
+        .products-grid a:visited,
+        .products-grid a:hover,
+        .products-grid a:active {
+            color: #e5e7eb !important;w
+            text-decoration: none !important;
+        }
+
+        /* ✅ Titre produit en blanc (si tu as une classe titre) */
+        .products-grid .product-name,
+        .products-grid .name,
+        .products-grid .title,
+        .products-grid h3,
+        .products-grid h4 {
+            color: #e5e7eb !important;
+        }
+
+        /* (optionnel) hover un peu plus “premium” */
+        .products-grid a:hover .product-name,
+        .products-grid a:hover .name,
+        .products-grid a:hover .title,
+        .products-grid a:hover h3,
+        .products-grid a:hover h4 {
+            color: #ffffff !important;
+        }
+        .priceRow {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .priceNow {
+            color: #22c55e;
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .priceOld {
+            color: #9ca3af;
+            text-decoration: line-through;
+            font-weight: 800;
+            opacity: .9;
+        }
+
+        .promoBadge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(249,115,22,.45);
+            background: rgba(249,115,22,.12);
+            color: #f97316;
+            font-weight: 950;
+            font-size: 13px;
+        }
+        /* ✅ 2 colonnes sur mobile */
+        @media (max-width: 700px) {
+            #grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="wrap" style="max-width:1100px;margin:0 auto;padding:18px 16px">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+            <button class="btn btnGhost" onclick="history.back()">⬅ Retour</button>
+            <h2 id="shopTitle" style="margin:0">Boutique</h2>
+        </div>
+
+        <div id="msg" class="muted" style="margin-top:10px">Chargement…</div>
+        <div id="grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px"></div>
+    </div>
+
+    <script src="/assets/js/app.js?v=1"></script>
+    <script>
+    const API = window.API_BASE || location.origin;
+
+    const qs = (s, r=document) => r.querySelector(s);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[c]));
+
+    function fmt(n){
+      return (Number(n||0)).toLocaleString("fr-FR") + " FCFA";
+    }
+
+    function pickImg(p){
+      const raw = p?.mainImageUrl || p?.mainImage || p?.imageUrl || p?.image || "";
+      if (!raw) return "/assets/img/placeholder.jpg";
+      if (window.absUrl) return absUrl(raw);
+      return raw.startsWith("http") ? raw : (raw.startsWith("/") ? raw : "/"+raw);
+    }
+
+    function getVendorId(){
+      return new URL(location.href).searchParams.get("vendorId");
+    }
+
+        function promoHtml(price, promo) {
+            price = Number(price || 0);
+            promo = Number(promo || 0);
+
+            const hasPromo = promo > 0 && promo < price;
+
+            if (!hasPromo) {
+                return `<div class="priceNow">${fmt(price)}</div>`;
+            }
+
+            const pct = Math.round((1 - (promo / price)) * 100);
+
+            return `
+    <div class="priceRow">
+      <div class="priceNow">${fmt(promo)}</div>
+      <div class="priceOld">${fmt(price)}</div>
+      <span class="promoBadge">-${pct}%</span>
+    </div>
+  `;
+        }
+
+    async function load(){
+      const vendorId = getVendorId();
+      const msg = qs("#msg");
+      const grid = qs("#grid");
+      if(!vendorId){ msg.textContent = "vendorId manquant."; return; }
+
+      // ✅ Il faut un endpoint qui filtre par vendorId (voir section 3)
+      const res = await fetch(API + "/api/products?vendorId=" + encodeURIComponent(vendorId), { cache:"no-store" });
+      const text = await res.text();
+      const json = text ? JSON.parse(text) : null;
+
+      const items = Array.isArray(json) ? json : (json?.items || []);
+      if(!items.length){ msg.textContent = "Aucun produit dans cette boutique."; return; }
+
+      // titre boutique (si présent dans items)
+      const vn = items[0]?.vendorName || items[0]?.shopName || items[0]?.VendorName || "Boutique";
+      qs("#shopTitle").textContent = vn;
+
+      msg.textContent = "";
+      grid.innerHTML = items.map(p => {
+        const img = pickImg(p);
+        const name = esc(p?.name || "Produit");
+        const price = Number(p?.price || 0);
+        const promo = Number(p?.pricePromo || 0);
+        const eff = (promo > 0 && promo < price) ? promo : price;
+
+        return `
+          <a href="/product.html?id=${encodeURIComponent(p.id)}" style="text-decoration:none">
+            <div style="border:1px solid #1f2937;border-radius:14px;background:#111827;padding:10px">
+              <img src="${img}" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px"
+                   onerror="this.onerror=null;this.src='/assets/img/placeholder.jpg'">
+             <div style="margin-top:8px;font-weight:900;color:#e5e7eb">${name}</div>
+<div style="margin-top:6px">
+  ${promoHtml(price, promo)}
+</div>
+
+            </div>
+          </a>
+        `;
+      }).join("");
+    }
+
+    document.addEventListener("DOMContentLoaded", load);
+    </script>
+</body>
+</html>

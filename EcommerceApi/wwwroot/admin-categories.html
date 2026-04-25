@@ -1,0 +1,795 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Catégories</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <style>
+                /* ✅ Cartes centrées (même largeur) */
+                .card-narrow {
+                    width: 100%;
+                    max-width: 980px; /* ajuste 900/980/1050 */
+                    margin: 12px auto 0;
+                }
+
+                /* ✅ Header outils attributs */
+                .attr-head {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                }
+
+                .attr-tools {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                    .attr-tools .search {
+                        min-width: 260px;
+                    }
+
+                .attr-only {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    user-select: none;
+                    white-space: nowrap;
+                }
+
+                /* ✅ Checkboxes petites (ne pas laisser base.css les grossir) */
+                .attr-card input[type="checkbox"],
+                .card-narrow input[type="checkbox"] {
+                    width: 14px !important;
+                    height: 14px !important;
+                    min-width: 14px !important;
+                    min-height: 14px !important;
+                    transform: none !important;
+                    margin: 0 !important;
+                }
+
+                /* ✅ Liste attributs */
+                #catAttrsBoxWrap {
+                    margin-top: 10px;
+                    max-height: 260px;
+                    overflow: auto;
+                    padding-right: 6px;
+                }
+
+                #catAttrsBox {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                /* (optionnel) Si ton JS génère des rows */
+                .cat-attr-row {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    padding: 12px 14px;
+                    border-radius: 14px;
+                    background: rgba(255,255,255,.03);
+                    border: 1px solid rgba(255,255,255,.06);
+                }
+
+                .cat-attr-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    min-width: 0;
+                }
+
+                .cat-attr-title {
+                    font-weight: 800;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .cat-attr-sub {
+                    font-size: 12px;
+                    opacity: .65;
+                    margin-top: 2px;
+                }
+
+                .form-wrap {
+                    max-width: 1180px; /* largeur “pro” (ajuste si tu veux) */
+                    margin: 0 auto;
+                }
+
+                .grid-3 {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    gap: 16px;
+                }
+
+                .grid-2 {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 16px;
+                }
+
+                @media (max-width: 980px) {
+                    .grid-3, .grid-2 {
+                        grid-template-columns: 1fr;
+                    }
+                }
+
+                /* ✅ Attributs : pas full width, même style propre */
+                .attr-box {
+                    max-width: 980px;
+                    margin: 12px 0 0; /* aligné à gauche sous le formulaire */
+                }
+
+                .modal {
+                    position: fixed;
+                    inset: 0;
+                    background: rgba(0,0,0,.55);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 14px;
+                    z-index: 9999;
+                }
+
+                .modal-card {
+                    width: min(520px, 95vw);
+                    background: #111827;
+                    border: 1px solid #1f2937;
+                    border-radius: 16px;
+                    padding: 16px;
+                }
+
+
+                /* =========================
+           RESPONSIVE GLOBAL ADMIN CATEGORIES
+        ========================= */
+
+                .container {
+                    width: 100%;
+                    max-width: 1600px;
+                    margin: 0 auto;
+                    padding: 0 18px;
+                }
+
+                .page-admin {
+                    width: 100%;
+                }
+
+                .card {
+                    width: 100%;
+                    overflow: hidden;
+                }
+
+                .form-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 16px;
+                }
+
+                .grid-3 {
+                    display: grid;
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                    gap: 16px;
+                }
+
+                .grid-2 {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 16px;
+                }
+
+                .field {
+                    min-width: 0;
+                }
+
+                    .field input,
+                    .field select,
+                    .field textarea,
+                    .search {
+                        width: 100%;
+                        min-width: 0;
+                    }
+
+                .form-wrap,
+                .card-narrow,
+                .attr-box {
+                    width: 100%;
+                    max-width: 100%;
+                }
+
+                .attr-card {
+                    width: 100%;
+                    min-width: 0;
+                }
+
+                .attr-head {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                }
+
+                .attr-tools {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    flex-wrap: wrap;
+                    width: 100%;
+                }
+
+                    .attr-tools .search {
+                        flex: 1 1 260px;
+                        min-width: 180px;
+                    }
+
+                .attr-only {
+                    flex: 0 0 auto;
+                }
+
+                #btnSaveCatAttrs {
+                    flex: 0 0 auto;
+                }
+
+                .actions {
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
+                }
+
+                    .actions .btn {
+                        min-width: 140px;
+                    }
+
+                .list-head {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                }
+
+                    .list-head .search {
+                        width: 100%;
+                        max-width: 320px;
+                    }
+
+                .table-wrap {
+                    width: 100%;
+               
+                    -webkit-overflow-scrolling: touch;
+                    border-radius: 14px;
+                }
+
+
+                    .table-wrap th,
+                    .table-wrap td {
+                        white-space: nowrap;
+                    }
+
+
+
+                    td:last-child .btn,
+                    td:last-child button,
+                    td:last-child a {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        white-space: nowrap;
+                        margin-right: 8px;
+                    }
+
+                        td:last-child .btn:last-child,
+                        td:last-child button:last-child,
+                        td:last-child a:last-child {
+                            margin-right: 0;
+                        }
+
+                .action-cell {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    gap: 8px;
+                    flex-wrap: nowrap;
+                    min-width: 240px;
+                }
+                /* =========================
+           TABLETTE
+        ========================= */
+                @media (max-width: 1100px) {
+                    .grid-3 {
+                        grid-template-columns: 1fr 1fr;
+                    }
+
+                    .form-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+
+                /* =========================
+           MOBILE
+        ========================= */
+                @media (max-width: 768px) {
+                    .container {
+                        padding: 0 12px;
+                    }
+
+                    .card {
+                        padding: 14px;
+                    }
+
+                    .grid-3,
+                    .grid-2,
+                    .form-grid {
+                        grid-template-columns: 1fr;
+                        gap: 14px;
+                    }
+
+                    .attr-head {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+
+                    .attr-tools {
+                        flex-direction: column;
+                        align-items: stretch;
+                        width: 100%;
+                    }
+
+                        .attr-tools .search,
+                        #btnSaveCatAttrs {
+                            width: 100%;
+                            min-width: 0;
+                        }
+
+                    .attr-only {
+                        width: 100%;
+                        justify-content: flex-start;
+                    }
+
+                    .actions {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+
+                        .actions .btn {
+                            width: 100%;
+                            min-width: 0;
+                        }
+
+                    .list-head {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+
+                        .list-head .search {
+                            max-width: 100%;
+                        }
+
+                    #catAttrsBoxWrap {
+                        max-height: 300px;
+                    }
+
+                    .cat-attr-row {
+                        display: grid !important;
+                        grid-template-columns: minmax(0, 1fr) auto !important;
+                        align-items: center !important;
+                    }
+
+                    .cat-attr-left {
+                        width: 100%;
+                    }
+
+                    .cat-attr-title {
+                        white-space: normal !important;
+                    }
+
+                    .cat-attr-left {
+                        width: 100%;
+                    }
+
+                    .cat-attr-title {
+                        white-space: normal;
+                    }
+
+                    .modal {
+                        padding: 10px;
+                    }
+
+                    .modal-card {
+                        width: 100%;
+                        max-width: 100%;
+                        padding: 14px;
+                        border-radius: 14px;
+                    }
+                }
+
+                /* =========================
+           PETITS MOBILES
+        ========================= */
+                @media (max-width: 480px) {
+                    .container {
+                        padding: 0 10px;
+                    }
+
+                    .card {
+                        padding: 12px;
+                        border-radius: 14px;
+                    }
+
+                    h1, h2, h3 {
+                        word-break: break-word;
+                    }
+
+                    .table-wrap table {
+                        min-width: 760px;
+                    }
+                }
+
+                /* ✅ chaque ligne attribut = texte + case cochée bien séparés */
+                .cat-attr-row {
+                    display: grid !important;
+                    grid-template-columns: minmax(0, 1fr) auto !important;
+                    align-items: center !important;
+                    gap: 12px !important;
+                    padding: 12px 14px !important;
+                    border-radius: 14px;
+                    background: rgba(255,255,255,.03);
+                    border: 1px solid rgba(255,255,255,.06);
+                }
+
+                /* ✅ bloc texte autorisé à rétrécir */
+                .cat-attr-left {
+                    min-width: 0 !important;
+                }
+
+                /* ✅ le texte ne doit pas pousser la checkbox hors cadre */
+                .cat-attr-title {
+                    font-weight: 800;
+                    white-space: normal !important;
+                    overflow: hidden !important;
+                    text-overflow: ellipsis;
+                    word-break: break-word;
+                    line-height: 1.3;
+                }
+
+                /* ✅ zone checkbox toujours visible à droite */
+                .cat-attr-row > input[type="checkbox"],
+                .cat-attr-row .attr-check,
+                .cat-attr-row .cat-attr-check {
+                    justify-self: end !important;
+                    align-self: center !important;
+                    flex: 0 0 auto !important;
+                    margin-left: 8px !important;
+                    position: relative;
+                    z-index: 2;
+                }
+
+
+        /* ===== TABLEAU CATEGORIES - TOUTES LES COLONNES ===== */
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 14px;
+        }
+
+            .table-wrap table {
+                width: 100%;
+                min-width: 1380px;
+                border-collapse: collapse;
+                table-layout: auto;
+            }
+
+            .table-wrap th,
+            .table-wrap td {
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+
+                /* largeurs */
+                .table-wrap th:nth-child(1),
+                .table-wrap td:nth-child(1) {
+                    width: 70px;
+                }
+
+                .table-wrap th:nth-child(2),
+                .table-wrap td:nth-child(2) {
+                    width: 280px;
+                }
+
+                .table-wrap th:nth-child(3),
+                .table-wrap td:nth-child(3) {
+                    width: 240px;
+                }
+
+                .table-wrap th:nth-child(4),
+                .table-wrap td:nth-child(4) {
+                    width: 280px;
+                }
+
+                .table-wrap th:nth-child(5),
+                .table-wrap td:nth-child(5) {
+                    width: 170px;
+                }
+
+                .table-wrap th:nth-child(6),
+                .table-wrap td:nth-child(6) {
+                    width: 80px;
+                }
+
+                .table-wrap th:nth-child(7),
+                .table-wrap td:nth-child(7) {
+                    width: 110px;
+                }
+
+                .table-wrap th:nth-child(8),
+                .table-wrap td:nth-child(8) {
+                    width: 100px;
+                }
+
+                .table-wrap th:nth-child(9),
+                .table-wrap td:nth-child(9) {
+                    width: 220px;
+                    min-width: 220px;
+                    text-align: right;
+                }
+
+        /* actions */
+        .action-cell {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: nowrap;
+        }
+
+            .action-cell .btn,
+            .action-cell button,
+            .action-cell a {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                white-space: nowrap;
+            }
+
+            /* bouton produit */
+            .action-cell .btn-success,
+            .action-cell .btn-product {
+                height: 40px;
+                padding: 0 16px;
+                border-radius: 14px;
+                font-size: 14px;
+            }
+
+            /* bouton mod */
+            .action-cell .btn:last-child,
+            .action-cell button:last-child,
+            .action-cell a:last-child {
+                min-width: 60px;
+                height: 40px;
+                padding: 0 12px;
+            }
+
+        /* ===== TABLEAU SIMPLE ET UTILISABLE ===== */
+
+        .table-wrap {
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+            .table-wrap th:last-child,
+            .table-wrap td:last-child {
+                position: static !important;
+                box-shadow: none !important;
+            }
+        .table-wrap {
+            max-height: 500px; /* hauteur fixe du tableau */
+            overflow-x: auto;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">Gestion des catégories et attributs produits</p>
+                    </section>
+
+
+                    <!-- =========================
+         FORM AJOUT / EDIT
+    ========================== -->
+                    <section class="card">
+                        <h2>Ajouter une catégorie</h2>
+
+                        <!-- ✅ LIGNE 1 -->
+                        <div class="grid-3">
+                            <div class="field">
+                                <label>Nom</label>
+                                <input id="txtCatName" placeholder="Ex : Chaussures" />
+                            </div>
+
+                            <div class="field">
+                                <label>Slug</label>
+                                <input id="txtCatSlug" placeholder="auto si vide" />
+                            </div>
+
+                            <div class="field">
+                                <label>Parent</label>
+                                <select id="selCatParent">
+                                    <option value="">(Racine)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- ✅ LIGNE 2 : Statut | Image | Attributs -->
+                        <div class="grid-3" style="margin-top:16px">
+
+                            <!-- Statut -->
+                            <div class="field">
+                                <label>Statut</label>
+                                <select id="selIsActive">
+                                    <option value="true">Actif</option>
+                                    <option value="false">Inactif</option>
+                                </select>
+                            </div>
+
+                            <!-- Image -->
+                            <div class="field">
+                                <label>Image</label>
+                                <input id="fileCatImage" type="file" accept="image/*" />
+                            </div>
+
+                            <!-- Attributs -->
+                            <div class="card attr-compact attr-card">
+                                <div class="attr-head">
+                                    <h4 style="margin:0">Attributs</h4>
+
+                                    <div class="attr-tools">
+                                        <input class="search" id="txtAttrSearch" placeholder="Rechercher attribut..." />
+
+                                        <label class="attr-only">
+                                            <input type="checkbox" id="chkAttrOnlyVariant" />
+                                            Variant
+                                        </label>
+
+                                        <button class="btn btn-primary" id="btnSaveCatAttrs" type="button" disabled>
+                                            Les attributs seront enregistrés après création
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="catAttrsBoxWrap">
+                                    <div id="catAttrsBox"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- BOUTONS -->
+                        <div class="actions" style="margin-top:18px; display:flex; gap:10px; justify-content:flex-end;">
+                            <button class="btn btn-primary" id="btnCatCreate" type="button">Créer</button>
+                            <button class="btn" id="btnCatReset" type="button">Réinitialiser</button>
+                        </div>
+
+                    </section>
+
+                    <!-- =========================
+         SEO
+    ========================== -->
+                    <section class="card">
+                        <h2>SEO</h2>
+
+                        <div class="form-grid">
+                            <div class="field">
+                                <label>Meta Title (SEO)</label>
+                                <input id="txtMetaTitle" placeholder="Titre SEO (max ~60 caractères)" />
+                            </div>
+
+                            <div class="field" style="grid-column:1/-1">
+                                <label>Meta Description (SEO)</label>
+                                <textarea id="txtMetaDesc" rows="2" placeholder="Description SEO (140-160 caractères)"></textarea>
+                            </div>
+
+                            <div class="field" style="grid-column:1/-1">
+                                <label>Description (texte affiché sur la page catégorie)</label>
+                                <textarea id="txtCatDesc" rows="4" placeholder="Texte visible sur la page catégorie"></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- =========================
+         LISTE
+    ========================== -->
+                    <section class="card">
+                        <div class="list-head">
+                            <h2>Liste</h2>
+                            <input class="search" id="txtSearch" placeholder="Rechercher..." />
+                        </div>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Catégorie</th>
+                                        <th>Slug</th>
+                                        <th>Parent</th>
+                                        <th>Commission</th>
+                                        <th>Ordre</th>
+                                        <th>Actif</th>
+                                        <th>Image</th>
+                                        <th style="text-align:right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="catsBody"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                </div>
+                        </div>
+                    </main>
+
+                </div>
+
+
+                <div id="commModal" class="modal" style="display:none;">
+                    <div class="modal-card">
+                        <h3 style="margin:0 0 10px;">💸 Commission catégorie</h3>
+
+                        <div class="field">
+                            <label>Mode</label>
+                            <select id="commMode">
+                                <option value="inherit">Hériter (parent / global)</option>
+                                <option value="custom">Définir un %</option>
+                            </select>
+                        </div>
+
+                        <div class="field" id="commPercentWrap" style="display:none;">
+                            <label>Pourcentage (%)</label>
+                            <input id="commPercent" type="number" min="0" max="100" step="0.01" placeholder="Ex: 12" />
+                        </div>
+
+                        <div class="actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;">
+                            <button class="btn" id="commCancel" type="button">Annuler</button>
+                            <button class="btn btn-primary" id="commSave" type="button">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <script src="/assets/js/app.js?v=20260215_fix2" defer></script>
+                <script src="/assets/js/admin-categories.js?v=20260215_fix2" defer></script>
+
+
+
+
+</body>
+</html>

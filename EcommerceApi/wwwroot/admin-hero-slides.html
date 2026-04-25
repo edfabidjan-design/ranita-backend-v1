@@ -1,0 +1,577 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin - Hero Slides</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <style>
+        :root {
+            --bg: #081120;
+            --panel: #0d1728;
+            --panel2: #101c31;
+            --border: rgba(255,255,255,.08);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --green: #22c55e;
+            --green2: #16a34a;
+            --blue: #2563eb;
+            --blue2: #1d4ed8;
+            --red: #ef4444;
+            --red2: #dc2626;
+            --orange: #f59e0b;
+            --orange2: #d97706;
+            --radius: 18px;
+            --shadow: 0 12px 30px rgba(0,0,0,.28);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: radial-gradient(900px 400px at 10% 0%, rgba(34,197,94,.06), transparent 50%), radial-gradient(700px 300px at 100% 10%, rgba(37,99,235,.08), transparent 50%), var(--bg);
+            color: var(--text);
+        }
+
+        .page {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .heroAdminTop {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin: 18px 0 22px;
+        }
+
+        .heroAdminTitle h1 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -.02em;
+        }
+
+        .heroAdminTitle p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.015));
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .tableCard {
+            padding: 14px;
+            overflow: hidden;
+        }
+
+        .formCard {
+            margin-top: 22px;
+            padding: 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 14px;
+        }
+
+        .tableWrap {
+            overflow-x: auto;
+            border-radius: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 980px;
+        }
+
+        thead th {
+            text-align: left;
+            font-size: 13px;
+            font-weight: 800;
+            color: #cbd5e1;
+            padding: 14px 12px;
+            background: rgba(255,255,255,.03);
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody td {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: rgba(255,255,255,.025);
+        }
+
+        .slideThumb {
+            width: 88px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.10);
+            background: #0b1220;
+        }
+
+        .thumbEmpty {
+            width: 88px;
+            height: 56px;
+            border-radius: 12px;
+            border: 1px dashed rgba(255,255,255,.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 12px;
+            background: rgba(255,255,255,.02);
+        }
+
+        .statusBadge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            border: 1px solid transparent;
+        }
+
+        .statusActive {
+            background: rgba(34,197,94,.14);
+            color: #86efac;
+            border-color: rgba(34,197,94,.22);
+        }
+
+        .statusInactive {
+            background: rgba(245,158,11,.12);
+            color: #fcd34d;
+            border-color: rgba(245,158,11,.22);
+        }
+
+        .adminActions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            border-radius: 12px;
+            min-height: 42px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .18s ease;
+            text-decoration: none;
+        }
+
+            .btn:hover {
+                transform: translateY(-1px);
+            }
+
+        .btnPrimary {
+            background: linear-gradient(135deg, var(--green), var(--green2));
+            color: #05210e;
+            box-shadow: 0 10px 25px rgba(34,197,94,.28);
+        }
+
+            .btnPrimary:hover {
+                box-shadow: 0 16px 34px rgba(34,197,94,.35);
+            }
+
+        .btnEdit {
+            background: var(--blue);
+            color: #fff;
+        }
+
+            .btnEdit:hover {
+                background: var(--blue2);
+            }
+
+        .btnDelete {
+            background: var(--red);
+            color: #fff;
+        }
+
+            .btnDelete:hover {
+                background: var(--red2);
+            }
+
+        .btnToggle {
+            background: var(--green);
+            color: #05210e;
+        }
+
+            .btnToggle:hover {
+                background: var(--green2);
+            }
+
+        .btnDisable {
+            background: var(--orange);
+            color: #2b1c00;
+        }
+
+            .btnDisable:hover {
+                background: var(--orange2);
+            }
+
+        .btnSm {
+            min-height: 36px;
+            padding: 8px 12px;
+            font-size: 12px;
+            border-radius: 10px;
+        }
+
+        .sectionTitle {
+            margin: 0 0 18px;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .sectionSub {
+            margin: -8px 0 18px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .formGrid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .fieldFull {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            font-size: 13px;
+            font-weight: 800;
+            color: #dbe7f5;
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            border: 1px solid rgba(255,255,255,.10);
+            background: #07101f;
+            color: var(--text);
+            border-radius: 14px;
+            padding: 12px 14px;
+            outline: none;
+            font-size: 14px;
+        }
+
+            .field input:focus,
+            .field textarea:focus,
+            .field select:focus {
+                border-color: rgba(34,197,94,.50);
+                box-shadow: 0 0 0 4px rgba(34,197,94,.10);
+            }
+
+        .field textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .inlineCheck {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 100%;
+            padding-top: 28px;
+        }
+
+            .inlineCheck input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+            }
+
+        .previewBox {
+            display: none;
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(255,255,255,.02);
+            max-width: 260px;
+        }
+
+            .previewBox img {
+                width: 100%;
+                border-radius: 12px;
+                object-fit: cover;
+                border: 1px solid rgba(255,255,255,.10);
+            }
+
+        .formActions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .btnGhost {
+            background: rgba(255,255,255,.04);
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,.08);
+        }
+
+            .btnGhost:hover {
+                background: rgba(255,255,255,.07);
+            }
+
+        @media (max-width: 900px) {
+            .formGrid {
+                grid-template-columns: 1fr;
+            }
+
+            .inlineCheck {
+                padding-top: 0;
+            }
+        }
+    </style>
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">
+                            Gestion des slides affichés sur la page d’accueil
+                        </p>
+                    </section>
+
+                    <div class="heroAdminTop">
+                        <button id="btnNew" type="button" class="btn btnPrimary">
+                            + Ajouter un slide
+                        </button>
+                    </div>
+
+                    <section class="card tableCard">
+                        <div class="tableWrap">
+                            <table id="slidesTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Image</th>
+                                        <th>Titre</th>
+                                        <th>Badge</th>
+                                        <th>Bouton</th>
+                                        <th>Ordre</th>
+                                        <th>Statut</th>
+                                        <th>Actions</th>
+                                        <th>Titre droite</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="card formCard">
+                        <h2 id="formTitle" class="sectionTitle">Nouveau slide</h2>
+                        <p class="sectionSub">Configurez le contenu, les boutons, le style et l’image du slide.</p>
+
+                        <form id="slideForm">
+                            <input type="hidden" id="slideId">
+
+                            <div class="formGrid">
+                                <div class="field">
+                                    <label for="title">Titre</label>
+                                    <input id="title" required>
+                                </div>
+
+                                <div class="field">
+                                    <label for="badgeText">Badge</label>
+                                    <input id="badgeText">
+                                </div>
+
+                                <div class="field fieldFull">
+                                    <label for="subtitle">Sous-titre</label>
+                                    <textarea id="subtitle"></textarea>
+                                </div>
+
+                                <div class="field">
+                                    <label for="smallTag">Tag</label>
+                                    <input id="smallTag">
+                                </div>
+
+                                <div class="field">
+                                    <label for="theme">Thème</label>
+                                    <input id="theme" placeholder="promo / new / brand / category">
+                                </div>
+
+                                <div class="field">
+                                    <label for="primaryButtonText">Bouton principal</label>
+                                    <input id="primaryButtonText">
+                                </div>
+
+                                <div class="field">
+                                    <label for="primaryButtonUrl">Lien bouton principal</label>
+                                    <input id="primaryButtonUrl">
+                                </div>
+
+                                <div class="field">
+                                    <label for="secondaryButtonText">Bouton secondaire</label>
+                                    <input id="secondaryButtonText">
+                                </div>
+
+                                <div class="field">
+                                    <label for="secondaryButtonUrl">Lien bouton secondaire</label>
+                                    <input id="secondaryButtonUrl">
+                                </div>
+
+                                <div class="field">
+                                    <label for="accentColor">Couleur accent</label>
+                                    <input id="accentColor" value="#22c55e">
+                                </div>
+
+                                <div class="field">
+                                    <label for="highlightText">Texte en surbrillance</label>
+                                    <input id="highlightText">
+                                </div>
+
+                                <div class="field fieldFull">
+                                    <label style="font-size:16px;font-weight:900;color:#fff;">Contenu carte droite</label>
+                                </div>
+
+                                <div class="field">
+                                    <label for="rightBadgeText">Badge droite</label>
+                                    <input id="rightBadgeText">
+                                </div>
+
+                                <div class="field">
+                                    <label for="rightTitle">Titre droite</label>
+                                    <input id="rightTitle">
+                                </div>
+
+                                <div class="field fieldFull">
+                                    <label for="rightSubtitle">Texte droite</label>
+                                    <textarea id="rightSubtitle"></textarea>
+                                </div>
+
+                                <div class="field">
+                                    <label for="rightButtonText">Bouton droite</label>
+                                    <input id="rightButtonText">
+                                </div>
+
+                                <div class="field">
+                                    <label for="rightButtonUrl">Lien bouton droite</label>
+                                    <input id="rightButtonUrl">
+                                </div>
+
+                                <div class="field fieldFull">
+                                    <label style="font-size:16px;font-weight:900;color:#fff;">Bloc statistiques</label>
+                                </div>
+
+                                <div class="field">
+                                    <label for="statsTitle">Titre stats</label>
+                                    <input id="statsTitle" placeholder="Pourquoi acheter sur Ranita ?">
+                                </div>
+
+                                <div class="field">
+                                    <label for="stat1Value">Stat 1 valeur</label>
+                                    <input id="stat1Value" placeholder="29+">
+                                </div>
+
+                                <div class="field">
+                                    <label for="stat1Label">Stat 1 label</label>
+                                    <input id="stat1Label" placeholder="Produits">
+                                </div>
+
+                                <div class="field">
+                                    <label for="stat2Value">Stat 2 valeur</label>
+                                    <input id="stat2Value" placeholder="21+">
+                                </div>
+
+                                <div class="field">
+                                    <label for="stat2Label">Stat 2 label</label>
+                                    <input id="stat2Label" placeholder="Catégories">
+                                </div>
+
+                                <div class="field">
+                                    <label for="stat3Value">Stat 3 valeur</label>
+                                    <input id="stat3Value" placeholder="24/7">
+                                </div>
+
+                                <div class="field">
+                                    <label for="stat3Label">Stat 3 label</label>
+                                    <input id="stat3Label" placeholder="Boutique en ligne">
+                                </div>
+
+
+                                <div class="field">
+                                    <label for="displayOrder">Ordre affichage</label>
+                                    <input id="displayOrder" type="number" value="0">
+                                </div>
+
+                                <div class="field inlineCheck">
+                                    <input id="isActive" type="checkbox" checked>
+                                    <label for="isActive">Slide actif</label>
+                                </div>
+
+                                <div class="field fieldFull">
+                                    <label for="imageFile">Image du slide</label>
+                                    <input id="imageFile" type="file" accept=".jpg,.jpeg,.png,.webp,image/*">
+
+                                    <div id="imagePreviewWrap" class="previewBox">
+                                        <img id="imagePreview" alt="preview">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="formActions">
+                                <button type="submit" class="btn btnPrimary">Enregistrer</button>
+                                <button type="button" class="btn btnGhost" id="btnResetForm">Réinitialiser</button>
+                            </div>
+                        </form>
+                    </section>
+                </div> <!-- container -->
+            </div> <!-- page-admin -->
+        </main>
+
+    </div> <!-- admin-shell -->
+
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/admin-hero-slides.js"></script>
+</body>
+</html>

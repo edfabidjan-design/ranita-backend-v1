@@ -1,0 +1,397 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Vendor - Mes produits</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    
+
+    <style>
+        /* ✅ Table pro + hover premium */
+        .vp-table {
+            width: 100%;
+            border-collapse: collapse;
+        
+        }
+
+            .vp-table th,
+            .vp-table td {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                vertical-align: middle;
+            }
+
+            .vp-table thead th {
+                white-space: nowrap;
+            }
+
+            .vp-table tbody td {
+                white-space: normal;
+            }
+            .vp-table thead th {
+                text-align: left;
+                padding: 10px;
+                border-bottom: 1px solid rgba(148,163,184,.18);
+                font-size: 13px;
+                color: rgba(229,231,235,.9);
+            }
+
+            .vp-table tbody td {
+                padding: 12px;
+                border-bottom: 1px solid rgba(148,163,184,.10);
+                vertical-align: middle;
+            }
+
+        .vp-rowItem {
+            transition: background .18s ease, transform .18s ease;
+        }
+
+            .vp-rowItem:hover {
+                background: rgba(255,255,255,.03);
+            }
+
+        /* ✅ cellule produit (thumb + title + sku) */
+        .vp-prodCell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .vp-thumb {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: rgba(2,6,23,.35);
+            border: 1px solid rgba(148,163,184,.18);
+            flex: 0 0 auto;
+        }
+
+        .vp-prodTitle {
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .vp-sku {
+            font-size: 12px;
+            opacity: .65;
+            margin-top: 4px;
+        }
+
+        /* ✅ badges status */
+        .vp-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            border: 1px solid rgba(148,163,184,.18);
+            background: rgba(2,6,23,.25);
+        }
+
+            .vp-status.pending {
+                border-color: rgba(245,158,11,.35);
+                color: #fbbf24;
+                background: rgba(245,158,11,.10);
+            }
+
+            .vp-status.published {
+                border-color: rgba(34,197,94,.35);
+                color: #86efac;
+                background: rgba(34,197,94,.10);
+            }
+
+            .vp-status.rejected {
+                border-color: rgba(239,68,68,.35);
+                color: #fca5a5;
+                background: rgba(239,68,68,.10);
+            }
+
+        /* ✅ actions boutons pro */
+        .vp-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: nowrap; /* 🔥 empêche retour à la ligne */
+            justify-content: flex-end;
+        }
+
+            .vp-actions .vp-btnSmall {
+                white-space: nowrap;
+            }
+
+        .vp-btnSmall {
+            border: 1px solid rgba(148,163,184,.22);
+            background: rgba(2,6,23,.35);
+            color: #e5e7eb;
+            padding: 6px 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 800;
+            transition: transform .12s ease, background .12s ease, border-color .12s ease;
+        }
+
+        .card {
+            overflow: hidden;
+        }
+
+            .vp-btnSmall:hover {
+                transform: translateY(-1px);
+                background: rgba(255,255,255,.04);
+            }
+
+            .vp-btnSmall.primary {
+                border-color: rgba(34,197,94,.45);
+            }
+
+            .vp-btnSmall.ghost {
+                opacity: .9;
+            }
+
+            .vp-btnSmall.danger {
+                border-color: rgba(239,68,68,.40);
+                color: #fca5a5;
+            }
+
+  
+        .vp-thumb {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            object-fit: cover;
+            border: 1px solid rgba(148,163,184,.18);
+            background: rgba(2,6,23,.25);
+            flex: 0 0 auto;
+        }
+
+        .vp-name,
+        .vp-prodTitle {
+            font-weight: 900;
+            font-size: 15px;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+            max-width: none;
+            line-height: 1.25;
+        }
+
+        .vp-actions {
+            display: flex !important;
+            gap: 6px;
+            flex-wrap: wrap !important;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+            .vp-actions .vp-btnSmall,
+            .vp-actions .btn,
+            .vp-actions button,
+            .vp-actions a {
+                white-space: nowrap;
+                flex: 0 0 auto;
+            }
+        .vp-table th:last-child,
+        .vp-table td:last-child {
+            width: 240px;
+            min-width: 240px;
+        }
+        .btn.danger {
+            border-color: rgba(239,68,68,.45);
+        }
+
+        /* badges pro */
+        .vp-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            border: 1px solid rgba(148,163,184,.18);
+            background: rgba(2,6,23,.25);
+        }
+
+        .vp-ok {
+            border-color: rgba(34,197,94,.45);
+            background: rgba(34,197,94,.12);
+            color: #86efac;
+        }
+
+        .vp-warn {
+            border-color: rgba(245,158,11,.45);
+            background: rgba(245,158,11,.12);
+            color: #fde68a;
+        }
+
+        .vp-bad {
+            border-color: rgba(239,68,68,.45);
+            background: rgba(239,68,68,.10);
+            color: #fca5a5;
+        }
+
+        .vp-draft {
+            border-color: rgba(148,163,184,.30);
+            background: rgba(148,163,184,.08);
+            color: #cbd5e1;
+        }
+
+        /* hover premium */
+        .vp-rowPremium {
+            transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+        }
+
+            .vp-rowPremium:hover {
+                background: rgba(255,255,255,.02);
+                transform: translateY(-1px);
+                box-shadow: 0 12px 26px rgba(0,0,0,.25);
+            }
+
+        .vp-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto; /* 🔥 IMPORTANT */
+        }
+
+
+
+            .vp-table th,
+            .vp-table td {
+                vertical-align: middle;
+                overflow: hidden;
+            }
+
+            .vp-table thead th {
+                white-space: nowrap;
+            }
+
+            .vp-table tbody td {
+                white-space: normal;
+            }
+
+        .vp-prodCell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+            .vp-prodCell > div {
+                min-width: 0;
+            }
+
+        .vp-prodTitle,
+        .vp-name {
+            font-weight: 900;
+            font-size: 15px;
+            line-height: 1.2;
+            white-space: normal;
+            word-break: break-word;
+            margin: 0;
+        }
+
+        .vp-sku {
+            font-size: 12px;
+            opacity: .7;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .vp-actions {
+            display: flex !important;
+            gap: 6px;
+            flex-wrap: nowrap !important;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+            .vp-actions .vp-btnSmall,
+            .vp-actions .btn,
+            .vp-actions button,
+            .vp-actions a {
+                white-space: nowrap;
+                flex: 0 0 auto;
+            }
+
+        .vp-btnSmall {
+            padding: 6px 8px;
+            font-size: 11px;
+            border-radius: 10px;
+        }
+
+        .vp-table td:last-child {
+            overflow: visible !important;
+        }
+
+        .vp-actions {
+            display: flex !important;
+            gap: 6px;
+            flex-wrap: nowrap !important;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+            .vp-actions .vp-btnSmall,
+            .vp-actions .btn,
+            .vp-actions button,
+            .vp-actions a {
+                white-space: nowrap;
+                flex: 0 0 auto;
+            }
+    </style>
+
+</head>
+
+<body class="admin-body">
+    <div id="vendorNav"></div>
+
+    <main class="wrap" style="max-width:1180px;margin:0 auto;padding:16px;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                <input id="q" placeholder="Rechercher (nom / SKU)..." style="min-width:260px" />
+                <select id="status" style="min-width:180px">
+                    <option value="">Tous statuts</option>
+                    <option value="pending">Pending</option>
+                    <option value="published">Publié</option>
+                    <option value="rejected">Rejeté</option>
+                </select>
+            </div>
+            <div class="muted" id="count">0 produit(s)</div>
+        </div>
+
+        <div class="muted" id="msg" style="margin:10px 0;"></div>
+
+        <div class="card" style="overflow:auto">
+            <table class="vp-table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix</th>
+                        <th>Stock</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="body">
+                    <tr><td colspan="5" class="muted" style="padding:12px;">Chargement…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+	<script src="/assets/js/vendor-nav.js?v=100000"></script>
+    <script src="/assets/js/vendor-app.js?v=1"></script>
+    <script src="/assets/js/vendor-products.js?v=2"></script>
+    <script>
+        VendorNav.initVendorPage({ active: "/vendor-products.html" });
+    </script>
+
+
+
+</body>
+</html>

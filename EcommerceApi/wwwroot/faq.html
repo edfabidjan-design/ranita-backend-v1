@@ -1,0 +1,618 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Ranita - FAQ</title>
+    <meta name="description" content="Questions fréquentes Ranita : paiement, livraison, retours, support client et commande." />
+    <link rel="stylesheet" href="/css/base.css?v=1" />
+    <style>
+        :root {
+            --bg: #071224;
+            --panel: #0b1730;
+            --card: #0e1b36;
+            --line: rgba(255,255,255,.08);
+            --text: #e5eefc;
+            --muted: #9fb0cc;
+            --accent: #22c55e;
+            --accent-dark: #16a34a;
+            --shadow: 0 18px 50px rgba(0,0,0,.28);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+            background: radial-gradient(circle at top, #10244a 0%, #071224 45%, #050d1a 100%);
+            color: var(--text);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .hero {
+            padding: 46px 0 20px;
+        }
+
+        .heroCard {
+            background: linear-gradient(135deg, rgba(34,197,94,.12), rgba(15,23,42,.86));
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+            .heroCard::after {
+                content: "";
+                position: absolute;
+                inset: auto -60px -60px auto;
+                width: 220px;
+                height: 220px;
+                border-radius: 999px;
+                background: radial-gradient(circle, rgba(34,197,94,.22), transparent 68%);
+                pointer-events: none;
+            }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(255,255,255,.04);
+            font-size: 12px;
+            font-weight: 800;
+            color: #bbf7d0;
+            margin-bottom: 14px;
+        }
+
+        .heroTitle {
+            margin: 0;
+            font-size: clamp(30px,4vw,48px);
+            line-height: 1.05;
+            font-weight: 950;
+            letter-spacing: -.02em;
+        }
+
+        .heroText {
+            max-width: 760px;
+            margin: 14px 0 0;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .quickLinks {
+            display: grid;
+            grid-template-columns: repeat(4,minmax(0,1fr));
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .quickLink {
+            background: rgba(7,18,36,.62);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            padding: 16px;
+            min-height: 96px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: .2s ease;
+        }
+
+            .quickLink:hover {
+                transform: translateY(-2px);
+                border-color: rgba(34,197,94,.28);
+                box-shadow: 0 16px 34px rgba(0,0,0,.22);
+            }
+
+            .quickLink small {
+                color: #86efac;
+                font-weight: 800;
+            }
+
+            .quickLink b {
+                font-size: 16px;
+            }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 290px minmax(0,1fr);
+            gap: 18px;
+            padding: 18px 0 44px;
+        }
+
+        .sideNav {
+            position: sticky;
+            top: 88px;
+            align-self: start;
+            background: rgba(11,23,48,.9);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: var(--shadow);
+        }
+
+            .sideNav h3 {
+                margin: 4px 0 12px;
+                font-size: 15px;
+            }
+
+            .sideNav a {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                padding: 12px 14px;
+                border-radius: 14px;
+                color: var(--text);
+                border: 1px solid transparent;
+                transition: .2s ease;
+                margin-bottom: 8px;
+                background: rgba(255,255,255,.03);
+            }
+
+                .sideNav a:hover {
+                    background: rgba(34,197,94,.08);
+                    border-color: rgba(34,197,94,.2);
+                }
+
+        .contentCol {
+            display: grid;
+            gap: 16px;
+        }
+
+        .faqSection {
+            background: rgba(11,23,48,.88);
+            border: 1px solid var(--line);
+            border-radius: 26px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            scroll-margin-top: 90px;
+        }
+
+        .faqSectionHead {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-end;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            padding-bottom: 14px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .faqSection h2 {
+            margin: 0;
+            font-size: 28px;
+            line-height: 1.1;
+        }
+
+        .faqSection p.lead {
+            margin: 8px 0 0;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .faqList {
+            display: grid;
+            gap: 12px;
+        }
+
+        details.faqItem {
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            background: rgba(255,255,255,.03);
+            overflow: hidden;
+        }
+
+            details.faqItem[open] {
+                border-color: rgba(34,197,94,.28);
+                background: linear-gradient(180deg, rgba(34,197,94,.06), rgba(255,255,255,.02));
+            }
+
+        .faqItem summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 18px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            font-weight: 900;
+            font-size: 17px;
+        }
+
+            .faqItem summary::-webkit-details-marker {
+                display: none
+            }
+
+            .faqItem summary span:last-child {
+                color: #86efac;
+                font-size: 22px;
+                line-height: 1;
+                flex: 0 0 auto;
+            }
+
+        .faqAnswer {
+            padding: 0 18px 18px;
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+            .faqAnswer ul {
+                margin: 10px 0 0 18px;
+                padding: 0;
+            }
+
+        .helpBox {
+            background: linear-gradient(135deg, rgba(34,197,94,.14), rgba(255,255,255,.03));
+            border: 1px solid rgba(34,197,94,.18);
+            border-radius: 24px;
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+            .helpBox h3 {
+                margin: 0 0 8px;
+                font-size: 24px;
+            }
+
+            .helpBox p {
+                margin: 0;
+                color: var(--muted);
+                line-height: 1.7;
+                max-width: 700px;
+            }
+
+        .btnRow {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btnFaq {
+            min-height: 46px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 900;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: .2s ease;
+        }
+
+        .btnFaqPrimary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: #05210e;
+            box-shadow: 0 12px 26px rgba(34,197,94,.24);
+        }
+
+        .btnFaqSecondary {
+            background: #111c31;
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,.08);
+        }
+
+        .btnFaq:hover {
+            transform: translateY(-1px)
+        }
+
+        @media (max-width: 980px) {
+            .quickLinks {
+                grid-template-columns: repeat(2,minmax(0,1fr))
+            }
+
+            .layout {
+                grid-template-columns: 1fr
+            }
+
+            .sideNav {
+                position: static
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero {
+                padding-top: 24px
+            }
+
+            .heroCard, .faqSection, .sideNav, .helpBox {
+                border-radius: 20px
+            }
+
+            .quickLinks {
+                grid-template-columns: 1fr
+            }
+
+            .faqSection {
+                padding: 18px
+            }
+
+            .faqItem summary {
+                font-size: 16px;
+                padding: 16px
+            }
+
+            .faqAnswer {
+                padding: 0 16px 16px
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="siteHeader"></div>
+
+    <main>
+        <section class="hero">
+            <div class="wrap">
+                <div class="heroCard">
+                    <div class="eyebrow">❓ Questions fréquentes Ranita</div>
+                    <h1 class="heroTitle">Paiement, livraison, retours et support client</h1>
+                    <p class="heroText">
+                        Retrouvez ici les réponses essentielles avant votre commande : modes de paiement,
+                        délais de livraison, politique de retour, assistance client et suivi de commande.
+                    </p>
+
+                    <div class="quickLinks">
+                        <a class="quickLink" href="#paiement">
+                            <small>Paiement</small>
+                            <b>Voir les réponses sur les paiements</b>
+                        </a>
+                        <a class="quickLink" href="#livraison">
+                            <small>Livraison</small>
+                            <b>Comprendre les délais et zones couvertes</b>
+                        </a>
+                        <a class="quickLink" href="#retours">
+                            <small>Retours</small>
+                            <b>Consulter la politique de retour</b>
+                        </a>
+                        <a class="quickLink" href="#support">
+                            <small>Support</small>
+                            <b>Contacter l’équipe Ranita</b>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="wrap">
+            <div class="layout">
+                <aside class="sideNav">
+                    <h3>Navigation rapide</h3>
+                    <a href="#paiement"><span>Paiement sécurisé</span><span>→</span></a>
+                    <a href="#livraison"><span>Livraison rapide</span><span>→</span></a>
+                    <a href="#retours"><span>Retours simplifiés</span><span>→</span></a>
+                    <a href="#support"><span>Support client</span><span>→</span></a>
+                    <a href="#commande"><span>Commande & suivi</span><span>→</span></a>
+                </aside>
+
+                <div class="contentCol">
+                    <section class="faqSection" id="paiement">
+                        <div class="faqSectionHead">
+                            <div>
+                                <h2>Paiement sécurisé</h2>
+                                <p class="lead">Tout ce qu’il faut savoir sur les paiements acceptés et la sécurité des transactions.</p>
+                            </div>
+                        </div>
+
+                        <div class="faqList">
+                            <details class="faqItem" open>
+                                <summary><span>Quels moyens de paiement sont acceptés sur Ranita ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Ranita peut accepter selon votre configuration : Mobile Money, carte bancaire et autres moyens de paiement en ligne sécurisés. Les options affichées au checkout sont celles disponibles pour votre commande et votre zone de livraison.
+                                </div>
+                            </details>
+
+                            <details class="faqItem">
+                                <summary><span>Le paiement sur Ranita est-il sécurisé ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Oui. Les transactions sont traitées via des solutions de paiement sécurisées. Les données sensibles ne doivent jamais être partagées par message ou téléphone. Vérifiez toujours que vous êtes bien sur le site officiel avant de régler une commande.
+                                </div>
+                            </details>
+
+                            <details class="faqItem">
+                                <summary><span>Puis-je payer à la livraison ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Le paiement à la livraison dépend de la politique logistique active, de la zone desservie et du type de produit. Si cette option est disponible, elle apparaît automatiquement lors du passage en caisse.
+                                </div>
+                            </details>
+                        </div>
+                    </section>
+
+                    <section class="faqSection" id="livraison">
+                        <div class="faqSectionHead">
+                            <div>
+                                <h2>Livraison rapide</h2>
+                                <p class="lead">Délais, couverture, frais et suivi de livraison de vos commandes.</p>
+                            </div>
+                        </div>
+
+                        <div class="faqList">
+                            <details class="faqItem" open>
+                                <summary><span>En combien de temps ma commande est-elle livrée ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Les délais de livraison varient selon le produit, la ville et le transporteur. Une estimation peut être affichée avant validation de la commande. Vous recevez ensuite des mises à jour lorsque votre commande est confirmée puis expédiée.
+                                </div>
+                            </details>
+
+                            <details class="faqItem">
+                                <summary><span>Comment suivre ma commande ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Dès qu’un numéro ou statut de suivi est disponible, vous pouvez consulter l’évolution de votre commande depuis votre espace client ou via les notifications liées à votre commande.
+                                </div>
+                            </details>
+
+                            <details class="faqItem">
+                                <summary><span>Quels sont les frais de livraison ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Les frais de livraison dépendent du panier, de l’adresse, du poids et de la politique en cours. Le montant final est présenté avant le paiement.
+                                </div>
+                            </details>
+                        </div>
+                    </section>
+
+                    <section class="faqSection" id="retours">
+                        <div class="faqSectionHead">
+                            <div>
+                                <h2>Retours simplifiés</h2>
+                                <p class="lead">Les conditions générales pour un retour, échange ou demande de remboursement.</p>
+                            </div>
+                        </div>
+
+                        <div class="faqList">
+                            <details class="faqItem" open>
+                                <summary><span>Dans quels cas puis-je demander un retour ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Vous pouvez demander un retour en cas de produit non conforme, endommagé, défectueux ou selon la politique affichée pour l’article concerné. Certains produits peuvent être exclus pour des raisons d’hygiène ou d’usage.
+                                </div>
+                            </details>
+
+                            <details class="faqItem">
+                                <summary><span>Quel est le délai pour faire une demande de retour ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Le délai de retour dépend de la politique active du site et du produit commandé. Il est recommandé d’initier la demande le plus tôt possible après réception.
+                                </div>
+                            </details>
+
+                            <details class="faqItem">
+                                <summary><span>Comment se passe le remboursement ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Après validation du retour et contrôle du produit, le remboursement est traité selon le mode de paiement utilisé initialement ou selon la procédure indiquée par le service client.
+                                </div>
+                            </details>
+                        </div>
+                    </section>
+
+                    <section class="faqSection" id="support">
+                        <div class="faqSectionHead">
+                            <div>
+                                <h2>Support client</h2>
+                                <p class="lead">Besoin d’aide avant ou après achat ? Notre équipe est là pour vous accompagner.</p>
+                            </div>
+                        </div>
+
+                        <div class="faqList">
+                            <details class="faqItem" open>
+                                <summary><span>Comment contacter le support client ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Vous pouvez contacter le support Ranita via :
+
+                                    <ul>
+                                        <li>📞 WhatsApp (réponse rapide)</li>
+                                        <li>📧 Email : support@ranita.com</li>
+                                        <li>🌐 Formulaire en ligne</li>
+                                    </ul>
+
+                                    <br>
+
+                                    <a href="https://wa.me/2250585171297" target="_blank" class="btnFaq btnFaqPrimary">
+                                        Contacter sur WhatsApp
+                                    </a>
+                                </div>
+                            </details>
+
+                            <details class="faqItem">
+                                <summary><span>Le support peut-il m’aider avant ma commande ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Oui. Le support peut vous orienter sur un produit, une taille, une disponibilité, un délai ou un mode de paiement avant validation de votre achat.
+                                </div>
+                            </details>
+
+                            <details class="faqItem">
+                                <summary><span>Le support est-il disponible après achat ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Oui. Pour toute question sur le suivi, la réception, un incident ou une demande de retour, le support reste disponible après la commande.
+                                </div>
+                            </details>
+                        </div>
+                    </section>
+
+                    <section class="faqSection" id="commande">
+                        <div class="faqSectionHead">
+                            <div>
+                                <h2>Commande & suivi</h2>
+                                <p class="lead">Informations utiles sur la validation, les statuts et le suivi global de vos commandes.</p>
+                            </div>
+                        </div>
+
+                        <div class="faqList">
+                            <details class="faqItem" open>
+                                <summary><span>Comment savoir si ma commande a bien été confirmée ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Une commande confirmée apparaît dans votre espace client avec un statut clair. Vous pouvez également recevoir un e-mail, un SMS ou une notification selon la configuration active du site.
+                                </div>
+                            </details>
+
+                            <details class="faqItem">
+                                <summary><span>Puis-je annuler ma commande ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    L’annulation dépend de l’état d’avancement de la commande. Si elle n’a pas encore été traitée ou expédiée, une demande peut être possible via le support client.
+                                </div>
+                            </details>
+
+                            <details class="faqItem">
+                                <summary><span>Pourquoi le statut de ma commande change ?</span><span>＋</span></summary>
+                                <div class="faqAnswer">
+                                    Les statuts évoluent selon les étapes : validation, préparation, expédition, livraison, retour éventuel. Cela vous permet de suivre votre commande de façon transparente.
+                                </div>
+                            </details>
+                        </div>
+                    </section>
+
+                    <div class="helpBox">
+                        <div>
+                            <h3>Vous n’avez pas trouvé votre réponse ?</h3>
+                            <p>
+                                Notre équipe peut vous aider pour votre commande, un retour, un problème de paiement ou une question avant achat.
+                            </p>
+                        </div>
+                        <div class="btnRow">
+                            <a class="btnFaq btnFaqPrimary" href="https://wa.me/2250585171297" target="_blank">
+                                💬 Contacter sur WhatsApp
+                            </a>
+
+                            <a class="btnFaq btnFaqSecondary" href="/products.html">
+                                Voir les produits
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/assets/js/app.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.renderSiteHeader?.();
+    });
+    </script>
+</body>
+</html>

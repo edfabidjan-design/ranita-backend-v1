@@ -1,0 +1,1285 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita - Produit</title>
+
+
+
+    <style>
+                /* =========================
+           BASE + FONT
+        ========================= */
+        html, body {
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        }
+
+                * {
+                    box-sizing: border-box
+                }
+
+                /* liens: jamais bleu/souligné */
+                a, a:visited, a:hover, a:active {
+                    color: inherit !important;
+                    text-decoration: none !important;
+                }
+
+                /* =========================
+           VARIABLES
+        ========================= */
+                :root {
+                    --bg: #0b1220;
+                    --panel: #0f172a;
+                    --card: #111c31;
+                    --border: rgba(255,255,255,.10);
+                    --mut: #9ca3af;
+                    --text: #e5e7eb;
+                    --accent: #22c55e;
+                    --orange: #f97316;
+                }
+
+                /* =========================
+           BODY
+        ========================= */
+                body {
+                    margin: 16px;
+                    background: radial-gradient(1200px 600px at 20% 0%, rgba(34,197,94,.10), transparent 55%), radial-gradient(900px 500px at 90% 20%, rgba(59,130,246,.10), transparent 50%), var(--bg);
+                    color: var(--text);
+                }
+
+                /* =========================
+           LAYOUT
+        ========================= */
+                .page {
+                    max-width: 1180px;
+                    margin: 0 auto;
+                    padding: 10px 12px 30px
+                }
+
+                .top {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: 12px
+                }
+
+                /* panel principal */
+                .box {
+                    background: linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+                    border: 1px solid var(--border);
+                    border-radius: 18px;
+                    padding: 16px;
+                    box-shadow: 0 12px 30px rgba(0,0,0,.28);
+                }
+
+                /* grille produit */
+                .grid {
+                    display: grid;
+                    grid-template-columns: 420px 1fr;
+                    gap: 20px
+                }
+
+                @media(max-width:980px) {
+                    .grid {
+                        grid-template-columns: 1fr
+                    }
+                }
+
+                /* =========================
+           BOUTONS
+        ========================= */
+                .btn {
+                    padding: 10px 14px;
+                    border-radius: 12px;
+                    border: 1px solid #1f2937;
+                    background: #111827;
+                    color: var(--text);
+                    cursor: pointer;
+                    font-weight: 700;
+                }
+
+                .btnG {
+                    background: linear-gradient(90deg,#22c55e,#10b981);
+                    color: #06240f;
+                    border: 0;
+                    font-weight: 900;
+                }
+
+                .btn:disabled {
+                    opacity: .6;
+                    cursor: not-allowed
+                }
+
+                /* =========================
+           IMAGE + GALLERY
+        ========================= */
+        .img-zoom-box {
+            width: 100%;
+            max-width: 460px;
+            aspect-ratio: 1/1;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #fff; /* blanc propre */
+            margin: 0 auto;
+            padding: 18px; /* ✅ marge intérieure */
+        }
+
+        .img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* ✅ ne couvre plus, pas de crop */
+            background: transparent;
+            transition: transform .35s ease;
+            cursor: zoom-in;
+        }
+
+                /* ✅ gallery horizontale */
+                .gallery {
+                    display: flex;
+                    gap: 10px;
+                    margin-top: 12px;
+                    flex-wrap: wrap;
+                }
+
+                /* ✅ thumbs plus grands */
+        .thumb {
+            width: 110px;
+            height: 110px;
+            border-radius: 16px;
+            object-fit: contain; /* ✅ ne coupe plus l’image */
+            padding: 8px; /* ✅ espace intérieur */
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,.15);
+            background: #fff; /* fond blanc comme l’image principale */
+            transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+        }
+
+            .thumb:hover {
+                transform: scale(1.04);
+            }
+
+            .thumb.active {
+                border-color: var(--orange);
+                box-shadow: 0 0 0 2px rgba(249,115,22,.35);
+            }
+
+        .shopbar {
+            margin-top: 10px;
+            padding: 10px 12px;
+            border: 1px solid rgba(255,255,255,.10);
+            border-radius: 14px;
+            background: rgba(0,0,0,.12);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .shopLabel {
+            color: #9ca3af;
+            font-weight: 800;
+        }
+
+        .shopLink {
+            font-weight: 950;
+            color: #e5e7eb !important;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.16);
+            background: rgba(255,255,255,.06);
+        }
+
+            .shopLink:hover {
+                border-color: #22c55e;
+                color: #22c55e !important;
+            }
+
+                /* =========================
+           TITRE & PRIX
+		========================= */
+		.title {
+		font-size: 32px;
+		font-weight: 900;
+		margin: 0 0 6px;
+		letter-spacing: .2px
+		}
+
+		.price {
+		font-size: 24px;
+		font-weight: 900;
+		color: var(--accent)
+		}
+
+		.muted {
+		color: var(--mut)
+		}
+
+		/* =========================
+		BADGES VARIANTES (FIX ORANGE)
+		========================= */
+		.badges {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap
+		}
+
+		button.badge, a.badge, .badge {
+		-webkit-appearance: none !important;
+		appearance: none !important;
+		border: 1px solid rgba(255,255,255,.25) !important;
+		background: rgba(255,255,255,.04) !important;
+		color: #e5e7eb !important;
+		padding: 10px 18px !important;
+		border-radius: 999px !important;
+		cursor: pointer !important;
+		font-weight: 900 !important;
+		font-size: 15px !important;
+		line-height: 1 !important;
+		outline: none !important;
+		box-shadow: none !important;
+		text-decoration: none !important;
+		}
+
+		/* hover */
+		button.badge:hover, a.badge:hover, .badge:hover {
+		border-color: var(--orange) !important;
+		color: var(--orange) !important;
+		background: rgba(249,115,22,.06) !important;
+		}
+
+		/* ✅ sélectionné = ORANGE (même en focus/active) */
+		button.badge.active, a.badge.active, .badge.active,
+		button.badge:active, a.badge:active, .badge:active {
+		border-color: var(--orange) !important;
+		color: var(--orange) !important;
+		background: rgba(249,115,22,.10) !important;
+		box-shadow: 0 0 0 2px rgba(249,115,22,.25) !important;
+		}
+
+		button.badge:focus, button.badge:focus-visible {
+		outline: none !important;
+		box-shadow: 0 0 0 2px rgba(249,115,22,.25) !important;
+		}
+
+		/* =========================
+		BUYBOX
+		========================= */
+		.buybox {
+		margin-top: 14px;
+		padding: 14px;
+		border-radius: 18px;
+		border: 1px solid rgba(255,255,255,.10);
+		background: rgba(0,0,0,.12);
+		}
+
+		.stock {
+		margin-top: 6px;
+		font-weight: 900
+		}
+
+		.qty-full {
+		width: 120px;
+		padding: 10px;
+		border-radius: 12px;
+		border: 1px solid rgba(255,255,255,.18);
+		background: rgba(255,255,255,.06);
+		color: var(--text);
+		margin: 10px 0;
+		}
+
+		.btn-full {
+		width: auto;
+		padding: 12px 16px;
+		border-radius: 14px
+		}
+
+		/* =========================
+		SECTIONS
+		========================= */
+		.section-card {
+		margin-top: 16px;
+		background: linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+		border: 1px solid var(--border);
+		border-radius: 16px;
+		padding: 16px;
+		}
+
+		.section-title {
+		font-weight: 900;
+		font-size: 14px;
+		text-transform: uppercase;
+		letter-spacing: .8px;
+		color: var(--mut);
+		margin-bottom: 12px;
+		}
+
+		.desc {
+		line-height: 1.7;
+		font-size: 15px;
+		color: rgba(229,231,235,.92)
+		}
+
+		/* =========================
+		FICHE TECH
+		========================= */
+		.specs-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px 24px
+		}
+
+		@media(max-width:900px) {
+		.specs-grid {
+		grid-template-columns: 1fr
+		}
+		}
+
+		.spec-item {
+		display: flex;
+		justify-content: space-between;
+		padding: 8px 0;
+		border-bottom: 1px solid rgba(255,255,255,.06)
+		}
+
+		.spec-k {
+		color: var(--mut);
+		font-weight: 700
+		}
+
+		.spec-v {
+		font-weight: 800;
+		text-align: right
+		}
+
+		/* =========================
+		PRODUITS SIMILAIRES (HORIZONTAL)
+		========================= */
+		.related-grid {
+		display: flex;
+		gap: 14px;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-behavior: smooth;
+		padding-bottom: 8px;
+		-webkit-overflow-scrolling: touch;
+		}
+
+		.related-grid::-webkit-scrollbar {
+		height: 6px
+		}
+
+		.related-grid::-webkit-scrollbar-thumb {
+		background: rgba(255,255,255,.15);
+		border-radius: 10px
+		}
+
+		.related-card {
+		min-width: 170px;
+		max-width: 170px;
+		flex: 0 0 auto;
+		padding: 10px;
+		border-radius: 14px;
+		border: 1px solid var(--border);
+		background: rgba(0,0,0,.15);
+		transition: transform .15s ease,border-color .15s ease;
+		}
+
+		.related-card:hover {
+		transform: translateY(-3px);
+		border-color: var(--accent)
+		}
+
+		.related-img {
+		width: 100%;
+		aspect-ratio: 1/1;
+		border-radius: 12px;
+		object-fit: cover;
+		background: #0b1220;
+		}
+
+		.related-name {
+		margin-top: 10px;
+		font-size: 13px;
+		font-weight: 800;
+		line-height: 1.35
+		}
+
+		.related-price {
+		margin-top: 6px;
+		font-size: 14px;
+		font-weight: 900;
+		color: var(--accent)
+		}
+
+		/* ✅ MOBILE: cacher la scrollbar du scroll horizontal */
+		@media (max-width: 900px) {
+
+		/* Produits similaires */
+		.related-grid {
+		scrollbar-width: none; /* Firefox */
+		-ms-overflow-style: none; /* IE/Edge legacy */
+		}
+
+		.related-grid::-webkit-scrollbar {
+		display: none; /* Chrome/Safari/Android */
+		}
+
+		/* (optionnel) si tu veux aussi cacher la scrollbar de la galerie */
+		.gallery {
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		overflow-x: auto;
+		}
+
+		.gallery::-webkit-scrollbar {
+		display: none;
+		}
+		}
+
+		/* =========================
+		🔥👀 ROW HORIZONTALE (BUNDLE + RECENT)
+		========================= */
+		.hrow {
+		display: flex;
+		gap: 14px;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding: 4px 2px 10px;
+		scroll-behavior: smooth;
+		-webkit-overflow-scrolling: touch;
+		}
+
+		/* ✅ cacher la scrollbar partout */
+		.hrow {
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		}
+
+		.hrow::-webkit-scrollbar {
+		display: none;
+		}
+
+		/* cartes */
+		.hcard {
+		min-width: 170px;
+		max-width: 170px;
+		flex: 0 0 auto;
+		padding: 10px;
+		border-radius: 14px;
+		border: 1px solid rgba(255,255,255,.10);
+		background: rgba(0,0,0,.15);
+		transition: transform .15s ease, border-color .15s ease;
+		}
+
+		.hcard:hover {
+		transform: translateY(-3px);
+		border-color: var(--accent);
+		}
+
+		.himg {
+		width: 100%;
+		aspect-ratio: 1/1;
+		border-radius: 12px;
+		object-fit: cover;
+		background: #0b1220;
+		}
+
+		.hname {
+		margin-top: 10px;
+		font-size: 13px;
+		font-weight: 800;
+		line-height: 1.35;
+		color: #e5e7eb;
+		}
+
+		.hprice {
+		margin-top: 6px;
+		font-size: 14px;
+		font-weight: 900;
+		color: var(--accent);
+		}
+
+		/* ✅ Promo style identique à shop.html */
+		.priceRow {
+		display: flex;
+		align-items: baseline;
+		gap: 10px;
+		flex-wrap: wrap;
+		}
+
+		.priceNow {
+		color: var(--accent);
+		font-weight: 950;
+		font-size: 14px;
+		}
+
+		.priceOld {
+		color: #9ca3af;
+		text-decoration: line-through;
+		font-weight: 850;
+		opacity: .9;
+		}
+
+		.promoBadge {
+		display: inline-block;
+		padding: 4px 10px;
+		border-radius: 999px;
+		border: 1px solid rgba(249,115,22,.45);
+		background: rgba(249,115,22,.12);
+		color: var(--orange);
+		font-weight: 950;
+		font-size: 12px;
+		}
+
+
+		/* ✅ version compacte */
+		.shopbar {
+		margin-top: 10px;
+		padding: 10px 12px;
+		border: 1px solid rgba(255,255,255,.10);
+		border-radius: 14px;
+		background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015));
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+		}
+
+		.shopLabel {
+		color: var(--mut);
+		font-weight: 900;
+		font-size: 11px;
+		letter-spacing: .7px;
+		text-transform: uppercase;
+		}
+
+		.shopName {
+		font-weight: 950;
+		font-size: 13px;
+		line-height: 1.1;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 220px; /* ajuste si tu veux */
+		}
+
+		.shopGo {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 7px 10px;
+		border-radius: 12px;
+		border: 1px solid rgba(34,197,94,.35);
+		background: rgba(34,197,94,.10);
+		color: var(--accent) !important;
+		font-weight: 950;
+		font-size: 13px;
+		}
+
+		.shopGo:hover {
+		background: rgba(34,197,94,.16);
+		border-color: rgba(34,197,94,.55);
+		}
+
+
+		/* =========================
+		✅ AVIS (VERSION COMPACTE)
+		========================= */
+		#reviewsBox {
+		padding: 12px !important;
+		border-radius: 14px !important;
+		}
+
+		#reviewsBox .section-title {
+		margin-bottom: 8px;
+		}
+
+		#reviewsBox .btn.btnG {
+		padding: 8px 12px !important;
+		border-radius: 12px !important;
+		font-size: 13px !important;
+		}
+
+		#rvSummary {
+		font-size: 13px;
+		}
+
+		#rvHistogram {
+		margin-top: 8px !important;
+		}
+
+		/* barres histogramme + lignes compact */
+		#rvHistogram > div {
+		gap: 6px !important;
+		}
+
+		#rvHistogram .muted {
+		font-size: 12px;
+		}
+
+		/* mini barre */
+		#rvHistogram .barWrap {
+		height: 6px !important;
+		}
+
+		#rvHistogram .barFill {
+		height: 6px !important;
+		}
+
+		/* Select + chips plus petits */
+		#rvSort {
+		padding: 8px 10px !important;
+		border-radius: 12px !important;
+		font-size: 13px !important;
+		}
+
+		#rvStarsFilter .badge {
+		padding: 8px 12px !important;
+		font-size: 13px !important;
+		}
+
+
+		/* ✅ MODAL AVIS — FORCER STYLE PRO (à mettre en bas du CSS) */
+		/* ✅ MODAL AVIS (propre, grand, opaque) */
+		#rvModal {
+		position: fixed !important;
+		inset: 0 !important;
+		display: none;
+		align-items: center !important;
+		justify-content: center !important;
+		padding: 12px !important;
+		z-index: 999999 !important;
+		background: rgba(0,0,0,.82) !important;
+		backdrop-filter: blur(6px);
+		}
+
+		#rvModal.show {
+		display: flex !important;
+		}
+
+		#rvModal .rvModalBox {
+		width: min(460px, 92%) !important; /* 🔥 plus petit */
+		max-width: 460px !important;
+		max-height: 85vh !important;
+
+		overflow-y: auto !important;
+		overflow-x: hidden !important;
+
+		margin: auto !important; /* 🔥 centre */
+
+		background: #0f172a !important;
+		color: #e5e7eb !important;
+
+		border: 1px solid rgba(255,255,255,.14) !important;
+		border-radius: 18px !important;
+
+		padding: 16px !important;
+
+		box-shadow: 0 30px 90px rgba(0,0,0,.75) !important;
+		}
+
+		/* champs du modal */
+		#rvModal .qty-full,
+		#rvModal input,
+		#rvModal textarea,
+		#rvModal select {
+		width: 100% !important;
+		min-width: 0 !important;
+		margin: 0 !important;
+		}
+
+		#rvModal textarea {
+		resize: vertical;
+		min-height: 110px;
+		}
+
+		/* mobile */
+		@media (max-width: 640px) {
+		#rvModal {
+		align-items: flex-end !important;
+		padding: 0 !important;
+		}
+
+		#rvModal .rvModalBox {
+		width: 100% !important;
+		max-width: none !important;
+		max-height: 88vh !important;
+		border-radius: 18px 18px 0 0 !important;
+		padding: 14px !important;
+		margin: 0 !important;
+		}
+
+		#rvModal .rvModalBox > div:first-child {
+		gap: 10px;
+		}
+
+		#rvModal .btn {
+		min-height: 46px;
+		}
+
+		.rvModalHead {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 10px;
+		flex-wrap: wrap;
+		}
+
+		#rvTitle,
+		#rvComment,
+		#rvRating {
+		font-size: 16px !important;
+		}
+		}
+
+		.shopbar {
+		justify-content: space-between;
+		}
+
+		/* =========================
+		STICKY PANIER FLOTTANT
+		========================= */
+        .sticky-cart {
+            position: fixed;
+            right: 12px; /* 👉 à droite */
+            left: auto; /* 👉 très important */
+            bottom: 80px; /* 👉 évite le bouton ↑ */
+
+            transform: translateY(120%);
+            width: min(420px, calc(100vw - 20px));
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform .28s ease, opacity .28s ease;
+        }
+
+            .sticky-cart.show {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+		.sticky-cart-box {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 14px;
+		border-radius: 18px;
+		border: 1px solid rgba(255,255,255,.12);
+		background: rgba(15,23,42,.96);
+		backdrop-filter: blur(10px);
+		box-shadow: 0 20px 50px rgba(0,0,0,.45);
+		}
+
+		.sticky-cart-left {
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		}
+
+		.sticky-cart-title {
+		font-size: 15px;
+		font-weight: 950;
+		color: #e5e7eb;
+		line-height: 1.2;
+		}
+
+		.sticky-cart-sub {
+		font-size: 13px;
+		color: #9ca3af;
+		line-height: 1.2;
+		}
+
+		.sticky-cart-actions {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		flex-shrink: 0;
+		}
+
+		.sticky-cart-btn {
+		min-height: 46px;
+		padding: 0 14px;
+		border-radius: 14px;
+		border: 1px solid rgba(255,255,255,.10);
+		background: #111827;
+		color: #e5e7eb;
+		font-weight: 900;
+		cursor: pointer;
+		}
+
+		.sticky-cart-btn.go {
+		background: linear-gradient(90deg,#22c55e,#10b981);
+		color: #06240f;
+		border: 0;
+		}
+
+		@media (max-width: 640px) {
+		.sticky-cart {
+		width: calc(100vw - 16px);
+		bottom: 10px;
+		}
+
+		.sticky-cart-box {
+		display: grid;
+		gap: 10px;
+		padding: 12px;
+		border-radius: 16px;
+		}
+
+		.sticky-cart-actions {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: 8px;
+		}
+
+		.sticky-cart-btn {
+		min-height: 48px;
+		width: 100%;
+		}
+
+		.sticky-cart-btn.clear {
+		width: 48px;
+		min-width: 48px;
+		padding: 0;
+		}
+		}
+
+		/* 🔥 FIX FINAL RESPONSIVE MODAL */
+		@media (max-width: 640px) {
+
+		#rvModal {
+		display: none;
+		align-items: flex-end !important;
+		justify-content: center !important;
+		padding: 0 !important;
+		}
+
+		#rvModal.show {
+		display: flex !important;
+		}
+
+		#rvModal .rvModalBox {
+		width: 100% !important;
+		max-width: 100% !important;
+		max-height: 90vh !important;
+		border-radius: 18px 18px 0 0 !important;
+		padding: 14px !important;
+		overflow-y: auto !important;
+		}
+		}
+		/* =========================
+		FIX MOBILE GLOBAL PAGE DETAIL
+		========================= */
+		html, body {
+		max-width: 100%;
+		overflow-x: hidden;
+		}
+
+		body {
+		margin: 0;
+		}
+
+		.page {
+		width: 100%;
+		max-width: 1180px;
+		margin: 0 auto;
+		padding: 10px 10px 24px;
+		overflow-x: hidden;
+		}
+
+		.box,
+		.section-card,
+		.buybox,
+		.shopbar,
+		#reviewsBox,
+		#rvList > div,
+		#relatedBox,
+		#bundleBox,
+		#popularBox,
+		#recentBox {
+		max-width: 100%;
+		overflow-x: hidden;
+		}
+
+		.grid {
+		display: grid;
+		grid-template-columns: 420px minmax(0, 1fr);
+		gap: 20px;
+		}
+
+		.left,
+		.right {
+		min-width: 0;
+		width: 100%;
+		}
+
+		.img-zoom-box {
+		width: 100%;
+		max-width: 460px;
+		}
+
+		#gallery {
+		width: 100%;
+		overflow-x: auto;
+		flex-wrap: nowrap;
+		padding-bottom: 6px;
+		}
+
+		.thumb {
+		flex: 0 0 auto;
+		}
+
+		.shopbar {
+		width: 100%;
+		min-width: 0;
+		}
+
+		.shopLeft {
+		min-width: 0;
+		flex: 1;
+		}
+
+		.shopName {
+		max-width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		}
+
+		.shopGo {
+		flex-shrink: 0;
+		}
+
+		#reviewsBox {
+		width: 100%;
+		min-width: 0;
+		}
+
+		#rvHistogram,
+		#rvList,
+		#rvStarsFilter {
+		min-width: 0;
+		}
+
+        #rvStarsFilter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            flex-wrap: nowrap !important;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            padding: 4px 14px 8px 0;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+        }
+
+            #rvStarsFilter::-webkit-scrollbar {
+                display: none;
+            }
+
+            #rvStarsFilter .badge {
+                flex: 0 0 auto;
+                white-space: nowrap;
+            }
+
+        @media (max-width: 640px) {
+            #rvStarsFilter {
+               gap: 8px;
+                padding-right: 22px;
+            }
+
+                #rvStarsFilter .badge {
+                    font-size: 9px !important;
+                    padding: 8px 12px !important;
+                }
+        }
+
+		#rvList > div {
+		width: 100%;
+		min-width: 0;
+		}
+
+		.related-grid,
+		.hrow {
+		width: 100%;
+		overflow-x: auto;
+		}
+
+		.related-card,
+		.hcard {
+		flex: 0 0 170px;
+		}
+
+		/* =========================
+		MODAL AVIS FIX
+		========================= */
+
+
+		.rvModalHead {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 10px;
+		flex-wrap: wrap;
+		}
+
+		#rvModal .qty-full,
+		#rvModal input,
+		#rvModal textarea,
+		#rvModal select,
+		#rvModal button {
+		width: 100% !important;
+		min-width: 0 !important;
+		box-sizing: border-box !important;
+		}
+
+		#rvModal textarea {
+		resize: vertical;
+		min-height: 110px;
+		}
+
+
+		@media (max-width: 980px) {
+		.grid {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 16px;
+		}
+		}
+
+
+		/* =========================
+		MOBILE
+		========================= */
+		@media (max-width: 640px) {
+
+		#rvModal {
+		align-items: center !important; /* 🔥 centré mobile */
+		justify-content: center !important;
+		padding: 10px !important;
+		}
+
+		#rvModal .rvModalBox {
+		width: 92% !important;
+		max-width: 92% !important;
+		max-height: 75vh !important;
+		border-radius: 16px !important;
+		padding: 12px !important;
+		}
+		}
+	</style>
+
+</head>
+
+<body>
+	<div class="page">
+
+		<div class="top">
+			<button class="btn" onclick="location.href='/products.html'">⬅ Retour</button>
+			<button class="btn" onclick="location.href='/cart.html'">
+				🛒 Panier (<span id="cc">0</span>)
+			</button>
+		</div>
+
+		<div id="err" class="muted"></div>
+
+		<div class="box" id="content" style="display:none">
+			<div class="grid">
+
+				<!-- 🔹 COLONNE GAUCHE : images -->
+				<div class="left">
+					<div class="img-zoom-box">
+						<img id="mainImg"
+							 class="img"
+							 src="/assets/img/placeholder.jpg"
+							 loading="eager"
+							 decoding="async"
+							 fetchpriority="high" />
+					</div>
+
+					<div id="gallery" class="gallery"></div>
+
+					<!-- ✅ Boutique sous les miniatures -->
+					<div id="shopBar" class="shopbar" style="display:none">
+						<div class="shopLeft">
+							<div class="shopLabel">Boutique</div>
+							<div id="shopName" class="shopName"></div>
+						</div>
+
+						<a id="shopLink" class="shopGo" href="#">
+							Voir <span style="opacity:.9">→</span>
+						</a>
+					</div>
+
+
+					<!-- ✅ Avis clients (sous Boutique) -->
+					<div id="reviewsBox" class="section-card" style="display:none;margin-top:12px">
+						<div class="section-title"><span>⭐ Avis clients</span></div>
+
+						<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+							<div id="rvSummary" class="muted"></div>
+							<button class="btn btnG" id="btnWriteReview" type="button" style="display:none">Écrire un avis</button>
+						</div>
+
+						<div id="rvHistogram" style="margin-top:10px"></div>
+
+						<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px">
+							<select id="rvSort" class="qty-full" style="width:auto">
+								<option value="recent">Plus récents</option>
+								<option value="top">Mieux notés</option>
+							</select>
+
+							<div id="rvStarsFilter" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+						</div>
+
+						<div id="rvList" style="margin-top:10px;display:grid;gap:10px"></div>
+
+						<div style="display:flex;justify-content:center;margin-top:10px">
+							<button class="btn" id="rvMore" type="button" style="display:none">Voir plus</button>
+						</div>
+					</div>
+
+					<!-- ✅ Modal Avis -->
+					<div id="rvModal">
+						<div class="rvModalBox">
+							<div class="rvModalHead">
+								<div style="font-weight:950">Laisser un avis</div>
+								<button class="btn" id="rvClose" type="button">Fermer</button>
+							</div>
+
+							<div style="margin-top:10px;display:grid;gap:8px">
+								<select id="rvRating" class="qty-full" style="width:100%">
+									<option value="5">★★★★★ (5)</option>
+									<option value="4">★★★★☆ (4)</option>
+									<option value="3">★★★☆☆ (3)</option>
+									<option value="2">★★☆☆☆ (2)</option>
+									<option value="1">★☆☆☆☆ (1)</option>
+								</select>
+
+								<input id="rvTitle" class="qty-full" style="width:100%" placeholder="Titre (optionnel)" maxlength="120">
+								<textarea id="rvComment" class="qty-full" style="width:100%" placeholder="Commentaire (optionnel)" maxlength="2000" rows="4"></textarea>
+
+								<button class="btn btnG" id="rvSubmit" type="button" onclick="submitReview()">Envoyer</button>
+								<div class="muted" id="rvMsg"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 🔹 COLONNE DROITE : infos produit -->
+				<div class="right">
+
+
+					<div id="name" class="title"></div>
+					<div id="price" class="price"></div>
+					<div id="promo" class="muted" style="margin-top:6px"></div>
+
+					<div class="muted" style="margin-top:10px">
+						<div id="brand"></div>
+						<div id="sku"></div>
+						<div id="dims"></div>
+						<div id="weight"></div>
+					</div>
+
+					<div style="margin-top:10px">
+						<div id="sizesRow" style="display:none"></div>
+						<div id="colorsRow" style="display:none;margin-top:8px"></div>
+					</div>
+
+					<div class="buybox">
+						<div id="stock" class="stock"></div>
+						<input id="qty" type="number" min="1" value="1" class="qty-full" />
+						<button class="btn btnG btn-full" id="btnAdd" type="button">
+							➕ Ajouter au panier
+						</button>
+						<div class="muted" id="msg" style="margin-top:8px"></div>
+					</div>
+
+					<!-- ✅ SECTIONS PRO -->
+					<div id="shortDescBox" class="section-card" style="display:none">
+						<div class="section-title"><span>Description courte</span></div>
+						<div id="shortDesc" class="desc"></div>
+					</div>
+
+					<div id="techSpecsBox" class="section-card" style="display:none">
+						<div class="section-title"><span>Fiche technique</span></div>
+						<div id="techSpecs"></div>
+					</div>
+
+					<div class="section-card">
+						<div class="section-title"><span>Description longue</span></div>
+						<div id="longDesc" class="desc"></div>
+					</div>
+
+					<div class="section-card">
+						<div class="section-title"><span>Points forts</span></div>
+						<ul id="highlights" style="margin-left:18px;line-height:1.7"></ul>
+					</div>
+
+
+
+
+				</div> <!-- /right -->
+			</div> <!-- /grid -->
+			<!-- ✅ Produits similaires (pleine largeur) -->
+			<div id="relatedBox" class="section-card" style="display:none">
+				<div class="section-title"><span>Produits similaires</span></div>
+				<div id="relatedGrid" class="related-grid"></div>
+			</div>
+
+			<!-- 🔥 Fréquemment achetés ensemble -->
+			<div id="bundleBox" class="section-card" style="display:none">
+				<div class="section-title"><span>Fréquemment achetés ensemble</span></div>
+				<div id="bundleGrid" class="hrow"></div>
+			</div>
+
+			<!-- 🔥 Produits populaires -->
+			<div id="popularBox" class="section-card" style="display:none">
+				<div class="section-title"><span>Produits populaires</span></div>
+				<div id="popularGrid" class="hrow"></div>
+			</div>
+
+
+			<!-- 👀 Récemment vus -->
+			<div id="recentBox" class="section-card" style="display:none">
+				<div class="section-title"><span>Récemment vus</span></div>
+				<div id="recentGrid" class="hrow"></div>
+			</div>
+
+		</div> <!-- /content -->
+	</div> <!-- /page -->
+	<!-- ✅ Scripts TOUJOURS ici, juste avant </body> -->
+	<script src="/assets/js/app.js?v=2" defer></script>
+	<script src="/assets/js/cart-core.js?v=999" defer></script>
+	<script src="/assets/js/variants.js?v=1" defer></script>
+	<script src="/assets/js/modal-variants.js?v=1" defer></script>
+	<script src="/assets/js/product.js?v=6" defer></script>
+
+
+	<!-- ✅ Sticky Panier -->
+	<div id="stickyCart" class="sticky-cart" aria-live="polite">
+		<div class="sticky-cart-box">
+			<div class="sticky-cart-left">
+				<div class="sticky-cart-title">✅ Produit ajouté au panier</div>
+				<div class="sticky-cart-sub">
+					<span id="stickyCartCount">0</span> article(s) dans votre panier
+				</div>
+			</div>
+
+			<div class="sticky-cart-actions">
+				<button id="stickyCartGo" class="sticky-cart-btn go" type="button">Voir panier</button>
+				<button id="stickyCartClear" class="sticky-cart-btn clear" type="button" title="Vider le panier">🗑</button>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

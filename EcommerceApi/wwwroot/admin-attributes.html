@@ -1,0 +1,121 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Attributs</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+</head>
+
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">Crée des attributs produits et leurs options</p>
+                    </section>
+
+                    <div class="grid2">
+
+
+
+                        <!-- LEFT: list -->
+                        <section class="card">
+                            <div class="toprow">
+                                <input id="txtSearchAttr" class="inp" placeholder="Rechercher (code / nom)..." />
+                                <button id="btnNewAttr" class="btn">+ Nouveau</button>
+                            </div>
+
+                            <div id="attrList" class="listbox" style="margin-top:10px">
+                                <div class="muted">Chargement...</div>
+                            </div>
+                        </section>
+
+                        <!-- RIGHT: form -->
+                        <section class="card">
+                            <div id="attrMsg" class="form-msg" style="display:none"></div>
+
+                            <div class="grid2" style="grid-template-columns:1fr 1fr">
+                                <label class="field">
+                                    <div class="lbl">Code (unique)</div>
+                                    <input id="txtAttrCode" class="inp" placeholder="ex: color, size, brand" />
+                                </label>
+
+                                <label class="field">
+                                    <div class="lbl">Nom</div>
+                                    <input id="txtAttrName" class="inp" placeholder="ex: Couleur" />
+                                </label>
+                            </div>
+
+                            <div class="grid2" style="grid-template-columns:1fr 1fr">
+                                <label class="field">
+                                    <div class="lbl">Type</div>
+                                    <select id="selAttrType" class="inp">
+                                        <option value="Text">Texte libre</option>
+                                        <option value="Option">Liste déroulante</option>
+                                    </select>
+
+
+
+                                </label>
+
+                                <div class="field">
+                                    <div class="lbl">Flags</div>
+                                    <label style="display:flex;gap:10px;align-items:center;margin-top:8px">
+                                        <input id="chkAttrVariant" type="checkbox" />
+                                        <span>IsVariant (utilisé pour variantes)</span>
+                                    </label>
+                                    <label style="display:flex;gap:10px;align-items:center;margin-top:8px">
+                                        <input id="chkAttrActive" type="checkbox" checked />
+                                        <span>Actif</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row" style="display:flex;gap:10px;margin-top:12px">
+                                <button id="btnSaveAttr" class="btn">Enregistrer</button>
+                                <button id="btnDeleteAttr" class="btn danger" style="display:none">Supprimer</button>
+                                <button id="btnResetAttr" class="btn ghost">Réinitialiser</button>
+                            </div>
+
+                            <!-- OPTIONS panel -->
+                            <div id="optPanel" class="card" style="margin-top:14px;display:none">
+                                <div style="font-weight:900">Options (type Option)</div>
+                                <div class="muted" style="margin-top:4px">Ajoute des valeurs pour un select (ex: Noir, Blanc, Rouge).</div>
+
+                                <div class="toprow" style="margin-top:10px">
+                                    <input id="txtOptValue" class="inp" placeholder="Valeur..." />
+                                    <input id="txtOptSort" class="inp" type="number" value="0" style="width:110px" />
+                                    <button id="btnAddOpt" class="btn">Ajouter</button>
+                                </div>
+
+                                <div id="optList" class="listbox" style="margin-top:10px"></div>
+                            </div>
+
+                        </section>
+                    </div>
+                </div>
+            </div>
+   
+    </main>
+
+    <script src="/assets/js/app.js?v=2"></script>
+    <script src="/assets/js/admin-attributes.js?v=2"></script>
+
+
+
+
+</body>
+</html>

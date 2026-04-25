@@ -1,0 +1,76 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita - Inscription</title>
+    <link rel="stylesheet" href="/css/base.css?v=1" />
+</head>
+<body class="admin-body">
+    <div class="wrap" style="max-width:520px;margin:28px auto;padding:14px;">
+        <div class="card" style="padding:16px;border:1px solid #1f2937;border-radius:16px;background:#111827;color:#e5e7eb">
+            <h2 style="margin:0 0 10px;font-weight:900">📝 Créer un compte</h2>
+
+            <div style="display:grid;gap:10px">
+                <input id="name" placeholder="Nom complet" style="padding:12px;border-radius:12px;border:1px solid #1f2937;background:#0b1220;color:#e5e7eb">
+                <input id="phone" placeholder="Téléphone " style="padding:12px;border-radius:12px;border:1px solid #1f2937;background:#0b1220;color:#e5e7eb">
+                <input id="email" placeholder="Email" style="padding:12px;border-radius:12px;border:1px solid #1f2937;background:#0b1220;color:#e5e7eb">
+                <input id="pass" type="password" placeholder="Mot de passe (min 6)" style="padding:12px;border-radius:12px;border:1px solid #1f2937;background:#0b1220;color:#e5e7eb">
+
+                <button id="btnReg" class="btn btnPri" style="padding:12px;border-radius:12px;border:0;background:#22c55e;color:#06240f;font-weight:900;cursor:pointer">Créer</button>
+                <div id="msg" style="display:none;padding:10px;border-radius:12px;border:1px solid #374151;background:rgba(15,23,42,.6)"></div>
+            </div>
+
+            <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+                <a href="/client-login.html" class="btn" style="padding:10px 12px;border-radius:12px;border:1px solid #1f2937;background:#111827;color:#e5e7eb;font-weight:800">J’ai déjà un compte</a>
+                <a href="/products.html" class="btn" style="padding:10px 12px;border-radius:12px;border:1px solid #1f2937;background:#111827;color:#e5e7eb;font-weight:800">Retour</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/client-auth.js?v=2"></script>
+    <script>
+        const msg = document.getElementById("msg");
+        const btn = document.getElementById("btnReg");
+
+        const show = (t, ok = false) => {
+            msg.style.display = "block";
+            msg.style.borderColor = ok ? "rgba(34,197,94,.35)" : "rgba(239,68,68,.35)";
+            msg.textContent = t;
+        };
+
+        btn.addEventListener("click", async () => {
+            if (btn.disabled) return;
+
+            btn.disabled = true;
+            const oldText = btn.textContent;
+            btn.textContent = "Création...";
+
+            try {
+                const fullName = document.getElementById("name").value.trim();
+                const phone = document.getElementById("phone").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("pass").value;
+
+                if (typeof window.clientRegister !== "function") {
+                    throw new Error("clientRegister introuvable (client-auth.js pas chargé).");
+                }
+                await window.clientRegister({ fullName, phone, email, password });
+
+
+                show("✅ Compte créé. Connexion en cours...", true);
+
+                const back = new URL(location.href).searchParams.get("returnUrl");
+                location.href = back ? decodeURIComponent(back) : "/home.html";
+            } catch (e) {
+                show("❌ " + (e?.message || e));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = oldText;
+            }
+        });
+    </script>
+
+
+</body>
+</html>

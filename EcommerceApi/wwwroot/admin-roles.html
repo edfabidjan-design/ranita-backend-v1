@@ -1,0 +1,104 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Rôles & permissions</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">
+                            Gestion des rôles administrateurs et des droits d’accès
+                        </p>
+                    </section>
+
+                    <section class="card">
+                        <h2>Créer / modifier un rôle</h2>
+
+                        <div class="form-grid">
+                            <div class="field">
+                                <label>Nom du rôle</label>
+                                <input id="txtRoleName" placeholder="ex: Gestionnaire catalogue" />
+                            </div>
+
+                            <div class="field">
+                                <label>Code</label>
+                                <input id="txtRoleCode" placeholder="ex: CATALOG_MANAGER" />
+                            </div>
+
+                            <div class="field field-full">
+                                <label>Description</label>
+                                <input id="txtRoleDescription" placeholder="Description du rôle" />
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <button class="btn btn-primary" id="btnSaveRole" type="button">Enregistrer</button>
+                            <button class="btn" id="btnResetRole" type="button">Réinitialiser</button>
+                        </div>
+                    </section>
+
+                    <section class="card">
+                        <div class="list-head">
+                            <h2>Liste des rôles</h2>
+                            <input class="search" id="txtSearchRole" placeholder="Rechercher un rôle..." />
+                        </div>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nom</th>
+                                        <th>Code</th>
+                                        <th>Système</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rolesBody"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="card">
+                        <div class="list-head">
+                            <h2>Permissions du rôle sélectionné</h2>
+                            <div id="selectedRoleInfo" class="muted">Sélectionnez un rôle.</div>
+                        </div>
+
+                        <div id="permissionsBox" class="permissions-grid">
+                        </div>
+
+                        <div class="actions actions-top">
+                            <button class="btn btn-primary" id="btnSavePermissions" type="button">Enregistrer les permissions</button>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+
+    <script src="/assets/js/app.js?v=3001" defer></script>
+    <script src="/assets/js/admin-roles.js?v=1000" defer></script>
+</body>
+</html>

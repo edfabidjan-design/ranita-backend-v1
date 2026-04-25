@@ -1,0 +1,107 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Clients</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+</head>
+
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">Gestion : fiche, désactivation, suppression</p>
+                    </section>
+
+                    <section class="card">
+
+                        <div class="list-head" style="align-items:flex-end">
+                            <div>
+                                <h2 style="margin:0">Clients</h2>
+                                <div class="muted">Gestion : fiche, désactivation, suppression</div>
+                            </div>
+
+                            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+                                <input class="search" id="q" placeholder="Recherche nom / tel / email" />
+                                <select id="flt" class="search" style="max-width:220px">
+                                    <option value="">Tous</option>
+                                    <option value="1">Actifs</option>
+                                    <option value="0">Désactivés</option>
+                                </select>
+                                <button id="btnReload" class="btn" type="button">Rafraîchir</button>
+                            </div>
+                        </div>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nom</th>
+                                        <th>Téléphone</th>
+                                        <th>Email</th>
+                                        <th>Statut</th>
+                                        <th style="text-align:right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rows"></tbody>
+                            </table>
+                        </div>
+
+                        <div id="msg" class="form-msg" style="display:none"></div>
+                    </section>
+
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+
+    <!-- IMPORTANT: même version que users pour éviter cache -->
+    <script src="/assets/js/app.js?v=2002" defer></script>
+    <script src="/assets/js/admin-customers.js?v=2002" defer></script>
+
+    <!-- Modal fiche client -->
+    <div id="modal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:9999">
+        <div style="width:min(560px,92vw);background:#0b1220;border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:14px;box-shadow:0 18px 50px rgba(0,0,0,.45);color:#e5e7eb">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                <div style="font-weight:900">📌 Fiche client</div>
+                <button id="mClose" class="btn btnGhost" type="button">Fermer</button>
+            </div>
+            <div id="mBody" style="margin-top:12px;display:grid;gap:10px"></div>
+        </div>
+    </div>
+
+
+    <!-- Modal détail commande -->
+    <div id="modalOrder" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:10000">
+        <div style="width:min(820px,94vw);max-height:86vh;overflow:auto;background:#0b1220;border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:14px;box-shadow:0 18px 50px rgba(0,0,0,.45);color:#e5e7eb">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                <div style="font-weight:900">🧾 Détail commande</div>
+                <button id="oClose" class="btn btnGhost" type="button">Fermer</button>
+            </div>
+            <div id="oBody" style="margin-top:12px;display:grid;gap:10px"></div>
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

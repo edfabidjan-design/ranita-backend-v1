@@ -1,0 +1,103 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Modération produits vendeurs</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <style>
+        .btn.active {
+            border: 2px solid #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245,158,11,.18);
+        }
+
+            .btn.active[data-tab="Pending"] {
+                border-color: #f59e0b;
+            }
+
+            .btn.active[data-tab="Published"] {
+                border-color: #22c55e;
+            }
+
+            .btn.active[data-tab="Rejected"] {
+                border-color: #ef4444;
+            }
+
+            .btn.active[data-tab="Deleted"] {
+                border-color: #9ca3af;
+            }
+    </style>
+</head>
+
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">Validation, refus et suivi des produits soumis par les vendeurs</p>
+                    </section>
+
+                    <div class="card" style="margin-top:12px;padding:12px;">
+                        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                <button class="btn" data-tab="Pending">Pending</button>
+                                <button class="btn" data-tab="Published">Published</button>
+                                <button class="btn" data-tab="Rejected">Rejected</button>
+                                <button class="btn danger" data-tab="Deleted">Deleted</button>
+                            </div>
+
+                            <span class="muted" style="margin-left:auto;">Total:</span>
+                            <b id="countItems">0</b>
+                            <button id="btnRefresh" class="btn" style="margin-left:10px;">Rafraîchir</button>
+
+                        </div>
+
+                        <div id="activeFilterInfo" class="muted" style="margin-bottom:10px;"></div>
+                        <div id="msg" class="muted" style="margin-top:10px;"></div>
+
+                        <div style="overflow:auto;margin-top:12px;">
+                            <table class="table" style="min-width:1100px;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Image</th>
+                                        <th>Nom</th>
+                                        <th>Statut</th>
+                                        <th>Catégorie</th>
+                                        <th>Prix</th>
+                                        <th>Stock</th>
+                                        <th>Boutique</th>
+                                        <th>Soumis le</th>
+                                        <th>VendorId</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemsBody">
+                                    <tr><td colspan="11" class="muted">Chargement…</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script src="/assets/js/app.js?v=1001"></script>
+    <script src="/assets/js/admin-products-moderation.js?v=2002"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Flash Deals</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">Gestion des offres promotionnelles à durée limitée</p>
+                    </section>
+
+                    <div class="box" style="margin-bottom:16px;">
+                        <div style="font-weight:800;margin-bottom:12px;">Créer / modifier un Flash Deal</div>
+
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
+                            <select id="fdProductId" class="input"></select>
+
+                            <input id="fdDiscountPercent" class="input" type="number" min="1" max="99" step="0.01" placeholder="Réduction (%)">
+
+                            <input id="fdStartAt" class="input" type="datetime-local">
+                            <input id="fdEndAt" class="input" type="datetime-local">
+
+                            <input id="fdDisplayOrder" class="input" type="number" min="1" value="1" placeholder="Ordre">
+                        </div>
+
+                        <label style="display:flex;gap:8px;align-items:center;margin-top:12px;">
+                            <input id="fdIsActive" type="checkbox" checked>
+                            <span>Activer ce Flash Deal</span>
+                        </label>
+
+                        <div style="display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap;">
+                            <button class="btn" id="btnSaveFlashDeal">Enregistrer</button>
+                            <button class="btn btnGhost" id="btnCancelFlashDealEdit" type="button" style="display:none;">Annuler modification</button>
+                        </div>
+                    </div>
+
+                    <div class="box">
+                        <div style="font-weight:800;margin-bottom:12px;">Liste des Flash Deals</div>
+                        <div id="flashDealsList"></div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script src="/assets/js/app.js?v=5000"></script>
+    <script src="/assets/js/admin-flash-deals.js"></script>
+</body>
+</html>

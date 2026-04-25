@@ -1,0 +1,827 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Vendor - Dashboard</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+   
+
+    <style>
+		:root {
+		--bg: #0b1220;
+		--card: #111827;
+		--bd: #1f2937;
+		--txt: #e5e7eb;
+		--mut: #94a3b8;
+		--acc: #22c55e;
+		--warn: #f59e0b;
+		--bad: #ef4444;
+		--chip: #0f172a;
+		}
+
+		body {
+		background: radial-gradient(1200px 600px at 10% -10%, rgba(34,197,94,.20), transparent 60%), radial-gradient(900px 600px at 110% 0%, rgba(59,130,246,.18), transparent 60%), var(--bg);
+		color: var(--txt);
+		font-family: Arial;
+		margin: 0;
+		}
+
+		.v-top {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		z-index: 9999;
+		backdrop-filter: blur(10px);
+		background: rgba(15,23,42,.85);
+		border-bottom: 1px solid rgba(148,163,184,.18);
+		}
+		.wrap {
+		margin-top: 90px; /* espace pour le header */
+		}
+
+		.v-top-inner {
+		max-width: 1180px;
+		margin: 0 auto;
+		padding: 14px 16px;
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		justify-content: space-between;
+		}
+
+		.brand {
+		display: flex;
+		align-items: center;
+		gap: 12px
+		}
+
+		.who b {
+		display: block;
+		font-size: 14px
+		}
+
+		.who span {
+		display: block;
+		color: var(--mut);
+		font-size: 12px;
+		margin-top: 2px
+		}
+
+		.nav {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap
+		}
+
+		.nav a {
+		text-decoration: none;
+		color: var(--txt);
+		background: rgba(2,6,23,.45);
+		border: 1px solid rgba(148,163,184,.18);
+		padding: 9px 12px;
+		border-radius: 999px;
+		font-size: 13px;
+		}
+
+		.nav a.active {
+		border-color: rgba(34,197,94,.55);
+		box-shadow: 0 0 0 3px rgba(34,197,94,.12);
+		}
+
+		.actions {
+		display: flex;
+		gap: 10px;
+		align-items: center
+		}
+
+		.btn {
+		background: rgba(2,6,23,.45);
+		color: var(--txt);
+		border: 1px solid rgba(148,163,184,.22);
+		padding: 9px 12px;
+		border-radius: 12px;
+		cursor: pointer;
+		}
+
+		.btn.primary {
+		border-color: rgba(34,197,94,.55)
+		}
+
+		.wrap {
+		max-width: 1180px;
+		margin: 0 auto;
+		padding: 18px 16px 40px
+		}
+
+		h1 {
+		margin: 16px 0 6px;
+		font-size: 28px
+		}
+
+		.sub {
+		color: var(--mut);
+		margin-bottom: 18px
+		}
+
+		.grid {
+		display: grid;
+		grid-template-columns: repeat(12,1fr);
+		gap: 12px;
+		}
+
+		.card {
+		background: rgba(17,24,39,.82);
+		border: 1px solid rgba(148,163,184,.18);
+		border-radius: 18px;
+		padding: 14px;
+		box-shadow: 0 16px 40px rgba(0,0,0,.25);
+		min-width: 0; /* important */
+		}
+
+		/* =========================
+		KPI (base)
+		========================= */
+		.kpi {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 10px;
+		}
+
+		.kpi .t {
+		color: var(--mut);
+		font-size: 12px;
+		margin-top: 4px;
+		}
+
+		/* =========================
+		KPI TOP (Produits) : compact + clickable
+		========================= */
+		.card.kpi-card {
+		padding: 10px 12px;
+		cursor: pointer;
+		transition: transform .08s ease,border-color .15s ease
+		}
+
+		.card.kpi-card:hover {
+		transform: translateY(-1px);
+		border-color: rgba(34,197,94,.35)
+		}
+
+		.card.kpi-card.active {
+		border-color: rgba(34,197,94,.65);
+		box-shadow: 0 0 0 3px rgba(34,197,94,.10)
+		}
+
+		.card.kpi-card .kpi {
+		gap: 6px
+		}
+
+		.card.kpi-card .n {
+		font-size: 20px;
+		font-weight: 900;
+		letter-spacing: .2px
+		}
+
+		.card.kpi-card .t {
+		font-size: 11px;
+		margin-top: 2px
+		}
+
+		.card.kpi-card .chip {
+		padding: 4px 8px;
+		font-size: 11px
+		}
+
+		/* =========================
+		KPI Revenus : propre (une seule ligne)
+		========================= */
+		.kpi-money {
+		font-size: 20px;
+		font-weight: 900;
+		letter-spacing: .2px;
+		white-space: nowrap;
+		}
+
+		.kpi-money .val {
+		font-size: 20px;
+		font-weight: 900
+		}
+
+		.kpi-money .cur {
+		font-size: 12px;
+		opacity: .75;
+		font-weight: 700;
+		margin-left: 8px
+		}
+
+		.chip {
+		font-size: 12px;
+		padding: 6px 10px;
+		border-radius: 999px;
+		background: rgba(2,6,23,.5);
+		border: 1px solid rgba(148,163,184,.18);
+		}
+
+		.chip.ok {
+		border-color: rgba(34,197,94,.55)
+		}
+
+		.chip.warn {
+		border-color: rgba(245,158,11,.55)
+		}
+
+		.chip.bad {
+		border-color: rgba(239,68,68,.55)
+		}
+
+		.panel {
+		grid-column: span 12;
+		background: rgba(17,24,39,.62);
+		border: 1px solid rgba(148,163,184,.18);
+		border-radius: 18px;
+		padding: 14px;
+		}
+
+		.row {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		}
+
+		.muted {
+		color: var(--mut);
+		font-size: 13px
+		}
+
+
+
+		@media (max-width:560px) {
+		.v-top-inner {
+		flex-wrap: wrap;
+		gap: 10px;
+		justify-content: space-between
+		}
+
+		.nav {
+		display: flex;
+		order: 3;
+		width: 100%;
+		gap: 8px;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		padding-bottom: 6px;
+		}
+
+		.nav::-webkit-scrollbar {
+		height: 0
+		}
+
+		.nav a {
+		white-space: nowrap;
+		font-size: 12px;
+		padding: 8px 10px
+		}
+
+		.actions {
+		order: 2;
+		width: 100%;
+		justify-content: flex-end;
+		gap: 8px;
+		}
+
+		.btn {
+		padding: 9px 10px;
+		border-radius: 12px;
+		font-size: 13px
+		}
+		}
+
+		.badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 10px;
+		border-radius: 999px;
+		font-weight: 900;
+		font-size: 12px;
+		border: 1px solid rgba(148,163,184,.18);
+		background: rgba(2,6,23,.45);
+		}
+
+		.badge.pending {
+		border-color: rgba(245,158,11,.55)
+		}
+
+		.badge.published {
+		border-color: rgba(34,197,94,.55)
+		}
+
+		.badge.rejected {
+		border-color: rgba(239,68,68,.55)
+		}
+		/* ✅ 2 lignes KPI séparées */
+		.kpi-row {
+		grid-column: span 12;
+		display: grid;
+		gap: 12px;
+		}
+
+		/* ✅ Ligne du haut = 5 KPI */
+		.kpi-row.top {
+		grid-template-columns: repeat(5, 1fr);
+		}
+
+		/* ✅ Ligne du bas = 4 KPI */
+		.kpi-row.bottom {
+		grid-template-columns: repeat(4, 1fr);
+		}
+
+		@media (max-width:980px) {
+		.card {
+		grid-column: span 6
+		}
+		/* ✅ seulement pour les cards hors KPI row si tu veux */
+		.panel {
+		grid-column: span 12;
+		}
+
+		.kpi-row.top {
+		grid-template-columns: repeat(2, 1fr);
+		}
+
+		.kpi-row.bottom {
+		grid-template-columns: repeat(2, 1fr);
+		}
+		}
+
+		@media (max-width:560px) {
+		.card {
+		grid-column: span 12;
+		}
+		/* ✅ seulement pour hors KPI row si tu veux */
+		.kpi-row.top {
+		grid-template-columns: 1fr;
+		}
+
+		.kpi-row.bottom {
+		grid-template-columns: 1fr;
+		}
+		}
+
+		/* 🔥 IMPORTANT : annule le span dans les kpi-row */
+		.kpi-row .card {
+		grid-column: auto !important;
+		}
+		/* ✅ Important: autoriser les items de grid à rétrécir */
+		.kpi-row > .card,
+		.grid > .card,
+		.grid > .panel {
+		min-width: 0;
+		}
+
+		/* ✅ Sur écran moyen: 2 par ligne */
+		@media (max-width: 980px) {
+		.kpi-row.top {
+		grid-template-columns: repeat(2, 1fr);
+		}
+
+		.kpi-row.bottom {
+		grid-template-columns: repeat(2, 1fr);
+		}
+		}
+
+		/* ✅ Sur petit écran: 1 par ligne */
+		@media (max-width: 560px) {
+		.kpi-row.top {
+		grid-template-columns: 1fr;
+		}
+
+		.kpi-row.bottom {
+		grid-template-columns: 1fr;
+		}
+
+		/* textes plus petits pour éviter débordement */
+		.card .n {
+		font-size: 18px;
+		}
+
+		.kpi-money {
+		font-size: 18px;
+		}
+
+		.kpi-money .val {
+		font-size: 18px;
+		}
+		}
+
+		@media (max-width: 560px) {
+		.v-top-inner {
+		flex-wrap: wrap;
+		}
+
+		/* menu scroll horizontal si trop long */
+		.nav {
+		width: 100%;
+		overflow-x: auto;
+		flex-wrap: nowrap;
+		-webkit-overflow-scrolling: touch;
+		}
+
+		.nav a {
+		white-space: nowrap;
+		}
+
+		/* boutons à droite qui restent visibles */
+		.actions {
+		width: 100%;
+		justify-content: flex-end;
+		flex-wrap: wrap;
+		}
+		}
+		/* ✅ FIX MOBILE MENU (force l'affichage) */
+		@media (max-width: 560px) {
+		.v-top-inner {
+		flex-wrap: wrap !important;
+		gap: 10px !important;
+		}
+
+		/* le menu */
+		.v-top-inner .nav,
+		.v-top-inner nav {
+		display: flex !important; /* 🔥 force si base.css fait display:none */
+		width: 100% !important;
+		order: 3 !important;
+		flex-wrap: nowrap !important;
+		overflow-x: auto !important;
+		-webkit-overflow-scrolling: touch !important;
+		gap: 8px !important;
+		padding-bottom: 6px !important;
+		}
+
+		.v-top-inner .nav a,
+		.v-top-inner nav a {
+		flex: 0 0 auto !important;
+		white-space: nowrap !important;
+		}
+
+		/* les boutons à droite */
+		.v-top-inner .actions {
+		width: 100% !important;
+		order: 2 !important;
+		justify-content: flex-end !important;
+		gap: 8px !important;
+		flex-wrap: wrap !important;
+		}
+		}
+
+		/* =========================
+		VENDOR DASHBOARD MOBILE FIX
+		========================= */
+		@media (max-width: 560px) {
+		.wrap {
+		padding: 16px 14px 34px;
+		}
+
+		h1 {
+		font-size: 24px;
+		line-height: 1.08;
+		margin: 14px 0 8px;
+		}
+
+		.sub {
+		font-size: 14px;
+		line-height: 1.45;
+		margin-bottom: 16px;
+		}
+
+		.v-top-inner {
+		padding: 12px 12px;
+		gap: 10px;
+		align-items: flex-start;
+		}
+
+		.brand {
+		width: 100%;
+		min-width: 0;
+		gap: 10px;
+		}
+
+		.brand img,
+		.brand .logo,
+		.brand .avatar {
+		width: 56px !important;
+		height: 56px !important;
+		min-width: 56px !important;
+		min-height: 56px !important;
+		}
+
+		.who {
+		min-width: 0;
+		flex: 1;
+		}
+
+		.who b {
+		font-size: 13px;
+		line-height: 1.2;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		}
+
+		.who span {
+		font-size: 11px;
+		}
+
+		.v-top-inner .nav,
+		.v-top-inner nav {
+		display: flex !important;
+		width: 100% !important;
+		order: 2 !important;
+		flex-wrap: nowrap !important;
+		overflow-x: auto !important;
+		-webkit-overflow-scrolling: touch !important;
+		gap: 8px !important;
+		padding-bottom: 4px !important;
+		}
+
+		.v-top-inner .nav a,
+		.v-top-inner nav a {
+		flex: 0 0 auto !important;
+		white-space: nowrap !important;
+		font-size: 13px !important;
+		padding: 10px 14px !important;
+		border-radius: 14px !important;
+		}
+
+		.v-top-inner .actions {
+		width: 100% !important;
+		order: 3 !important;
+		justify-content: flex-start !important;
+		flex-wrap: wrap !important;
+		gap: 8px !important;
+		}
+
+		.v-top-inner .actions .btn {
+		font-size: 13px !important;
+		padding: 10px 14px !important;
+		border-radius: 14px !important;
+		}
+
+		.kpi-row.top,
+		.kpi-row.bottom {
+		grid-template-columns: 1fr;
+		gap: 12px;
+		}
+
+		.card {
+		padding: 16px;
+		border-radius: 18px;
+		}
+
+		.card.kpi-card .n,
+		.card .n {
+		font-size: 22px;
+		}
+
+		.card.kpi-card .t,
+		.card .t {
+		font-size: 13px;
+		line-height: 1.35;
+		}
+
+		.kpi-money,
+		.kpi-money .val {
+		font-size: 20px;
+		}
+
+		.kpi-money .cur {
+		font-size: 11px;
+		margin-left: 6px;
+		}
+
+		.chip {
+		font-size: 12px;
+		padding: 6px 10px;
+		}
+
+		.panel {
+		padding: 14px;
+		border-radius: 18px;
+		}
+		}
+
+		@media (max-width: 560px){
+		#vendorNav{
+		height: 132px;
+		}
+
+		.vnav-inner{
+		flex-wrap: wrap !important;
+		gap: 10px !important;
+		padding: 12px 12px !important;
+		}
+
+		.vnav-links{
+		display: flex !important;
+		width: 100% !important;
+		order: 3 !important;
+		flex-wrap: nowrap !important;
+		overflow-x: auto !important;
+		-webkit-overflow-scrolling: touch !important;
+		gap: 8px !important;
+		padding-bottom: 6px !important;
+		}
+
+		.vnav-links::-webkit-scrollbar{ height:0 !important; }
+
+		.vnav-link{
+		flex: 0 0 auto !important;
+		white-space: nowrap !important;
+		font-size: 12px !important;
+		padding: 8px 10px !important;
+		}
+
+		.vnav-right{
+		width: 100% !important;
+		order: 2 !important;
+		justify-content: flex-end !important;
+		gap: 8px !important;
+		flex-wrap: wrap !important;
+		}
+		}
+	</style>
+</head>
+<body>
+
+    <div id="vendorNav"></div>
+
+    <main class="wrap">
+        <h1>Dashboard vendeur</h1>
+        <div class="sub">Gère tes produits, suis tes commandes et garde ta boutique à jour.</div>
+
+        <div class="grid">
+
+            <!-- ✅ LIGNE DU HAUT : 5 KPI -->
+            <div class="kpi-row top">
+
+                <div class="card kpi-card" data-filter="All">
+                    <div class="kpi">
+                        <div>
+                            <div class="n" id="kpiTotal">0</div>
+                            <div class="t">Produits (total)</div>
+                        </div>
+                        <span class="chip">Tous</span>
+                    </div>
+                </div>
+
+                <div class="card kpi-card" data-filter="Pending">
+                    <div class="kpi">
+                        <div>
+                            <div class="n" id="kpiPending">0</div>
+                            <div class="t">Produit en attente</div>
+                        </div>
+                        <span class="chip warn">Pending</span>
+                    </div>
+                </div>
+
+                <div class="card kpi-card" data-filter="Published">
+                    <div class="kpi">
+                        <div>
+                            <div class="n" id="kpiPublished">0</div>
+                            <div class="t">Publiés</div>
+                        </div>
+                        <span class="chip ok">Publié</span>
+                    </div>
+                </div>
+
+                <div class="card kpi-card" data-filter="Rejected">
+                    <div class="kpi">
+                        <div>
+                            <div class="n" id="kpiRejected">0</div>
+                            <div class="t">Rejetés</div>
+                        </div>
+                        <span class="chip bad">Rejet</span>
+                    </div>
+                </div>
+
+                <div class="card kpi-card" data-filter="OrdersPending">
+                    <div class="kpi">
+                        <div>
+                            <div class="n" id="kpiOrdersPending">0</div>
+                            <div class="t">Commande en attente</div>
+                        </div>
+                        <span class="chip warn">À traiter</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ✅ LIGNE DU BAS : 4 KPI REVENUS -->
+            <div class="kpi-row bottom">
+
+                <div class="card">
+                    <div class="kpi">
+                        <div>
+                            <div class="kpi-money" id="kpiTodayRevenue"><span class="val">0</span><span class="cur">FCFA</span></div>
+                            <div class="t">Revenus aujourd’hui</div>
+                        </div>
+                        <span class="chip ok">Aujourd’hui</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="kpi">
+                        <div>
+                            <div class="kpi-money" id="kpiWeekRevenue"><span class="val">0</span><span class="cur">FCFA</span></div>
+                            <div class="t">Revenus (7 jours)</div>
+                        </div>
+                        <span class="chip warn">Semaine</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="kpi">
+                        <div>
+                            <div class="kpi-money" id="kpiMonthRevenue"><span class="val">0</span><span class="cur">FCFA</span></div>
+                            <div class="t">Revenus (mois)</div>
+                        </div>
+                        <span class="chip">Mois</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="kpi">
+                        <div>
+                            <div class="kpi-money" id="kpiTotalRevenue"><span class="val">0</span><span class="cur">FCFA</span></div>
+                            <div class="t">Revenus totaux</div>
+                        </div>
+                        <span class="chip ok">Total</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ✅ zone filtre + liste -->
+            <div class="panel" id="productsPanel">
+                <div class="row" style="margin-bottom:10px">
+                    <div>
+                        <b id="panelTitle">Produits : Tous</b>
+                        <div class="muted" id="panelSubtitle">Clique sur un compteur pour filtrer.</div>
+                    </div>
+                    <div class="muted" id="lastSync">—</div>
+                </div>
+
+                <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+                    <table style="width:100%;border-collapse:collapse;min-width:780px">
+                        <thead>
+                            <tr class="muted" style="text-align:left">
+                                <th style="padding:10px 8px">Image</th>
+                                <th style="padding:10px 8px">Nom</th>
+                                <th style="padding:10px 8px">Statut</th>
+                                <th style="padding:10px 8px">Prix</th>
+                                <th style="padding:10px 8px">Stock</th>
+                                <th style="padding:10px 8px">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsBody">
+                            <tr><td colspan="6" class="muted" style="padding:12px 8px">Chargement...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="rejectBox" class="muted" style="margin-top:10px"></div>
+            </div>
+
+            <!-- ✅ Conseil pro (dans la grid, donc responsive) -->
+            <div class="panel">
+                <div class="row">
+                    <div>
+                        <b>Conseil pro</b>
+                        <div class="muted">Ajoute des photos nettes + une description claire : ça augmente la validation et les ventes.</div>
+                    </div>
+                    <div class="muted">—</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/assets/js/vendor-app.js?v=1"></script>
+	<script src="/assets/js/vendor-nav.js?v=100000"></script>
+
+    <script>
+        VendorNav.initVendorPage({ active: "/vendor-dashboard.html" });
+    </script>
+
+    <script src="/assets/js/vendor-dashboard.js?v=999"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Vendor - Commandes</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+
+
+    <style>
+        :root {
+            --bg: #0b1220;
+            --txt: #e5e7eb;
+            --mut: #94a3b8;
+            --card: rgba(17,24,39,.82);
+            --bd: rgba(148,163,184,.18);
+            --ok: #22c55e;
+            --warn: #f59e0b;
+            --bad: #ef4444;
+        }
+
+        body {
+            background: radial-gradient(1200px 600px at 10% -10%, rgba(34,197,94,.20), transparent 60%), radial-gradient(900px 600px at 110% 0%, rgba(59,130,246,.18), transparent 60%), var(--bg);
+            color: var(--txt);
+            font-family: Arial;
+            margin: 0;
+        }
+
+        /* ====== Pills filtres ====== */
+        .pill {
+            background: rgba(2,6,23,.45);
+            color: #e5e7eb;
+            border: 1px solid rgba(148,163,184,.18);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all .2s ease;
+        }
+
+            .pill:hover {
+                border-color: rgba(148,163,184,.35);
+                background: rgba(2,6,23,.65);
+            }
+
+            .pill.active {
+                border-color: rgba(34,197,94,.55);
+                box-shadow: 0 0 0 3px rgba(34,197,94,.12);
+            }
+        /* ====== Header clair ====== */
+        .head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 12px 0 14px;
+        }
+
+            .head h1 {
+                margin: 0;
+                font-size: 34px;
+                letter-spacing: .2px;
+            }
+
+            .head .sub {
+                margin-top: 6px;
+                color: var(--mut);
+                max-width: 720px;
+            }
+
+        .sync {
+            background: rgba(17,24,39,.55);
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 14px;
+            padding: 10px 12px;
+            min-width: 240px;
+            text-align: right;
+        }
+
+            .sync b {
+                display: block;
+                margin-top: 4px;
+                font-size: 14px;
+            }
+
+        /* ====== Toolbar: pills + search ====== */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: rgba(17,24,39,.45);
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 18px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Search capsule */
+        .searchbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(2,6,23,.45);
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 999px;
+            padding: 9px 12px;
+            min-width: 340px;
+            max-width: 520px;
+            flex: 1 1 360px;
+        }
+
+        .sico {
+            opacity: .8;
+        }
+
+        .sinput {
+            width: 100%;
+            background: transparent;
+            border: 0;
+            outline: none;
+            color: var(--txt);
+        }
+
+        /* Mobile */
+        @media(max-width:720px) {
+            .head {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .sync {
+                width: 100%;
+                text-align: left;
+            }
+
+            .searchbox {
+                min-width: 100%;
+            }
+        }
+
+        .wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 18px 16px 40px;
+        }
+
+        .panel {
+            background: rgba(17,24,39,.62);
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 18px;
+            padding: 14px;
+        }
+
+        .muted {
+            color: var(--mut);
+            font-size: 13px;
+        }
+
+        .btn[disabled] {
+            opacity: .45;
+            cursor: not-allowed;
+            filter: grayscale(0.3);
+            pointer-events: none;
+            background: rgba(2,6,23,.35) !important;
+            border-color: rgba(148,163,184,.18) !important;
+            box-shadow: none !important;
+        }
+
+        /* ===== BADGES STATUS ===== */
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .2px;
+        }
+
+            /* Pending */
+            .badge.pending {
+                background: rgba(245, 158, 11, 0.15);
+                color: #f59e0b;
+                border: 1px solid rgba(245, 158, 11, 0.35);
+            }
+
+            /* Confirmed */
+            .badge.confirmed {
+                background: rgba(59, 130, 246, 0.15);
+                color: #3b82f6;
+                border: 1px solid rgba(59, 130, 246, 0.35);
+            }
+
+            /* Shipped */
+            .badge.shipped {
+                background: rgba(168, 85, 247, 0.15);
+                color: #a855f7;
+                border: 1px solid rgba(168, 85, 247, 0.35);
+            }
+
+            /* Delivered */
+            .badge.delivered {
+                background: rgba(34, 197, 94, 0.15);
+                color: #22c55e;
+                border: 1px solid rgba(34, 197, 94, 0.35);
+            }
+    </style>
+</head>
+
+<body>
+    <!-- ✅ NAV -->
+    <div id="vendorNav"></div>
+
+    <!-- ✅ Modal statut (dans body) -->
+    <div id="statusModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(2px)">
+        <div style="max-width:420px;margin:10vh auto;background:rgba(17,24,39,.96);border:1px solid rgba(148,163,184,.22);border-radius:16px;padding:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+                <b>Changer statut</b>
+                <button id="btnCloseStatusModal" class="btn" type="button">✕</button>
+            </div>
+
+            <div class="muted" style="margin:10px 0 8px">Choisis le nouveau statut de cette ligne.</div>
+
+            <select id="selNewStatus" class="input" style="width:100%">
+                <option value="Pending">Pending</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Shipped">Shipped</option>
+            </select>
+            <div id="statusErr" class="muted" style="margin-top:10px;color:#fca5a5;display:none"></div>
+
+            <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:14px">
+                <button id="btnCancelStatus" class="btn" type="button">Annuler</button>
+                <button id="btnSaveStatus" class="btn primary" type="button">Valider</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="wrap">
+        <header class="head">
+            <div class="head-left">
+                <h1>Commandes</h1>
+                <div class="sub">Ici tu vois uniquement les commandes qui concernent tes produits.</div>
+            </div>
+
+            <div class="head-right">
+                <div class="sync">
+                    <span class="muted">Dernière synchro</span>
+                    <b id="lastSync">—</b>
+                </div>
+            </div>
+        </header>
+
+        <div class="toolbar">
+            <div class="pills">
+                <button class="pill active" data-filter="All">Toutes</button>
+                <button class="pill" data-filter="Pending">Pending</button>
+                <button class="pill" data-filter="Confirmed">Confirmées</button>
+                <button class="pill" data-filter="Shipped">Expédiées</button>
+               <button class="pill" data-filter="Delivered">Livrées</button>
+            </div>
+
+            <div class="searchbox">
+                <span class="sico">🔎</span>
+                <input id="txtSearch" class="sinput" placeholder="Recherche (produit, client, ville, #commande)" />
+            </div>
+        </div>
+
+        <div class="panel">
+            <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+                <table style="width:100%;border-collapse:collapse;min-width:980px">
+                    <thead>
+                        <tr class="muted" style="text-align:left">
+                            <th style="padding:10px 8px">#Commande</th>
+                            <th style="padding:10px 8px">Produit</th>
+                            <th style="padding:10px 8px">Client</th>
+                            <th style="padding:10px 8px">Ville</th>
+                            <th style="padding:10px 8px">Qté</th>
+                            <th style="padding:10px 8px">Montant</th>
+                            <th style="padding:10px 8px">Statut</th>
+                            <th style="padding:10px 8px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersBody">
+                        <tr><td colspan="8" class="muted" style="padding:12px 8px">Chargement...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="hintBox" class="muted" style="margin-top:10px"></div>
+        </div>
+    </main>
+
+	<script src="/assets/js/vendor-nav.js?v=100000"></script>
+    <script src="/assets/js/vendor-app.js?v=1"></script>
+    <script src="/assets/js/vendor-orders.js?v=2003"></script>
+    <script>
+        VendorNav.initVendorPage({ active: "/vendor-orders.html" });
+        window.initVendorOrdersPage && window.initVendorOrdersPage();
+    </script>
+</body>
+</html>

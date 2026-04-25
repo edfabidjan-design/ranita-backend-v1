@@ -1,0 +1,275 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita - Votre compte</title>
+    <link rel="stylesheet" href="/css/base.css?v=1003" />
+
+    <style>
+        body {
+            margin: 0;
+            background: #07122b;
+            color: #e5e7eb;
+            font-family: Arial, sans-serif;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+
+        .brandMini {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #e5e7eb;
+        }
+
+            .brandMini img {
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: #fff;
+                object-fit: cover;
+                border: 2px solid rgba(34,197,94,.55);
+            }
+
+        .brandMiniTitle {
+            font-size: 24px;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .brandMiniSub {
+            font-size: 12px;
+            color: #cbd5f5;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .topActions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: rgba(17,24,39,.72);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 12px 30px rgba(0,0,0,.22);
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 950;
+            margin-bottom: 16px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        @media (max-width: 980px) {
+            .grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mini {
+            background: rgba(255,255,255,.03);
+            border: 1px solid rgba(255,255,255,.06);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .miniLabel {
+            font-size: 12px;
+            opacity: .75;
+            margin-bottom: 6px;
+        }
+
+        .miniValue {
+            font-size: 18px;
+            font-weight: 900;
+            word-break: break-word;
+        }
+
+        .ok {
+            color: #22c55e;
+        }
+
+        .ko {
+            color: #fca5a5;
+        }
+
+        .btnRow {
+            margin-top: 18px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btnLink {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.10);
+            background: rgba(17,24,39,.65);
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .btnDanger {
+            border-color: rgba(248,113,113,.26);
+            color: #fca5a5;
+            background: rgba(127,29,29,.10);
+        }
+
+        .muted {
+            color: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            .brandMiniTitle {
+                font-size: 20px;
+            }
+
+            .title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="topbar">
+            <a href="/home.html" class="brandMini">
+                <img src="/assets/logo-192.png" alt="Ranita">
+                <div>
+                    <div class="brandMiniTitle">Ranita</div>
+                    <div class="brandMiniSub">Boutique en ligne</div>
+                </div>
+            </a>
+
+            <div class="topActions">
+                <a class="btnLink" href="/home.html">Accueil</a>
+                <a class="btnLink" href="/products.html">Catalogue</a>
+     
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="title">👤 Votre compte</div>
+
+            <div id="accBox" class="muted">Chargement…</div>
+
+            <div class="btnRow">
+                <a class="btnLink" href="/client-orders.html">🧾 Vos commandes</a>
+                <a class="btnLink" href="/client-favorites.html">❤️ Favoris</a>
+                <button class="btnLink btnDanger" onclick="logoutClient()">Déconnexion</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/app.js?v=2003" defer></script>
+    <script src="/assets/js/client-auth.js?v=2" defer></script>
+    <script src="/assets/js/client-guard.js?v=2002" defer></script>
+
+    <script>
+        const API = (window.API_BASE || location.origin);
+
+        async function fetchClientJson(url) {
+            const token = localStorage.getItem("ranita_client_token") || "";
+            const res = await fetch(API + url, {
+                headers: token ? { Authorization: "Bearer " + token } : {},
+                cache: "no-store"
+            });
+
+            if (res.status === 401) {
+                localStorage.removeItem("ranita_client_token");
+                localStorage.removeItem("ranita_client_user");
+                const returnUrl = encodeURIComponent(location.pathname + location.search);
+                location.href = "/client-login.html?returnUrl=" + returnUrl;
+                return null;
+            }
+
+            const text = await res.text();
+            const data = text ? JSON.parse(text) : null;
+
+            if (!res.ok || data?.ok === false) {
+                throw new Error(data?.message || ("HTTP " + res.status));
+            }
+
+            return data;
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            if (!window.requireClientAuth?.()) return;
+
+            const box = document.getElementById("accBox");
+
+            try {
+                const data = await fetchClientJson("/api/client/me");
+                if (!data) return;
+
+                const u = data.item || data.user || data;
+
+                box.innerHTML = `
+                        <div class="grid">
+                            <div class="mini">
+                                <div class="miniLabel">Nom</div>
+                                <div class="miniValue">${u.fullName || u.name || "—"}</div>
+                            </div>
+
+                            <div class="mini">
+                                <div class="miniLabel">Téléphone</div>
+                                <div class="miniValue">${u.phone || "—"}</div>
+                            </div>
+
+                            <div class="mini">
+                                <div class="miniLabel">Email</div>
+                                <div class="miniValue">${u.email || "—"}</div>
+                            </div>
+
+                            <div class="mini">
+                                <div class="miniLabel">Statut</div>
+                                <div class="miniValue ${u.isActive ? "ok" : "ko"}">
+                                    ${u.isActive ? "Actif" : "Désactivé"}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+            } catch (e) {
+                box.innerHTML = `<div class="ko">❌ ${e.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>

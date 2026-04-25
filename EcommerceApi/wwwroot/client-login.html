@@ -1,0 +1,172 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita - Connexion</title>
+    <link rel="stylesheet" href="/css/base.css?v=1" />
+
+    <style>
+        .loginOptionsRow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .showPassRow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #e5e7eb;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 0;
+        }
+
+            .showPassRow input {
+                width: 18px;
+                height: 18px;
+                accent-color: #22c55e;
+                cursor: pointer;
+            }
+
+        .forgotLink {
+            color: #22c55e;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+            .forgotLink:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+
+<body class="admin-body">
+    <div class="wrap" style="max-width:520px;margin:28px auto;padding:14px;">
+        <div class="card" style="padding:16px;border:1px solid #1f2937;border-radius:16px;background:#111827;color:#e5e7eb">
+            <h2 style="margin:0 0 10px;font-weight:900">🔐 Connexion client</h2>
+            <div class="muted" style="color:#9ca3af;margin-bottom:12px">
+                Accède à ton compte pour valider tes commandes.
+            </div>
+
+            <div style="display:grid;gap:10px">
+                <input id="email" placeholder="Téléphone ou Email"
+                       style="padding:12px;border-radius:12px;border:1px solid #1f2937;background:#0b1220;color:#e5e7eb">
+
+                <input id="pass" type="password" placeholder="Mot de passe"
+                       style="padding:12px;border-radius:12px;border:1px solid #1f2937;background:#0b1220;color:#e5e7eb">
+                <div class="loginOptionsRow">
+                    <label class="showPassRow">
+                        <input type="checkbox" id="togglePass">
+                        <span>Afficher le mot de passe</span>
+                    </label>
+
+                    <a href="/client-forgot-password.html" class="forgotLink">
+                        Mot de passe oublié ?
+                    </a>
+                </div>
+
+                <button id="btnLogin" class="btn btnPri"
+                        style="padding:12px;border-radius:12px;border:0;background:#22c55e;color:#06240f;font-weight:900;cursor:pointer">
+                    Se connecter
+                </button>
+
+                <div id="msg"
+                     style="display:none;padding:10px;border-radius:12px;border:1px solid #374151;background:rgba(15,23,42,.6)">
+                </div>
+            </div>
+
+            <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+                <a href="/client-register.html" class="btn"
+                   style="padding:10px 12px;border-radius:12px;border:1px solid #1f2937;background:#111827;color:#e5e7eb;font-weight:800">
+                    Créer un compte
+                </a>
+
+                <a href="/products.html" class="btn"
+                   style="padding:10px 12px;border-radius:12px;border:1px solid #1f2937;background:#111827;color:#e5e7eb;font-weight:800">
+                    Retour
+
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/client-auth.js?v=1"></script>
+
+    <script>
+        const msg = document.getElementById("msg");
+
+        const show = (t, ok = false) => {
+            msg.style.display = "block";
+            msg.style.borderColor = ok ? "rgba(34,197,94,.35)" : "rgba(239,68,68,.35)";
+            msg.textContent = t;
+        };
+
+        // 👁️ TOGGLE PASSWORD
+        const passInput = document.getElementById("pass");
+        const togglePass = document.getElementById("togglePass");
+
+        if (passInput && togglePass) {
+            togglePass.addEventListener("change", function () {
+                passInput.type = this.checked ? "text" : "password";
+            });
+        }
+
+        // =========================
+        // LOGIN
+        // =========================
+        window.clientLogin = async function (login, password) {
+            login = String(login || "").trim();
+            password = String(password || "");
+
+            if (!login || !password) throw new Error("Login et Password obligatoires.");
+
+            const res = await fetch("/api/auth/client/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ login, password })
+            });
+
+            const data = await res.json().catch(() => null);
+
+            if (!res.ok) {
+                throw new Error(data?.message || "Connexion refusée.");
+            }
+
+            const token = data?.token || "";
+            const user = data?.user || null;
+
+            if (!token || !user) throw new Error("Réponse login invalide.");
+
+            localStorage.setItem("ranita_client_token", token);
+            localStorage.setItem("ranita_client_user", JSON.stringify(user));
+
+            return { token, user };
+        };
+
+        document.getElementById("btnLogin").addEventListener("click", async () => {
+            try {
+                const login = document.getElementById("email").value.trim();
+                const password = document.getElementById("pass").value;
+
+                await clientLogin(login, password);
+
+                show("✅ Connexion OK", true);
+
+                const back = new URL(location.href).searchParams.get("returnUrl");
+                location.href = back ? decodeURIComponent(back) : "/products.html";
+
+            } catch (e) {
+                console.error(e);
+                show("❌ " + (e?.message || e));
+            }
+        });
+    </script>
+
+</body>
+</html>

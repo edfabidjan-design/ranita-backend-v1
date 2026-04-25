@@ -1,0 +1,119 @@
+﻿<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Ranita - Vos commandes</title>
+		<link rel="stylesheet" href="/css/base.css?v=1003" />
+		<link rel="stylesheet" href="/css/site-header.css?v=20260330_2359">
+</head>
+	<body>
+
+		<div id="siteHeader"></div>
+
+		<div class="clientNav">
+			<button class="btn btnGhost" onclick="location.href='/'">🏠 Accueil</button>
+			<button class="btn btnGhost" onclick="location.href='/client-account.html'">👤 Mon compte</button>
+			<button class="btn btnGhost" onclick="location.href='/products.html'">🛍️ Catalogue</button>
+		</div>
+
+		<main class="wrap" style="padding:18px 16px">
+			<div class="box">
+				<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+					<div style="font-weight:950;font-size:22px">🧾 Vos commandes</div>
+					<button class="btn btnGhost" id="btnReload">Rafraîchir</button>
+				</div>
+
+				<div id="list" class="muted" style="margin-top:10px">Chargement…</div>
+			</div>
+		</main>
+
+		<div id="modal" class="ordersModalOverlay">
+			<div class="ordersModalCard">
+				<div class="ordersModalHead">
+					<div class="ordersModalTitle">🧾 Détail commande</div>
+					<button id="mClose" class="btn btnGhost" type="button">Fermer</button>
+				</div>
+				<div id="mBody" style="display:grid;gap:10px"></div>
+			</div>
+		</div>
+
+		<div id="returnModal" class="ordersModalOverlay" style="z-index:10000">
+			<div class="ordersModalCard">
+				<div class="ordersModalHead">
+					<div class="ordersModalTitle">↩️ Demande de retour</div>
+					<button id="rClose" class="btn btnGhost" type="button">Fermer</button>
+				</div>
+
+				<div id="rInfo" class="muted" style="margin-top:4px;opacity:.9"></div>
+				<div id="rItems" style="margin-top:12px;display:grid;gap:12px"></div>
+
+				<div class="returnBox">
+					<div class="muted" style="opacity:.9;margin-bottom:8px;font-weight:800">Raison</div>
+					<textarea id="rReason" rows="4" class="returnTextarea"></textarea>
+
+					<div style="margin-top:10px">
+						<input type="file" id="rImages" class="returnFileInput" accept="image/*" multiple="" />
+					</div>
+
+					<div id="rPreview"></div>
+				</div>
+
+				<div class="returnActions">
+					<button id="rSend" class="btn btnGreen" type="button">Envoyer la demande</button>
+					<button id="rCancel" class="btn btnGhost" type="button">Annuler</button>
+				</div>
+
+				<div id="rMsg" class="muted" style="margin-top:10px;opacity:.95"></div>
+			</div>
+		</div>
+
+		<div id="reviewModal" class="ordersModalOverlay" style="z-index:11000">
+			<div class="ordersModalCard" style="width:min(560px,96vw)">
+				<div class="ordersModalHead">
+					<div class="ordersModalTitle">⭐ Noter le produit</div>
+					<button id="rvClose" class="btn btnGhost" type="button">Fermer</button>
+				</div>
+
+				<div id="rvInfo" class="muted" style="margin-top:8px;opacity:.85"></div>
+
+				<div style="margin-top:12px">
+					<div class="muted" style="opacity:.85;margin-bottom:6px">Note</div>
+					<div id="rvStars" style="display:flex;gap:8px;flex-wrap:wrap">
+						<button type="button" class="btn btnGhost rvStar" data-n="1">1★</button>
+						<button type="button" class="btn btnGhost rvStar" data-n="2">2★</button>
+						<button type="button" class="btn btnGhost rvStar" data-n="3">3★</button>
+						<button type="button" class="btn btnGhost rvStar" data-n="4">4★</button>
+						<button type="button" class="btn btnGhost rvStar" data-n="5">5★</button>
+					</div>
+				</div>
+
+				<div style="margin-top:12px">
+					<div class="muted" style="opacity:.85;margin-bottom:6px">Titre (optionnel)</div>
+					<input id="rvTitle" class="reviewInput" />
+				</div>
+
+				<div style="margin-top:12px">
+					<div class="muted" style="opacity:.85;margin-bottom:6px">Commentaire</div>
+					<textarea id="rvComment" rows="4" class="reviewTextarea"></textarea>
+				</div>
+
+				<div class="returnActions">
+					<button id="rvSend" class="btn btnGreen" type="button">Envoyer</button>
+					<button id="rvCancel" class="btn btnGhost" type="button">Annuler</button>
+				</div>
+
+				<div id="rvMsg" class="muted" style="margin-top:10px;opacity:.9"></div>
+			</div>
+		</div>
+
+		<script src="/assets/js/app.js?v=2003" defer=""></script>
+		<script src="/assets/js/client-auth.js?v=2" defer=""></script>
+		<script src="/assets/js/client-guard.js?v=2002" defer=""></script>
+		<script src="/assets/js/client-orders.js?v=1" defer=""></script>
+
+
+
+
+	</body>
+</html>

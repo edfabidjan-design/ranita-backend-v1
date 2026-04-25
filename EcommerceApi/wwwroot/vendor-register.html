@@ -1,0 +1,110 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Vendor - Créer ma boutique</title>
+    <link rel="stylesheet" href="/css/base.css?v=1" />
+
+    <style>
+        .btnGreen {
+            background: #22c55e !important;
+            color: #06240f !important;
+            border: 0 !important;
+        }
+
+            .btnGreen:hover {
+                background: #16a34a !important;
+            }
+
+        .btnYellow {
+            background: #facc15 !important;
+            color: #111827 !important;
+            border: 0 !important;
+        }
+
+            .btnYellow:hover {
+                background: #eab308 !important;
+            }
+
+        .showPassRow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            color: #cbd5e1;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+
+            .showPassRow input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
+                accent-color: #22c55e;
+                cursor: pointer;
+            }
+    </style>
+</head>
+<body>
+    <main class="wrap" style="max-width:520px;margin:40px auto;padding:0 14px">
+        <h1 style="margin:0 0 6px">Créer ma boutique</h1>
+        <p class="muted" style="margin:0 0 18px">
+            Soumets ta demande. Après validation et accord signé, ta boutique sera activée.
+        </p>
+
+        <div id="msg" class="msg" style="display:none"></div>
+
+        <form id="frm">
+            <label>Nom de la boutique</label>
+            <input id="vendorName" required placeholder="Ex: Boutique Abidjan Style" />
+
+            <label style="margin-top:12px">Email</label>
+            <input id="email" type="email" required placeholder="ex: vendeur@gmail.com" />
+
+            <label style="margin-top:12px">Téléphone</label>
+            <input id="phone" type="tel" required placeholder="Ex: 0700000000 ou +2250700000000" />
+
+            <label style="margin-top:12px">Mot de passe</label>
+            <input id="pwd" type="password" required minlength="6" placeholder="Min 6 caractères" />
+
+            <label class="showPassRow">
+                <input type="checkbox" id="togglePwd" />
+                <span>Afficher le mot de passe</span>
+            </label>
+
+            <button class="btn btnYellow" style="width:100%;margin-top:16px" type="submit">
+                Envoyer ma demande
+            </button>
+        </form>
+
+        <div style="margin-top:14px;text-align:center">
+            <button type="button"
+                    onclick="location.href='/'"
+                    class="btn"
+                    style="width:100%;margin-top:10px;background:transparent;border:1px solid rgba(255,255,255,.25);">
+                🌐 Retour à la page d’accueil
+            </button>
+
+            Déjà vendeur ?
+            <a href="/vendor-login.html" class="vendor-link vendor-link-login">
+                Se connecter
+            </a>
+        </div>
+    </main>
+
+    <script src="/assets/js/vendor-auth.js?v=1"></script>
+
+    <script>
+        const pwdInput = document.getElementById("pwd");
+        const togglePwd = document.getElementById("togglePwd");
+
+        if (pwdInput && togglePwd) {
+            togglePwd.addEventListener("change", function () {
+                pwdInput.type = this.checked ? "text" : "password";
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Retours</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">
+                            Gestion des demandes de retour et remboursements
+                        </p>
+                    </section>
+
+
+                    <section class="card">
+
+                        <div class="returnsToolbar">
+                            <div class="returnsFilters">
+                                <select id="status" class="btn btnGhost returnsSelect">
+                                    <option value="">Tous</option>
+                                    <option value="Requested">En attente</option>
+                                    <option value="Approved">Accepté</option>
+                                    <option value="Rejected">Refusé</option>
+                                    <option value="Refunded">Remboursé</option>
+                                    <option value="Closed">Clôturé</option>
+                                </select>
+
+                                <input id="q"
+                                       placeholder="Recherche (commande, client, téléphone...)"
+                                       class="btn btnGhost returnsInput" />
+
+                                <button id="reload" class="btn btnGhost" type="button">Rafraîchir</button>
+                            </div>
+                        </div>
+
+                        <div id="list" class="muted" style="margin-top:12px">Chargement…</div>
+                    </section>
+
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:9999">
+        <div style="width:min(920px,95vw);max-height:86vh;overflow:auto;background:#0b1220;border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:14px;box-shadow:0 18px 50px rgba(0,0,0,.45);color:#e5e7eb">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                <div style="font-weight:900">↩️ Détail retour</div>
+                <button id="mClose" class="btn btnGhost" type="button">Fermer</button>
+            </div>
+            <div id="mBody" style="margin-top:12px;display:grid;gap:10px"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+
+    <script src="/assets/js/app.js?v=1"></script>
+    <script src="/assets/js/admin-returns.js"></script>
+
+    <script>
+        const API = (window.API_BASE || location.origin);
+        const token = () => localStorage.getItem("ranita_admin_token") || "";
+
+        const qs = (s, r = document) => r.querySelector(s);
+        const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+        const fmtDate = (v) => { try { const d = new Date(v); return isNaN(d) ? "" : d.toLocaleString(); } catch { return "" } };
+
+        async function fetchAuth(url, opt = {}) {
+            const res = await fetch(API + url, {
+                ...opt,
+                headers: {
+                    ...(opt.headers || {}),
+                    Authorization: "Bearer " + token()
+                },
+                cache: "no-store"
+            });
+
+            const text = await res.text();
+            let data = null;
+            try { data = text ? JSON.parse(text) : null; }
+            catch { data = { message: text }; }
+
+            if (res.status === 401) throw new Error("401: Non autorisé (token invalide/expiré).");
+            if (!res.ok || data?.ok === false) throw new Error(data?.message || ("HTTP " + res.status));
+
+            return data;
+        }
+
+        function statusLabel(s) {
+            switch (s) {
+                case "Requested": return "En attente";
+                case "Received": return "Reçu";
+                case "Approved": return "Accepté";
+                case "Rejected": return "Refusé";
+                case "Refunded": return "Remboursé";
+                case "Closed": return "Clôturé";
+                default: return s;
+            }
+        }
+
+        function openModal() { qs("#modal").style.display = "flex"; }
+        function closeModal() { qs("#modal").style.display = "none"; }
+
+        function renderList(items) {
+            const box = qs("#list");
+
+            if (!items?.length) {
+                box.innerHTML = `<div class="muted" style="padding:18px 4px">Aucun retour.</div>`;
+                return;
+            }
+
+            box.innerHTML = `
+                    <div class="returnsList">
+                        ${items.map(r => `
+                            <button class="returnCard" data-id="${r.id}" type="button">
+                                <div class="returnCardRow">
+                                    <div class="returnCardMain">
+                                        <div class="returnStatusTop">
+                                            <span>Statut</span>
+                                            <span class="returnStrong">${statusLabel(r.status)}</span>
+                                        </div>
+
+                                        <h3 class="returnTitle">
+                                            Retour #${r.id} — Commande #${r.orderId}
+                                        </h3>
+
+                                        <p class="returnMeta">
+                                            ${esc(r.customerName || "")}
+                                            <span style="opacity:.55">•</span>
+                                            ${esc(r.customerPhone || "")}
+                                        </p>
+
+                                        <p class="returnSubMeta">
+                                            Statut brut :
+                                            <span class="returnStrong">${esc(r.status || "")}</span>
+                                            <span style="opacity:.55">•</span>
+                                            ${fmtDate(r.createdAtUtc)}
+                                        </p>
+                                    </div>
+
+                                    <div class="returnAside">
+                                        <span class="returnAsideBadge">
+                                            ${(r.images?.length || 0)} image(s)
+                                        </span>
+                                    </div>
+                                </div>
+                            </button>
+                        `).join("")}
+                    </div>
+                `;
+
+            box.querySelectorAll("[data-id]").forEach(btn => {
+                btn.addEventListener("click", () => openDetail(Number(btn.getAttribute("data-id"))));
+            });
+        }
+
+        function imgGrid(urls) {
+            if (!urls?.length) return `<div class="muted">Aucune image.</div>`;
+            return `
+                    <div style="display:flex;gap:10px;flex-wrap:wrap">
+                        ${urls.map(u => `
+                            <a href="${esc(u)}" target="_blank" rel="noreferrer">
+                                <img src="${esc(u)}" style="width:130px;height:130px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.12)" />
+                            </a>
+                        `).join("")}
+                    </div>
+                `;
+        }
+
+        async function openDetail(id) {
+            const canManageReturns = window.hasPermission?.("returns.manage");
+            openModal();
+
+            const body = qs("#mBody");
+            body.innerHTML = `<div class="muted">Chargement…</div>`;
+
+            try {
+                const d = await fetchAuth("/api/admin/returns/" + id);
+                const r = d.item;
+
+                body.innerHTML = `
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+                            <div>
+                                <div style="font-weight:950;font-size:18px">Retour #${r.id} — Commande #${r.orderId}</div>
+                                <div class="muted" style="opacity:.85">${esc(r.customerName || "")} • ${esc(r.customerPhone || "")}</div>
+                                <div class="muted" style="opacity:.85">Statut actuel: <b>${statusLabel(r.status)}</b> • ${fmtDate(r.createdAtUtc)}</div>
+                            </div>
+
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end">
+                                <select id="st" class="btn btnGhost" ${canManageReturns ? "" : "disabled"}>
+                                    ${["Requested", "Approved", "Rejected", "Received", "Refunded", "Closed"]
+                        .map(s => `
+                                            <option value="${s}" ${s === r.status ? "selected" : ""}>
+                                                ${statusLabel(s)}
+                                            </option>
+                                        `).join("")}
+                                </select>
+
+                                ${canManageReturns
+                        ? `<button id="saveSt" class="btn btnGreen" type="button">Sauver</button>`
+                        : `<span class="muted">Lecture seule</span>`
+                    }
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="font-weight:900;margin:8px 0">📝 Raison</div>
+                            <div style="border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:10px;background:rgba(255,255,255,.03)">
+                                ${esc(r.reason || r.comment || "")}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="font-weight:900;margin:8px 0">🛒 Articles à retourner</div>
+                            <div style="display:grid;gap:8px">
+                                ${(r.items || []).map(it => `
+                                    <div style="border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px;background:rgba(255,255,255,.03);display:flex;justify-content:space-between;gap:10px">
+                                        <div>
+                                            <div style="font-weight:900">${esc(it.productName || "")}</div>
+                                            <div class="muted" style="opacity:.8">
+                                                OrderItemId: ${it.orderItemId} •
+                                                Qté demandée: ${it.qtyRequested ?? it.QtyRequested ?? 0}
+                                            </div>
+                                        </div>
+                                        <div style="font-weight:900">${Number(it.unitPrice || 0).toLocaleString("fr-FR")} FCFA</div>
+                                    </div>
+                                `).join("")}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="font-weight:900;margin:8px 0">🖼 Images</div>
+                            ${imgGrid(r.images)}
+                        </div>
+
+                        <div id="mMsg" class="muted" style="opacity:.9"></div>
+                    `;
+
+                const saveBtn = qs("#saveSt");
+                if (saveBtn) {
+                    saveBtn.onclick = async () => {
+                        try {
+                            const st = qs("#st").value;
+                            qs("#mMsg").textContent = "Enregistrement…";
+
+                            await fetchAuth("/api/admin/returns/" + id + "/status", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ status: st })
+                            });
+
+                            qs("#mMsg").textContent = "✅ Statut mis à jour.";
+                            await load();
+                        } catch (e) {
+                            qs("#mMsg").textContent = "❌ " + (e.message || "Erreur.");
+                        }
+                    };
+                }
+
+            } catch (e) {
+                body.innerHTML = `<div style="color:#fca5a5">❌ ${e.message}</div>`;
+            }
+        }
+
+        async function load() {
+            const st = qs("#status").value || "";
+            const q = qs("#q").value || "";
+            const url = `/api/admin/returns?status=${encodeURIComponent(st)}&q=${encodeURIComponent(q)}&ts=${Date.now()}`;
+            const data = await fetchAuth(url);
+            renderList(data.items || []);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!window.requireAdminAuth?.()) return;
+            if (!window.requirePermission?.("returns.view")) return;
+
+            qs("#mClose").onclick = closeModal;
+            qs("#modal").addEventListener("click", (e) => {
+                if (e.target.id === "modal") closeModal();
+            });
+
+            qs("#reload").onclick = () => load().catch(console.error);
+            qs("#status").onchange = () => load().catch(console.error);
+            qs("#q").oninput = () => load().catch(console.error);
+
+            load().catch(console.error);
+
+            let _lastLocalCount = null;
+
+            async function autoRefreshReturnsList() {
+                try {
+                    const d = await fetchAuth("/api/admin/returns/count");
+                    const c = Number(d?.count || 0);
+
+                    if (_lastLocalCount !== null && c > _lastLocalCount) {
+                        await load();
+                    }
+
+                    _lastLocalCount = c;
+                } catch { }
+            }
+
+            setInterval(autoRefreshReturnsList, 5000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Paiements vendeurs</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+
+    <style>
+        .btnGreen {
+            background: #22c55e !important;
+            color: #06240f !important;
+            border: 0 !important;
+        }
+
+            .btnGreen:hover {
+                background: #16a34a !important;
+            }
+
+        .btnYellow {
+            background: #facc15 !important;
+            color: #111827 !important;
+            border: 0 !important;
+        }
+
+            .btnYellow:hover {
+                background: #eab308 !important;
+            }
+
+        /* ✅ Carousel horizontal batchs */
+        .batches-carousel {
+            margin-top: 10px;
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 6px 6px 10px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+            /* ✅ chaque batch = card fixe (pas de retour ligne) */
+            .batches-carousel > .batch-card {
+                flex: 0 0 auto;
+                width: 320px;
+                scroll-snap-align: start;
+            }
+
+            /* ✅ scrollbar */
+            .batches-carousel::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .batches-carousel::-webkit-scrollbar-thumb {
+                background: #1f2937;
+                border-radius: 10px;
+            }
+
+            .batches-carousel::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+        /* ✅ évite que le texte explose la carte */
+        .batch-card .line {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+            .batch-card .line .muted {
+                opacity: .85;
+            }
+
+            .batch-card .line .val {
+                font-weight: 900;
+                text-align: right;
+                white-space: nowrap;
+            }
+
+        .batch-card .period {
+            font-size: 12px;
+            opacity: .9;
+            line-height: 1.25;
+        }
+    </style>
+
+</head>
+
+<body class="admin-body">
+    <div class="admin-shell">
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">Suivi des paiements et batchs vendeurs</p>
+                    </section>
+
+                    <div class="card" style="margin:12px 0;padding:12px;border:1px solid #1f2937;border-radius:16px;background:#0b1220">
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                            <h3 style="margin:0">Batchs de paiement (manuel)</h3>
+
+                            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-left:auto">
+                                <input class="search" id="txtBatchSearch" placeholder="Rechercher batch (id, période, statut, montant)..." style="min-width:320px" />
+                                <div class="muted" id="batchesHint" style="font-size:13px"></div>
+                            </div>
+                        </div>
+
+                        <div id="batchesBox" class="batches-carousel"></div>
+                    </div>
+
+
+
+
+
+                    <div class="card" style="margin:12px 0;padding:12px;border:1px solid #1f2937;border-radius:16px;background:#0b1220">
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                            <h3 style="margin:0">Résumé par vendeur</h3>
+                            <div class="muted" id="vendorsSummaryHint" style="font-size:13px"></div>
+                        </div>
+
+                        <div id="vendorsSummary" style="margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px"></div>
+                    </div>
+
+                    <section class="card table-card">
+                        <div class="list-head" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                            <h2 style="margin:0">Liste</h2>
+
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-left:auto">
+                                <button class="btn" id="tabAll">Tous</button>
+                                <button class="btn" id="tabPending">En attente</button>
+                                <button class="btn" id="tabPayable">Payable</button>
+                                <button class="btn" id="tabPaid">Payés</button>
+                                <button class="btn btnGreen" id="btnCreateWeeklyBatch">Créer batch (semaine)</button>
+                                <button class="btn btnYellow" id="btnRefreshBatches">Rafraîchir batchs</button>
+                                <input class="search" id="txtSearch" placeholder="Rechercher vendeur / commande..." />
+                            </div>
+                        </div>
+
+                        <div class="muted" id="resume" style="padding:10px 0"></div>
+
+                        <div class="table-wrap">
+                            <table class="orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Commande</th>
+                                        <th>Vendeur</th>
+                                        <th>Montant</th>
+                                        <th>Livré</th>
+                                        <th>Payable</th>
+                                        <th>Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemsBody"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+    <div id="batchModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;">
+        <div style="background:#111827;width:900px;max-width:95%;margin:60px auto;padding:20px;border-radius:16px;border:1px solid #1f2937;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <h3 style="margin:0">Détails du batch</h3>
+                <button class="btn" onclick="closeBatchModal()">Fermer</button>
+            </div>
+
+            <div id="batchModalInfo" class="muted" style="margin-bottom:10px;"></div>
+
+            <div class="table-wrap">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Vendeur</th>
+                            <th>Items</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody id="batchModalBody"></tbody>
+                </table>
+            </div>
+
+            <div style="margin-top:12px;text-align:right;">
+                <button class="btn btnGreen" onclick="exportBatchCSV()">Exporter CSV</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="/assets/js/app.js?v=1000"></script>
+    <script src="/assets/js/admin-vendor-payouts.js?v=1001"></script>
+
+
+
+</body>
+</html>

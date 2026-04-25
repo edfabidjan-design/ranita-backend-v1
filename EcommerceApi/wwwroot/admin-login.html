@@ -1,0 +1,100 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Connexion</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+</head>
+<body>
+    <main class="container" style="padding:18px 12px;">
+        <div class="card" style="max-width:520px;margin:60px auto;">
+            <h1 style="margin:0 0 10px 0;">🔐 Ranita Admin</h1>
+            <div class="muted">Connexion admin (JWT) avec <b>username</b> et <b>mot de passe</b>.</div>
+
+            <div style="margin-top:14px">
+                <label>Username</label>
+                <input id="u" placeholder="ex: admin">
+            </div>
+
+            <div style="margin-top:10px">
+                <label>Mot de passe</label>
+                <input id="p" type="password" placeholder="Mot de passe">
+            </div>
+
+            <button class="btn" id="btn" type="button" style="width:100%;margin-top:14px;">✅ Se connecter</button>
+
+            <button class="btn" id="btnHome" type="button"
+                    style="width:100%;margin-top:10px;background:transparent;border:1px solid rgba(255,255,255,.25);">
+                🌐 Aller à la page d’accueil
+            </button>
+
+            <div id="msg" class="muted" style="margin-top:10px"></div>
+        </div>
+    </main>
+
+    <!-- ✅ UNE SEULE FOIS -->
+    <script src="/assets/js/app.js?v=1000"></script>
+
+    <script>
+        function goByRole(role) {
+            location.replace("/admin-dashboard.html");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const btn = document.getElementById("btn");
+            const msg = document.getElementById("msg");
+
+            async function doLogin() {
+                msg.textContent = "";
+
+                const username = document.getElementById("u").value.trim();
+                const password = document.getElementById("p").value; // ne pas trim
+
+                if (!username || !password) {
+                    msg.textContent = "Username et mot de passe obligatoires.";
+                    return;
+                }
+
+                try {
+                    // ✅ on passe par fetchPublicJson qui gère API_BASE
+                    const data = await window.fetchPublicJson("/api/auth/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    // ✅ stocker token + user
+                    localStorage.setItem("ranita_admin_token", data.token);
+                    localStorage.setItem("ranita_user", JSON.stringify(data.user || {}));
+                    if (data.user?.role) localStorage.setItem("adminRole", data.user.role);
+                    if (data.user?.roleCode) localStorage.setItem("adminRoleCode", data.user.roleCode);
+                    if (data.user?.roleId != null) localStorage.setItem("adminRoleId", String(data.user.roleId));
+
+                    // ✅ redirection fiable (mobile OK) : utilise data.user.role
+                    goByRole(data.user?.role);
+
+                } catch (e) {
+                    msg.textContent = "❌ " + (e.message || e);
+                }
+            }
+
+            btn?.addEventListener("click", doLogin);
+
+            // ✅ Bonus: Enter pour valider (mobile/PC)
+            document.getElementById("p")?.addEventListener("keydown", (ev) => {
+                if (ev.key === "Enter") doLogin();
+            });
+            const btnHome = document.getElementById("btnHome");
+
+            btnHome?.addEventListener("click", () => {
+                // si ton accueil est /index.html mets "/index.html"
+                location.href = "/";
+            });
+        });
+    </script>
+</body>
+</html>

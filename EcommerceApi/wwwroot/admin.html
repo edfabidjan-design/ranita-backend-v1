@@ -1,0 +1,90 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ranita Admin - Commandes</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+</head>
+
+<body>
+    <!-- ✅ Header commun (injecté par app.js) -->
+    <div id="appHeader"></div>
+
+    <main class="container" style="padding:18px 12px;">
+        <h1 style="margin:10px 0 14px 0;">📦 Commandes</h1>
+
+        <div class="card" style="padding:14px;">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th align="left">ID</th>
+                        <th align="left">Client</th>
+                        <th align="left">Ville</th>
+                        <th align="left">Total</th>
+                        <th align="left">Statut</th>
+                        <th align="left">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="rows"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- ✅ Script commun -->
+    <script src="/assets/js/app.js"></script>
+
+    <script>
+        function esc(s) {
+            return String(s ?? "")
+                .replaceAll("&", "&amp;").replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;").replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        async function loadOrders() {
+            const rows = document.getElementById("rows");
+            rows.innerHTML = `<tr><td colspan="6" class="muted">Chargement...</td></tr>`;
+
+            try {
+                // ✅ JWT via fetchJson (Authorization Bearer + X-Admin-Token compat)
+                const data = await fetchJson("/api/admin/orders?ts=" + Date.now(), { cache: "no-store" });
+                const items = data.items || [];
+
+                if (!items.length) {
+                    rows.innerHTML = `<tr><td colspan="6" class="muted">Aucune commande.</td></tr>`;
+                    return;
+                }
+
+                rows.innerHTML = items.map(o => `
+              <tr>
+                <td>${esc(o.id)}</td>
+                <td>${esc(o.fullName || o.client || "")}</td>
+                <td>${esc(o.city || o.ville || "")}</td>
+                <td>${esc(fmtFCFA(o.total))}</td>
+                <td>${esc(o.status || o.statut || "")}</td>
+                <td><a class="btn" href="/admin-order.html?id=${encodeURIComponent(o.id)}">👁️ Voir</a></td>
+              </tr>
+            `).join("");
+
+            } catch (e) {
+                rows.innerHTML = `<tr><td colspan="6" class="muted">Erreur: ${esc(e.message || e)}</td></tr>`;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            // ✅ auth + header + menu
+            requireAdminAuth();
+            renderAdminHeader("orders");
+            applyRoleMenu(); // va cacher/afficher menus selon rôle
+
+            await loadOrders();
+        });
+    </script>
+
+
+</body>
+</html>

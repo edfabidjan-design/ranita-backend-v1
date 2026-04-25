@@ -1,0 +1,389 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Détail commande</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 18px;
+            background: #0b1220;
+            color: #e5e7eb
+        }
+
+        .top {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 14px
+        }
+
+        .btn {
+            padding: 10px 12px;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            background: #111827;
+            color: #e5e7eb;
+            cursor: pointer;
+            font-weight: 700
+        }
+
+        .btnGreen {
+            background: #22c55e;
+            color: #06240f;
+            border: 0
+        }
+
+        .box {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 12px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px
+        }
+
+        @media(max-width:800px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .muted {
+            color: #9ca3af
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #374151;
+            background: #0b1220;
+            color: #e5e7eb
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #1f2937;
+            text-align: left;
+            font-size: 14px
+        }
+
+        th {
+            color: #9ca3af;
+            font-weight: 800
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top">
+        <button class="btn" onclick="history.back()">⬅ Retour</button>
+        <div style="font-size:18px;font-weight:900">🧾 Détail commande</div>
+        <button class="btn" id="btnLogout">🚪 Déconnexion</button>
+    </div>
+
+    <div class="box">
+        <div id="err" class="muted">Chargement...</div>
+    </div>
+
+    <div class="box" id="content" style="display:none">
+        <div class="grid">
+            <div style="display:flex;gap:12px;align-items:center">
+                <img id="orderImg"
+                     src="/assets/placeholder.png"
+                     style="width:70px;height:70px;object-fit:cover;border-radius:12px;border:1px solid #1f2937">
+                <div>
+                    <div class="muted">Commande</div>
+                    <div style="font-size:20px;font-weight:900" id="oid">#</div>
+                    <div class="muted" id="odate"></div>
+                </div>
+            </div>
+            <div>
+                <div class="muted">Statut</div>
+                <select id="status">
+                    <option>EnAttente</option>
+                    <option>EnPreparation</option>
+                    <option>EnLivraison</option>
+                    <option>Livree</option>
+                    <option>Annulee</option>
+                </select>
+                <button class="btn btnGreen" id="btnSave" style="margin-top:10px;width:100%">✅ Mettre à jour le statut</button>
+                <div class="muted" id="saveMsg" style="margin-top:8px"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box" id="clientBox" style="display:none">
+        <div style="font-weight:900;margin-bottom:8px">👤 Client</div>
+        <div class="grid">
+            <div><span class="muted">Nom :</span> <span id="fullName"></span></div>
+            <div><span class="muted">Téléphone :</span> <span id="phone"></span></div>
+            <div><span class="muted">Email :</span> <span id="email"></span></div>
+            <div><span class="muted">Ville :</span> <span id="city"></span></div>
+            <div style="grid-column:1/-1"><span class="muted">Adresse :</span> <span id="address"></span></div>
+            <div style="grid-column:1/-1"><span class="muted">Note :</span> <span id="note"></span></div>
+        </div>
+    </div>
+
+    <div class="box" id="itemsBox" style="display:none">
+        <div style="font-weight:900;margin-bottom:8px">🛒 Produits</div>
+        <div style="overflow:auto">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Produit</th>
+                        <th>PU</th>
+                        <th>Qté</th>
+                        <th>Total</th>
+                        <th>Couleur</th>
+                        <th>Reference</th>
+                        <th>Poids</th>
+                        <th>Dimensions</th>
+
+                    </tr>
+                </thead>
+                <tbody id="items"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="box" id="totalsBox" style="display:none">
+        <div style="font-weight:900;margin-bottom:8px">💰 Totaux</div>
+        <div class="grid">
+            <div><span class="muted">Sous-total :</span> <b id="subTotal"></b></div>
+            <div><span class="muted">Livraison :</span> <b id="delivery"></b></div>
+            <div style="grid-column:1/-1"><span class="muted">TOTAL :</span> <b id="total" style="font-size:18px"></b></div>
+        </div>
+    </div>
+
+    <script src="/assets/js/app.js?v=3001"></script>
+
+
+ 
+
+	<script>
+		function openImgViewer(src) {
+		const box = document.getElementById("imgViewer");
+		const img = document.getElementById("imgViewerSrc");
+		img.src = src;
+		box.style.display = "flex";
+		}
+
+		function closeImgViewer() {
+		document.getElementById("imgViewer").style.display = "none";
+		}
+
+		function fmtMoney(n) {
+		return Number(n || 0).toLocaleString("fr-FR") + " FCFA";
+		}
+
+		function getId() {
+		return new URL(location.href).searchParams.get("id");
+		}
+
+		let currentId = null;
+		let currentOrder = null;
+
+		function applyOrderDetailPermissions() {
+		const canEdit = window.hasPermission?.("orders.edit") === true;
+
+		const statusEl = document.getElementById("status");
+		const btnSave = document.getElementById("btnSave");
+		const saveMsg = document.getElementById("saveMsg");
+
+		if (!canEdit) {
+		if (statusEl) statusEl.disabled = true;
+		if (btnSave) btnSave.style.display = "none";
+		if (saveMsg) {
+		saveMsg.textContent = "Lecture seule : vous pouvez consulter la commande, pas modifier son statut.";
+		}
+		}
+		}
+
+		async function load() {
+		const id = getId();
+		currentId = id;
+
+		if (!id) {
+		document.getElementById("err").textContent = "ID manquant.";
+		return;
+		}
+
+		document.getElementById("err").textContent = "Chargement...";
+
+		try {
+		const data = await fetchJson("/api/admin/orders/" + encodeURIComponent(id));
+		const o = data.item;
+		currentOrder = o;
+
+		if (o.items?.length && o.items[0].imageUrl) {
+		document.getElementById("orderImg").src = o.items[0].imageUrl;
+		}
+
+		document.getElementById("err").textContent = "";
+		document.getElementById("content").style.display = "";
+		document.getElementById("clientBox").style.display = "";
+		document.getElementById("itemsBox").style.display = "";
+		document.getElementById("totalsBox").style.display = "";
+
+		document.getElementById("oid").textContent = "#" + o.id;
+
+		const dt = o.createdAt ? new Date(o.createdAt) : null;
+		document.getElementById("odate").textContent = dt ? dt.toLocaleString("fr-FR") : "";
+
+		document.getElementById("status").value = o.status || "EnAttente";
+
+		document.getElementById("fullName").textContent = o.fullName || "";
+		document.getElementById("phone").textContent = o.phone || "";
+		document.getElementById("email").textContent = o.email || "";
+		document.getElementById("city").textContent = o.city || "";
+		document.getElementById("address").textContent = o.address || "";
+		document.getElementById("note").textContent = o.note || "-";
+
+		const items = document.getElementById("items");
+		items.innerHTML = "";
+
+		(o.items || []).forEach(it => {
+		const tr = document.createElement("tr");
+		const img = it.imageUrl || "/assets/placeholder.png";
+
+		tr.innerHTML = `
+		<td>
+			<img src="${img}"
+				 onclick="openImgViewer('${img}')"
+				 style="width:50px;height:50px;object-fit:cover;cursor:zoom-in;border-radius:8px;border:1px solid #1f2937">
+			</td>
+		<td>${it.name || ""}</td>
+		<td>${fmtMoney(it.price)}</td>
+		<td>${it.qty}</td>
+		<td>
+			<b>${fmtMoney(it.lineTotal)}</b>
+		</td>
+		<td>${it.color || "-"}</td>
+		<td>${it.size || "-"}</td>
+		<td>${it.weightKg ?? "-"}</td>
+		<td>${it.dimensions || "-"}</td>
+		`;
+		items.appendChild(tr);
+		});
+
+		document.getElementById("subTotal").textContent = fmtMoney(o.subTotal);
+		document.getElementById("delivery").textContent = fmtMoney(o.deliveryFee);
+		document.getElementById("total").textContent = fmtMoney(o.total);
+
+		applyOrderDetailPermissions();
+		} catch (e) {
+		document.getElementById("err").textContent = "❌ " + e.message;
+		if (String(e.message).includes("401")) logout();
+		}
+		}
+
+		function vendorHasShipped(order) {
+		const items = order?.items || [];
+		return items.some(x => {
+		const s = String(
+		x.vendorStatus ||
+		x.shippingStatus ||
+		x.deliveryStatus ||
+		x.itemStatus ||
+		""
+		).toLowerCase().trim();
+
+		return s === "enlivraison" || s === "shipping" || s === "shipped" || s === "delivered";
+		});
+		}
+
+		async function saveStatus() {
+		const canEdit = window.hasPermission?.("orders.edit") === true;
+		const msg = document.getElementById("saveMsg");
+
+		if (!canEdit) {
+		msg.textContent = "❌ Vous n'avez pas la permission de modifier cette commande.";
+		return;
+		}
+
+		const st = document.getElementById("status").value;
+
+		if (st === "Livree" && !vendorHasShipped(currentOrder)) {
+		msg.textContent = "❌ Impossible de mettre Livrée : le vendor doit d'abord passer la commande en Shipping.";
+		return;
+		}
+
+		msg.textContent = "⏳ Mise à jour...";
+
+		try {
+		const data = await fetchJson("/api/admin/orders/" + encodeURIComponent(currentId) + "/status", {
+		method: "PUT",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ status: st })
+		});
+
+		msg.textContent = "✅ Statut mis à jour : " + data.status;
+		setTimeout(load, 300);
+		} catch (e) {
+		msg.textContent = "❌ " + e.message;
+		}
+		}
+
+		document.addEventListener("DOMContentLoaded", async () => {
+		if (!window.requireAdminAuth?.()) return;
+
+		try {
+		await window.loadAdminPermissions?.(true);
+		} catch {
+		logout();
+		return;
+		}
+
+		if (!window.requirePermission?.("orders.view")) return;
+
+		document.getElementById("btnLogout").addEventListener("click", logout);
+		document.getElementById("btnSave").addEventListener("click", saveStatus);
+
+		load();
+		});
+	</script>
+
+
+	<!-- 🔍 Image viewer -->
+    <div id="imgViewer"
+         style="display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.85);
+            align-items:center;
+            justify-content:center;
+            z-index:9999;"
+         onclick="closeImgViewer()">
+
+        <img id="imgViewerSrc"
+             style="max-width:90%;
+              max-height:90%;
+              border-radius:14px;
+              box-shadow:0 20px 60px rgba(0,0,0,.6)">
+    </div>
+
+
+
+
+</body>
+</html>

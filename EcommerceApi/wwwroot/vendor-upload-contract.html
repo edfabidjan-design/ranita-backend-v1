@@ -1,0 +1,42 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Vendor - Déposer contrat signé</title>
+    <link rel="stylesheet" href="/css/base.css?v=1" />
+</head>
+<body>
+    <main class="wrap" style="max-width:620px;margin:40px auto;padding:0 14px">
+        <h1 style="margin:0 0 6px">Déposer mon contrat signé</h1>
+        <p class="muted" style="margin:0 0 18px">
+            Téléverse ton contrat vendeur signé au format PDF pour finaliser la validation de ta boutique.
+        </p>
+
+        <div id="msg" class="msg" style="display:none"></div>
+
+        <div class="box" style="padding:18px">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+                <a id="btnViewContract" class="btn" href="#" target="_blank" rel="noopener">
+                    📄 Voir contrat envoyé
+                </a>
+
+                <a id="btnViewSignedContract" class="btn" href="#" target="_blank" rel="noopener">
+                    📎 Voir contrat signé
+                </a>
+            </div>
+
+            <form id="frmUpload">
+                <label for="contractFile">Contrat signé (PDF)</label>
+                <input id="contractFile" type="file" accept=".pdf,application/pdf" required />
+
+                <button class="btn btnGreen" type="submit" style="margin-top:16px;width:100%">
+                    Envoyer le contrat signé
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script src="/assets/js/vendor-upload-contract.js?v=2"></script>
+</body>
+</html>

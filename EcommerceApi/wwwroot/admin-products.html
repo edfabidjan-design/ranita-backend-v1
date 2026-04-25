@@ -1,0 +1,532 @@
+﻿<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Ranita Admin - Produits</title>
+
+		<link rel="stylesheet" href="/css/base.css">
+			<link rel="stylesheet" href="/css/admin.css">
+
+				<style>
+					.form-msg {
+					display: none;
+					margin: 10px 0 0;
+					padding: 10px 12px;
+					border-radius: 12px;
+					font-size: 14px;
+					border: 1px solid rgba(255,255,255,.12);
+					background: rgba(15,23,42,.55);
+					}
+
+					.form-msg.ok {
+					border-color: rgba(34,197,94,.35);
+					}
+
+					.form-msg.err {
+					border-color: rgba(239,68,68,.35);
+					}
+
+					.switch-line {
+					display: flex;
+					gap: 10px;
+					align-items: center;
+					margin: 10px 0 0;
+					font-size: 13px;
+					}
+
+					.preview-card {
+					border-radius: 18px;
+					border: 1px solid rgba(255,255,255,.10);
+					background: rgba(2,6,23,.35);
+					overflow: hidden;
+					min-height: 280px;
+					}
+
+					.preview-img {
+					position: relative;
+					height: 170px;
+					background: rgba(255,255,255,.04);
+					}
+
+					.preview-img img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+					display: block;
+					}
+
+					.preview-badge {
+					position: absolute;
+					left: 12px;
+					top: 12px;
+					padding: 6px 10px;
+					border-radius: 999px;
+					font-size: 12px;
+					font-weight: 700;
+					background: rgba(15,23,42,.75);
+					border: 1px solid rgba(255,255,255,.14);
+					}
+
+					.preview-body {
+					padding: 12px 14px;
+					}
+
+					.preview-title {
+					font-size: 16px;
+					font-weight: 800;
+					}
+
+					.preview-price {
+					margin-top: 6px;
+					font-size: 18px;
+					font-weight: 900;
+					}
+
+					.preview-desc {
+					margin-top: 8px;
+					font-size: 13px;
+					opacity: .85;
+					line-height: 1.35;
+					}
+
+					.preview-meta {
+					margin-top: 10px;
+					font-size: 12px;
+					opacity: .75;
+					display: flex;
+					gap: 10px;
+					flex-wrap: wrap;
+					}
+
+					#variantsTableWrap.is-hidden {
+					display: none;
+					}
+
+					.form-grid {
+					display: grid;
+					grid-template-columns: repeat(3, minmax(0, 1fr));
+					gap: 14px;
+					align-items: start;
+					}
+
+					@media (max-width:1100px) {
+					.form-grid {
+					grid-template-columns: repeat(2, minmax(0, 1fr));
+					}
+					}
+
+					@media (max-width:720px) {
+					.form-grid {
+					grid-template-columns: 1fr;
+					}
+					}
+
+					.span-2 {
+					grid-column: span 2;
+					}
+
+					.span-3 {
+					grid-column: 1 / -1;
+					}
+
+					.helper {
+					margin-top: -6px;
+					font-size: 12px;
+					opacity: .75;
+					}
+
+					.variant-wrap {
+					grid-column: 1 / span 2;
+					}
+
+					@media (max-width:1100px) {
+					.variant-wrap {
+					grid-column: 1 / -1;
+					}
+					}
+
+					.variant-options {
+					display: grid;
+					grid-template-columns: 1fr 1fr;
+					gap: 14px;
+					}
+
+					@media (max-width:900px) {
+					.variant-options {
+					grid-template-columns: 1fr;
+					}
+					}
+
+					.field .muted {
+					margin-top: 6px;
+					font-size: 12px;
+					opacity: .75;
+					}
+
+					#imgGallery {
+					display: grid;
+					gap: 10px;
+					}
+
+					.img-card {
+					border: 1px solid rgba(255,255,255,.10);
+					background: rgba(2,6,23,.28);
+					border-radius: 14px;
+					overflow: hidden;
+					}
+
+					.img-card .thumb {
+					height: 120px;
+					background: rgba(255,255,255,.04);
+					}
+
+					.img-card .thumb img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+					display: block;
+					}
+
+					.img-card .bar {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					padding: 8px 10px;
+					}
+
+					.badge-main {
+					font-size: 12px;
+					font-weight: 800;
+					padding: 4px 8px;
+					border-radius: 999px;
+					border: 1px solid rgba(255,255,255,.12);
+					background: rgba(15,23,42,.65);
+					}
+
+					.img-actions {
+					display: flex;
+					gap: 8px;
+					}
+
+					.prod-thumb {
+					width: 44px;
+					height: 44px;
+					border-radius: 10px;
+					object-fit: cover;
+					border: 1px solid rgba(255,255,255,.12);
+					}
+
+					.q-card {
+					position: relative;
+					border-radius: 14px;
+					overflow: hidden;
+					border: 1px solid rgba(255,255,255,.10);
+					background: rgba(2,6,23,.28);
+					height: 110px;
+					}
+
+					.q-img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+					display: block;
+					}
+
+					.q-del {
+					position: absolute;
+					top: 8px;
+					right: 8px;
+					width: 26px;
+					height: 26px;
+					border-radius: 999px;
+					border: 1px solid rgba(255,255,255,.18);
+					background: rgba(15,23,42,.75);
+					color: #fff;
+					cursor: pointer;
+					}
+
+					.q-badge.main {
+					position: absolute;
+					left: 8px;
+					top: 8px;
+					padding: 4px 8px;
+					border-radius: 999px;
+					font-size: 12px;
+					font-weight: 800;
+					border: 1px solid rgba(255,255,255,.18);
+					background: rgba(15,23,42,.75);
+					}
+				</style>
+			</head>
+
+	<body class="admin-body">
+		<div class="admin-shell">
+			<header class="admin-header">
+				<div id="appHeader"></div>
+			</header>
+
+			<main class="admin-content">
+				<div class="page-admin">
+					<div class="container">
+
+						<section class="dashboard-head">
+							<h1 id="pageTitle"></h1>
+							<p class="dashboard-subtitle">Gestion complète des produits (création, variantes, stock)</p>
+						</section>
+
+						<section class="card table-card">
+							<h2>Ajouter un produit</h2>
+
+							<div class="product-layout">
+								<div class="col-gallery">
+									<div class="card" style="padding:12px;margin-top:12px">
+										<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+											<div>
+												<div style="font-weight:900">Galerie</div>
+												<div class="muted">Ajoute jusqu’à 6 images. La 1ère devient l’image principale.</div>
+											</div>
+											<div class="muted" id="galCount">0 / 6</div>
+										</div>
+
+										<div class="field" style="margin-top:10px">
+											<label for="fileProdImages">Images produit</label>
+											<input id="fileProdImages" type="file" accept="image/*" multiple="" />
+											<div class="muted">Tu peux sélectionner plusieurs images d’un coup.</div>
+										</div>
+
+										<div id="imgQueue" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px"></div>
+									</div>
+
+									<div id="galleryWrap" class="field" style="margin-top:12px">
+										<div id="galleryHint" class="muted">Crée un produit pour gérer sa galerie.</div>
+										<div id="imgGallery" style="margin-top:10px"></div>
+									</div>
+								</div>
+
+								<div class="col-preview">
+									<div class="preview-card">
+										<div class="preview-img">
+											<img id="prevImg" src="/assets/placeholder.png" alt="Aperçu produit" />
+											<span class="preview-badge" id="prevBadge">Actif</span>
+										</div>
+
+										<div class="preview-body">
+											<div class="preview-title" id="prevName">Nom du produit</div>
+											<div class="preview-price" id="prevPrice">0 FCFA</div>
+											<div class="preview-desc" id="prevDesc">Description...</div>
+											<div class="preview-meta">
+												<span id="prevStock">Stock: 0</span>
+												<span id="prevCat">Catégorie: ...</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="card" style="margin-top:16px">
+								<h3>Informations du produit</h3>
+
+								<div class="form-grid">
+									<div class="field">
+										<label for="variantType">Type de variante</label>
+										<select id="variantType">
+											<option value="Simple">Aucune variante (simple)</option>
+											<option value="ColorOnly">Couleur (seulement)</option>
+											<option value="Shoes">Chaussure (Pointure + Couleur)</option>
+											<option value="Clothes">Vêtement (Taille + Couleur)</option>
+											<option value="Phone">Téléphone (Stockage + Couleur)</option>
+											<option value="Appliance">Électroménager (Capacité + Couleur)</option>
+											<option value="Pack">Pack (1 seule option)</option>
+											<option value="PackColor">Pack + Couleur</option>
+										</select>
+
+										<div class="muted" id="variantInfo" style="margin-top:6px">
+											Ça change les libellés et la génération des variantes.
+										</div>
+									</div>
+
+									<div class="field span-2">
+										<label for="selProdCategory">Catégorie</label>
+										<select id="selProdCategory"></select>
+										<div class="muted" style="margin-top:6px">
+											Choisis une sous-catégorie (ex: Mode > Homme > Chaussures)
+										</div>
+										<div id="catInfoForm" class="muted" style="margin-top:6px"></div>
+									</div>
+
+									<div class="field">
+										<label for="selVendor">Boutique vendeur</label>
+										<select id="selVendor">
+											<option value="">— Produit admin / aucune boutique —</option>
+										</select>
+										<div class="muted" style="margin-top:6px">
+											Choisis une boutique si tu veux que le produit apparaisse sur son dashboard.
+										</div>
+									</div>
+
+									<div class="field">
+										<label for="txtProdName">Nom</label>
+										<input id="txtProdName" maxlength="60" placeholder="Ex : Basket Nike" />
+										<div class="muted" id="nameCount">0 / 60</div>
+									</div>
+
+									<div class="field">
+										<label for="txtProdPrice">Prix</label>
+										<input id="txtProdPrice" type="number" min="0" step="1" placeholder="Ex : 25000" />
+									</div>
+
+									<div class="field">
+										<label for="txtProdStock">Stock</label>
+										<input id="txtProdStock" type="number" min="0" step="1" placeholder="Stock" />
+									</div>
+
+									<div class="field">
+										<label for="txtProdPricePromo">Prix promo</label>
+										<input id="txtProdPricePromo" type="number" min="0" step="1" placeholder="Ex : 20000" />
+									</div>
+
+									<div class="field">
+										<label for="txtProdBrand">Marque</label>
+										<input id="txtProdBrand" placeholder="Ex : Nike" />
+									</div>
+
+									<div class="field span-2">
+										<label for="txtProdSku">SKU (référence)</label>
+										<input id="txtProdSku" placeholder="Ex : NK-12345" />
+									</div>
+
+									<div class="field">
+										<label for="txtProdDimensions">Dimensions</label>
+										<input id="txtProdDimensions" placeholder="Ex : 30x20x10 cm" />
+									</div>
+
+									<div class="field variant-wrap">
+										<div class="variant-options">
+											<div class="field" id="sizesBlock">
+												<label id="lblSizes" for="inpSize">Pointures</label>
+												<div class="tagbox" id="sizesBox">
+													<input id="inpSize" list="dlSizes" placeholder="Ex: 36, 37... (Entrée pour ajouter)">
+                                            </div>
+												<datalist id="dlSizes"></datalist>
+												<input type="hidden" id="hidSizes" value="">
+													<div class="muted">Sépare par Enter.</div>
+												</div>
+
+											<div class="field" id="colorsBlock">
+												<label id="lblColors" for="inpColor">Couleurs</label>
+												<div class="tagbox" id="colorsBox">
+													<input id="inpColor" list="dlColors" placeholder="Ex: Noir, Blanc... (Entrée pour ajouter)">
+                                            </div>
+												<datalist id="dlColors"></datalist>
+												<input type="hidden" id="hidColors" value="">
+													<div class="muted">Sépare par Enter.</div>
+												</div>
+										</div>
+									</div>
+
+									<div class="field">
+										<label for="txtProdWeightKg">Poids (Kg)</label>
+										<input id="txtProdWeightKg" type="number" min="0" step="0.01" placeholder="Ex : 1.25" />
+									</div>
+
+									<section class="card span-3" style="margin-top:14px">
+										<div class="top" style="margin-bottom:10px">
+											<h3 id="variantTitle" style="margin:0">Stocks par variante (Pointure × Couleur)</h3>
+											<div style="display:flex;gap:8px;flex-wrap:wrap">
+												<button type="button" class="btn" id="btnGenVariants">Générer</button>
+												<button type="button" class="btn btn-primary" id="btnSaveVariants">Enregistrer variantes</button>
+											</div>
+										</div>
+
+										<div class="muted" id="variantsHint">Ajoute des pointures et couleurs, puis clique sur Générer.</div>
+
+										<div class="table-wrap" id="variantsTableWrap" style="margin-top:10px">
+											<table id="variantsTable">
+												<thead>
+													<tr>
+														<th id="thVar1" style="width:140px">Option 1</th>
+														<th id="thVar2" style="width:140px">Option 2</th>
+														<th style="width:160px">Stock</th>
+													</tr>
+												</thead>
+												<tbody id="variantsTbody"></tbody>
+											</table>
+										</div>
+									</section>
+
+									<div class="card span-3" style="margin-top:12px">
+										<h3 style="margin:0 0 10px 0">Attributs</h3>
+										<div id="dynAttrsBox" class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:10px"></div>
+									</div>
+
+									<div class="field span-3">
+										<label for="txtProdShort">Description courte</label>
+										<textarea id="txtProdShort" rows="2" placeholder="Résumé court (1-2 lignes)"></textarea>
+									</div>
+
+									<div class="field span-3">
+										<label for="txtProdDesc">Description</label>
+										<textarea id="txtProdDesc" rows="4" placeholder="Description détaillée du produit..."></textarea>
+									</div>
+
+									<div class="field span-3">
+										<label for="txtProdLong">Description longue</label>
+										<textarea id="txtProdLong" rows="6" placeholder="Description complète…"></textarea>
+									</div>
+
+									<div class="field span-3">
+										<label for="txtProdHighlights">Highlights (points clés)</label>
+										<textarea id="txtProdHighlights" rows="3" placeholder="- Point 1&#10;- Point 2"></textarea>
+									</div>
+								</div>
+
+								<label class="switch-line">
+									<input type="checkbox" id="chkActive" checked="" />
+									<span>Produit actif (visible côté public)</span>
+								</label>
+
+								<div id="prodMsg" class="form-msg" aria-live="polite"></div>
+
+								<div class="actions">
+									<button class="btn btn-primary" id="btnProdCreate" type="button">Créer</button>
+									<button class="btn" id="btnProdReset" type="button">Réinitialiser</button>
+								</div>
+							</div>
+						</section>
+
+						<section class="card table-card">
+							<h2>Produits de la catégorie</h2>
+							<div id="productsList" class="muted">Chargement...</div>
+						</section>
+
+					</div>
+				</div>
+			</main>
+		</div>
+
+		<div id="appModal" class="modal" aria-hidden="true">
+			<div class="modal__backdrop" data-act="close"></div>
+
+			<div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+				<div class="modal__head">
+					<div class="modal__icon" id="modalIcon">✅</div>
+
+					<div>
+						<div class="modal__title" id="modalTitle">Titre</div>
+						<div class="modal__desc" id="modalDesc" style="display:none">Description</div>
+					</div>
+
+					<button type="button" class="modal__x" data-act="close" aria-label="Fermer">×</button>
+				</div>
+
+				<div class="modal__actions">
+					<button type="button" class="btn modal__btn" data-act="close">OK</button>
+				</div>
+			</div>
+		</div>
+
+		<script src="/assets/js/app.js?v=1000"></script>
+		<script src="/assets/js/admin-products.js?v=20260215_99" defer=""></script>
+	</body>
+</html>

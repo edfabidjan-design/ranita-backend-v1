@@ -1,0 +1,933 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita - Validation commande</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 16px;
+            background: #0b1220;
+            color: #e5e7eb
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px
+        }
+
+        .btn {
+            padding: 10px 12px;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            background: #111827;
+            color: #e5e7eb;
+            cursor: pointer;
+            font-weight: 800
+        }
+
+        .btnG {
+            background: #22c55e;
+            color: #06240f;
+            border: 0
+        }
+
+        .box {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 12px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px
+        }
+
+        @media(max-width:900px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #374151;
+            background: #0b1220;
+            color: #e5e7eb;
+            box-sizing: border-box
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical
+        }
+
+        .muted {
+            color: #9ca3af
+        }
+
+        .line {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #1f2937
+        }
+
+            .line:last-child {
+                border-bottom: none
+            }
+
+        .tabOn {
+            border-color: #f59e0b !important;
+            box-shadow: 0 0 0 2px rgba(245,158,11,.18) inset;
+        }
+
+        .locked {
+            opacity: .55;
+            pointer-events: none;
+            filter: grayscale(0.2);
+        }
+
+        .btn-login {
+            background: #1f2937;
+            border: 1px solid #374151;
+            color: #e5e7eb;
+        }
+        /* Connexion sur 1 ligne (desktop) */
+        /* Connexion sur 1 ligne (desktop) */
+        #loginForm.loginRow {
+            grid-template-columns: 1.2fr 1fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+            /* Message sous la ligne */
+            #loginForm.loginRow #authMsg {
+                grid-column: 1 / -1;
+            }
+
+
+        /* Mobile : retour en colonne */
+        @media (max-width: 900px) {
+            #loginForm.loginRow {
+                grid-template-columns: 1fr !important;
+            }
+
+                #loginForm.loginRow button {
+                    width: 100% !important;
+                }
+        }
+
+        a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+            a:visited {
+                color: #ffffff;
+            }
+
+            a:hover {
+                color: #22c55e;
+            }
+    </style>
+</head>
+<body>
+    <div class="top">
+        <button class="btn" onclick="location.href='/cart.html'">⬅ Retour panier</button>
+        <div style="font-weight:900">✅ Validation commande</div>
+    </div>
+
+    <div class="box" id="cartBox">
+        <div style="font-weight:900;margin-bottom:8px">🛒 Résumé</div>
+        <div id="cartLines" class="muted">Chargement...</div>
+
+        <div style="margin-top:10px" class="grid">
+            <div>
+                <div class="muted">Sous-total</div>
+                <div style="font-size:18px;font-weight:900" id="sub">0 FCFA</div>
+            </div>
+            <div>
+                <div class="muted">Livraison</div>
+                <div style="font-size:18px;font-weight:900" id="del">0 FCFA</div>
+            </div>
+            <div style="grid-column:1/-1">
+                <div class="muted">TOTAL</div>
+                <div style="font-size:22px;font-weight:900" id="tot">0 FCFA</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box" id="authBox">
+        <div style="font-weight:900;margin-bottom:8px">🔐 Compte client</div>
+
+        <div class="grid" style="margin-bottom:10px">
+            <button class="btn" id="tabLogin">J’ai déjà un compte</button>
+            <button class="btn" id="tabRegister">Créer un compte</button>
+        </div>
+
+
+        <!-- Connexion -->
+        <!-- Connexion -->
+        <div id="loginForm" class="loginRow" autocomplete="off">
+
+            <!-- piège Chrome -->
+            <input type="text" style="display:none">
+            <input type="password" style="display:none">
+
+            <input id="loginId"
+                   name="no_autofill_user"
+                   autocomplete="off"
+                   placeholder="Téléphone ou Email *" />
+
+            <input id="loginPwd"
+                   name="no_autofill_pass"
+                   type="password"
+                   autocomplete="new-password"
+                   placeholder="Mot de passe *" />
+
+            <button class="btn btn-login" id="btnLogin">✅ Se connecter</button>
+            <div class="muted" id="authMsg"></div>
+        </div>
+
+
+
+        <!-- Inscription -->
+        <div id="registerForm" class="grid" style="display:none">
+            <input id="regName" placeholder="Nom complet *" />
+            <input id="regPhone" placeholder="Téléphone *" />
+            <input id="regEmail" placeholder="Email " style="grid-column:1/-1" />
+            <input id="regPwd" type="password" placeholder="Mot de passe *" />
+            <input id="regPwd2" type="password" placeholder="Confirmer mot de passe *" />
+            <button class="btn btnG" id="btnRegister" style="grid-column:1/-1">✅ Créer mon compte</button>
+            <div class="muted" id="regMsg" style="grid-column:1/-1"></div>
+        </div>
+
+        <div class="box">
+            <div style="font-weight:900;margin-bottom:8px">💳 Mode de paiement</div>
+
+            <div style="padding:10px;border:1px solid #1f2937;border-radius:12px">
+                <b>✔ Paiement à la livraison</b><br>
+                <span class="muted">
+                    Vous payez en espèces à la réception du produit.
+                </span>
+            </div>
+        </div>
+
+        <div class="muted" id="authOk" style="display:none;margin-top:10px">
+            ✅ Connecté. Tu peux confirmer ta commande.
+        </div>
+    </div>
+
+    <div class="muted" style="margin-top:8px;text-align:center">
+        📞 Un agent vous contactera pour confirmer votre commande
+    </div>
+
+    <div class="box">
+        <div style="font-weight:900;margin-bottom:8px">👤 Informations client</div>
+
+        <div class="grid">
+            <input id="fullName" autocomplete="off" placeholder="Nom complet *" />
+            <input id="phone" autocomplete="off" placeholder="Téléphone *" />
+            <input id="email" autocomplete="off" placeholder="Email *" style="grid-column:1/-1" />
+
+            <input id="city" autocomplete="off" list="cities" placeholder="Ville / Commune *" style="grid-column:1/-1" />
+            <datalist id="cities"></datalist>
+
+
+            <input id="address" autocomplete="off" placeholder="Adresse / Quartier *" style="grid-column:1/-1" />
+            <textarea id="note" autocomplete="off" placeholder="Note (optionnel)"></textarea>
+
+
+        </div>
+
+        <button class="btn btnG" id="btnSend" style="margin-top:12px;width:100%">
+            ✅ Confirmer la commande
+        </button>
+
+        <div class="muted" id="msg" style="margin-top:10px"></div>
+    </div>
+
+    <script src="/assets/js/app.js?v=1001"></script>
+
+    <!-- ✅ OBLIGATOIRE: panier (getCart/saveCart/...) -->
+    <script src="/assets/js/cart-core.js?v=1000"></script>
+
+    <!-- ✅ OBLIGATOIRE si tu utilises apiCreateOrder -->
+    <script src="/assets/js/api.js?v=1000"></script>
+    <script>
+
+        let _renderToken = 0;
+
+        const getCartSafe = () => (typeof window.getCart === "function" ? window.getCart() : []);
+        const saveCartSafe = (cart) => (typeof window.saveCart === "function" ? window.saveCart(cart) : localStorage.setItem("ranita_cart", JSON.stringify(cart || [])));
+        // =========================
+        // Sécurités globales
+        // =========================
+        const fmtFCFA_safe = (n) =>
+            (typeof window.fmtFCFA === "function")
+                ? window.fmtFCFA(n)
+                : Number(n || 0).toLocaleString("fr-FR") + " FCFA";
+
+        const norm = (s) => (s || "")
+            .toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .trim();
+
+        // =========================
+        // Livraison
+        // =========================
+        const LIVRAISON_PAR_VILLE = {
+            //"abidjan": 1500,
+            "cocody": 1500,
+            "angre": 1500,
+            "riviera": 1500,
+            "palmeraie": 1500,
+            "abatta": 1500,
+            "adjame": 1500,
+
+            "yopougon": 1500,
+            "plateau": 1500,
+            "marcory": 1500,
+
+            "abobo": 2000,
+            "koumassi": 2000,
+            "treichville": 2000,
+            "port-bouet": 2000,
+            "bingerville": 2000,
+            "anyama": 2000,
+            "grand_bassam": 2000,
+
+            "bouake": 2500,
+            "yamoussoukro": 2500,
+            "toumodi": 2500,
+            "tiebissou": 2500,
+            "soubre": 3000,
+            "san_pedro": 3000,
+            "sassandra": 3000,
+            "tiassalé": 2000,
+            "dimbokro": 3000,
+            "abgoville": 3000,
+            "anyama": 3000,
+            "daloa": 3000,
+            "man": 4000,
+            "guiglo": 3000,
+            "duokoue": 3000,
+            "zuenoula": 3500,
+            "gagnoa": 3000,
+            "daloa": 3000,
+            "korhogo": 3000,
+            "boundiali": 3000,
+            "tingrela": 3000,
+            "ferkessedougou": 3000,
+            "aboisso": 3000,
+            "odienne": 4000,
+
+            "retrait sur place": 0,
+            "retrait": 0
+        };
+
+        function getLivraisonFromVille(ville) {
+            const v = norm(ville);
+            if (!v) return 0;
+            if (v.includes("retrait")) return 0;
+
+            if (LIVRAISON_PAR_VILLE[v] != null) return LIVRAISON_PAR_VILLE[v];
+
+            // tolérance: si l'utilisateur tape un début (ex: "abid")
+            const keys = Object.keys(LIVRAISON_PAR_VILLE);
+            const found = keys.find(k => k.startsWith(v));
+            if (found) return LIVRAISON_PAR_VILLE[found];
+
+            return 7000; // fallback si inconnu
+        }
+
+        function fillCityDatalist() {
+            const dl = document.getElementById("cities");
+            if (!dl) return;
+
+            dl.innerHTML = "";
+
+            const keys = Object.keys(LIVRAISON_PAR_VILLE)
+                .filter(k => k)
+                .sort((a, b) => a.localeCompare(b, "fr"));
+
+            keys.forEach(k => {
+                const opt = document.createElement("option");
+                opt.value = k.replace(/\b\w/g, c => c.toUpperCase());
+                dl.appendChild(opt);
+            });
+        }
+
+        // =========================
+        // AUTH client (token)
+        // =========================
+        const CLIENT_TOKEN_KEY = "ranita_client_token";
+        const CLIENT_KEY = "ranita_client_user";   // ✅ comme le header
+
+        const API = (window.API_BASE || location.origin);
+
+        async function fetchClientJson(url, options = {}) {
+            const token = localStorage.getItem("ranita_client_token") || "";
+
+            const res = await fetch(API + url, {
+                ...options,
+                headers: {
+                    ...(options.headers || {}),
+                    ...(token ? { Authorization: "Bearer " + token } : {})
+                },
+                cache: "no-store"
+            });
+
+            // ✅ token expiré / invalide => on force login proprement
+            if (res.status === 401) {
+                localStorage.removeItem("ranita_client_token");
+                localStorage.removeItem("ranita_client_user");
+                const returnUrl = encodeURIComponent(location.pathname + location.search);
+                location.href = "/client-login.html?returnUrl=" + returnUrl;
+                return null;
+            }
+
+            const text = await res.text();
+            const data = text ? JSON.parse(text) : null;
+
+            if (!res.ok || data?.ok === false) {
+                const fullMsg =
+                    data?.inner2 ||
+                    data?.inner ||
+                    data?.message ||
+                    ("HTTP " + res.status);
+
+                throw new Error(fullMsg);
+            }
+
+            return data;
+        }
+
+        function setClientToken(t) {
+            if (!t) localStorage.removeItem(CLIENT_TOKEN_KEY);
+            else localStorage.setItem(CLIENT_TOKEN_KEY, t);
+        }
+        function getClientToken() {
+            return localStorage.getItem(CLIENT_TOKEN_KEY) || "";
+        }
+        function setClientUser(u) {
+            if (!u) localStorage.removeItem(CLIENT_KEY);
+            else localStorage.setItem(CLIENT_KEY, JSON.stringify(u));
+        }
+        function getClientUser() {
+            try { return JSON.parse(localStorage.getItem(CLIENT_KEY) || "null"); } catch { return null; }
+        }
+        function lockShipping(lock) {
+            ["fullName", "phone", "email", "city", "address", "note"].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.disabled = !!lock;
+                el.classList.toggle("locked", !!lock);
+                if (lock) el.value = ""; // option: vider pour éviter illusion
+            });
+        }
+
+
+        function applyAuthUI(isAuthed) {
+            const authBox = document.getElementById("authBox");
+            const btnSend = document.getElementById("btnSend");
+            const msg = document.getElementById("msg");
+
+            if (isAuthed) {
+                authBox.style.display = "none";
+                btnSend.disabled = false;
+                msg.textContent = "";
+                // ❌ ne bloque plus les champs
+            } else {
+                authBox.style.display = "block";
+                btnSend.disabled = false; // ✅ on laisse cliquer
+                msg.textContent = "🔐 Connecte-toi pour confirmer (tes infos restent saisies).";
+                // ❌ lockShipping(false) -> on enlève le blocage
+                showTab("login");
+            }
+        }
+
+
+
+
+
+        function fillClientFieldsFromUser(u) {
+            if (!u) return;
+            const fullName = document.getElementById("fullName");
+            const phone = document.getElementById("phone");
+            const email = document.getElementById("email");
+
+            // On ne remplace pas si l'utilisateur a déjà tapé
+            if (fullName && !fullName.value) fullName.value = u.fullName || u.name || "";
+            if (phone && !phone.value) phone.value = u.phone || "";
+            if (email && !email.value) email.value = u.email || "";
+        }
+
+        async function apiLoginSafe(login, password) {
+            const res = await fetch("/api/auth/client/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ login, password })
+            });
+
+            const text = await res.text();
+            let json = null; try { json = text ? JSON.parse(text) : null; } catch { }
+            if (!res.ok) throw new Error(json?.message || "Erreur login");
+            return json;
+        }
+
+
+        async function apiRegisterSafe(dto) {
+            const res = await fetch("/api/auth/client/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dto)
+            });
+
+            const text = await res.text();
+            let json = null; try { json = text ? JSON.parse(text) : null; } catch { }
+            if (!res.ok) throw new Error(json?.message || "Erreur inscription");
+            return json;
+        }
+
+
+        function showTab(which) {
+            const tabLogin = document.getElementById("tabLogin");
+            const tabRegister = document.getElementById("tabRegister");
+            const loginForm = document.getElementById("loginForm");
+            const registerForm = document.getElementById("registerForm");
+
+            if (which === "login") {
+                tabLogin.classList.add("tabOn");
+                tabRegister.classList.remove("tabOn");
+
+                loginForm.style.display = "grid";
+                registerForm.style.display = "none";
+            } else {
+                tabRegister.classList.add("tabOn");
+                tabLogin.classList.remove("tabOn");
+
+                registerForm.style.display = "grid";
+                loginForm.style.display = "none";
+            }
+        }
+
+
+        async function doLogin() {
+            const msg = document.getElementById("authMsg");
+            const login = document.getElementById("loginId")?.value.trim();
+            const password = document.getElementById("loginPwd")?.value;
+
+            if (!login) return alert("Téléphone ou Email obligatoire.");
+            if (!password) return alert("Mot de passe obligatoire.");
+
+            if (msg) msg.textContent = "⏳ Connexion...";
+            try {
+                const res = await apiLoginSafe(login, password);
+                const token = res?.token || res?.accessToken || "";
+                const user = res?.user || res?.client || null;
+
+                if (!token) throw new Error("Token manquant (API).");
+
+                setClientToken(token);
+                setClientUser(user);
+
+                fillClientFieldsFromUser(user);
+                applyAuthUI(true);
+
+                if (msg) msg.textContent = "✅ Connecté.";
+            } catch (e) {
+                if (msg) msg.textContent = "❌ " + (e.message || e);
+            }
+        }
+
+        async function doRegister() {
+            const msg = document.getElementById("regMsg");
+            const fullName = document.getElementById("regName")?.value.trim();
+            const phone = document.getElementById("regPhone")?.value.trim();
+            const email = document.getElementById("regEmail")?.value.trim();
+
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                return msg.textContent = "❌ Email invalide";
+            }
+
+            const pwd = document.getElementById("regPwd")?.value;
+            const pwd2 = document.getElementById("regPwd2")?.value;
+
+            if (!fullName) return alert("Nom complet obligatoire.");
+            if (!/^0\d{9}$/.test(phone)) {
+                return alert("Numéro invalide (ex: 07XXXXXXXX)");
+            }
+            if (!pwd) return alert("Mot de passe obligatoire.");
+            if (pwd !== pwd2) return alert("Les mots de passe ne correspondent pas.");
+
+            if (msg) msg.textContent = "⏳ Création du compte...";
+            try {
+                const res = await apiRegisterSafe({ fullName, phone, email, password: pwd });
+                const token = res?.token || res?.accessToken || "";
+                const user = res?.user || res?.client || { fullName, phone, email };
+
+                if (!token) throw new Error("Token manquant (API).");
+
+                setClientToken(token);
+                setClientUser(user);
+
+                // pré-remplir ton formulaire checkout
+                document.getElementById("fullName").value = fullName;
+                document.getElementById("phone").value = phone;
+                if (email) document.getElementById("email").value = email;
+
+                applyAuthUI(true);
+                if (msg) msg.textContent = "✅ Compte créé et connecté.";
+            } catch (e) {
+                if (msg) msg.textContent = "❌ " + (e.message || e);
+            }
+        }
+
+
+        // =========================
+        // Produits / prix
+        // =========================
+        async function apiGetProductsSafe() {
+            if (typeof window.apiGetProducts === "function") return await window.apiGetProducts();
+            const res = await fetch("/api/products", { cache: "no-store" });
+            const json = await res.json();
+            if (!res.ok) throw new Error("api/products => " + res.status);
+            return json;
+        }
+
+        function effectivePrice(p) {
+            const price = Number(p.price ?? p.Price ?? 0);
+            const promo = Number(p.pricePromo ?? p.PricePromo ?? 0);
+            return (promo > 0 && promo < price) ? promo : price;
+        }
+
+        // =========================
+        // Rendu résumé panier
+        // =========================
+        async function renderCartSummary() {
+            const myToken = ++_renderToken;          // ✅ identifiant unique pour cet appel
+
+            const cart = (typeof window.getCart === "function") ? window.getCart() : [];
+            const box = document.getElementById("cartLines");
+            if (!box) return;
+
+            // ✅ On ne touche pas au DOM tout de suite: on attend les données
+            // (sinon les appels concurrents se mélangent)
+
+            // ✅ recharge les prix depuis l’API (optionnel)
+            const priceById = new Map();
+            try {
+                const data = await apiGetProductsSafe();
+
+                // ✅ si un nouvel appel a commencé pendant qu'on attendait -> on STOP
+                if (myToken !== _renderToken) return;
+
+                const list = Array.isArray(data) ? data : (data.items || []);
+                list.forEach(p => {
+                    const id = Number(p.id ?? p.Id ?? 0);
+                    if (id > 0) priceById.set(id, effectivePrice(p));
+                });
+            } catch (e) {
+                // fallback: prix du panier
+                console.warn("API products failed, fallback:", e);
+            }
+
+            // ✅ si un nouvel appel a commencé -> stop
+            if (myToken !== _renderToken) return;
+
+            // ✅ Maintenant seulement on applique le rendu (1 seul rendu final)
+            box.replaceChildren();
+
+            if (!cart.length) {
+                box.innerHTML = `
+<div class="muted">
+        🛒 Votre panier est vide<br>
+        👉 <a href="/products.html">Découvrir nos produits</a>
+</div>`;
+
+                document.getElementById("sub").textContent = fmtFCFA_safe(0);
+                document.getElementById("del").textContent = fmtFCFA_safe(0);
+                document.getElementById("tot").textContent = fmtFCFA_safe(0);
+                return;
+            }
+
+            let sub = 0;
+
+            for (const it of cart) {
+                const unit = priceById.get(Number(it.id)) ?? Number(it.price || 0);
+                const total = unit * (Number(it.qty) || 0);
+                sub += total;
+
+                const div = document.createElement("div");
+                div.className = "line";
+                div.innerHTML = `
+                      <div><b>${it.name}</b> <span class="muted">x${it.qty}</span></div>
+                      <div><b>${fmtFCFA_safe(total)}</b></div>
+                    `;
+                box.appendChild(div);
+            }
+
+            const ville = document.getElementById("city")?.value || "";
+            const del = getLivraisonFromVille(ville);
+
+            document.getElementById("sub").textContent = fmtFCFA_safe(sub);
+            document.getElementById("del").textContent = fmtFCFA_safe(del);
+            document.getElementById("tot").textContent = fmtFCFA_safe(sub + del);
+        }
+        // =========================
+        // Envoi commande
+        // =========================
+        async function apiCreateOrderSafe(payload) {
+            const data = await fetchClientJson("/api/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            if (!data) return null; // redirection login en cours
+            return data;
+        }
+        async function sendOrder() {
+            if (window.__sending) return;
+
+            const msg = document.getElementById("msg");
+            const btn = document.getElementById("btnSend");
+
+            if (msg) {
+                msg.textContent = "";
+                msg.style.color = "";
+            }
+
+            const token = getClientToken();
+
+            if (!token) {
+                const a = document.getElementById("authBox");
+                if (a) a.scrollIntoView({ behavior: "smooth", block: "start" });
+
+                if (msg) {
+                    msg.textContent = "🔒 Merci de te connecter pour confirmer la commande.";
+                    msg.style.color = "#ef4444";
+                }
+                return;
+            }
+
+            const cart = getCartSafe();
+            if (!cart.length) {
+                alert("Panier vide.");
+                return;
+            }
+
+            const fullName = (document.getElementById("fullName")?.value || "").trim();
+            const phone = (document.getElementById("phone")?.value || "").trim();
+            const email = (document.getElementById("email")?.value || "").trim();
+            const city = (document.getElementById("city")?.value || "").trim();
+            const address = (document.getElementById("address")?.value || "").trim();
+            const note = (document.getElementById("note")?.value || "").trim();
+
+            if (!fullName) {
+                msg.textContent = "❌ Nom complet obligatoire";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            if (!/^0\d{9}$/.test(phone)) {
+                msg.textContent = "❌ Numéro invalide (ex: 07XXXXXXXX)";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                msg.textContent = "❌ Email invalide";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            if (!city) {
+                msg.textContent = "❌ Ville obligatoire";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            if (!address) {
+                msg.textContent = "❌ Adresse obligatoire";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            const addressClean = address.trim();
+            const digitsOnly = addressClean.replace(/\D/g, "");
+            const lettersOnly = addressClean.replace(/[^a-zA-ZÀ-ÿ]/g, "");
+            const words = addressClean.split(/\s+/).filter(Boolean);
+
+            if (addressClean.length < 3) {
+                msg.textContent = "❌ Adresse trop courte";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            if (/^(225)?0\d{9}$/.test(digitsOnly)) {
+                msg.textContent = "❌ Ne mets pas le numéro de téléphone dans l’adresse";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            if (lettersOnly.length < 3 && digitsOnly.length >= 8) {
+                msg.textContent = "❌ Saisis une vraie adresse, pas seulement un numéro";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            if (words.length === 1 && digitsOnly.length >= 8 && lettersOnly.length < 3) {
+                msg.textContent = "❌ Adresse invalide. Exemple : Cocody Angré 8e tranche";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            const cityNorm = norm(city);
+            const known = Object.keys(LIVRAISON_PAR_VILLE).some(
+                k => norm(k) === cityNorm || norm(k).startsWith(cityNorm)
+            );
+
+            if (!known && !cityNorm.includes("retrait")) {
+                msg.textContent = "❌ Ville/Commune non reconnue. Choisis une suggestion.";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            const deliveryRaw = getLivraisonFromVille(city);
+            const deliveryFee =
+                Number(String(deliveryRaw || "0").replace(/\s/g, "").replace(",", ".")) || 0;
+
+            const items = cart.map(x => ({
+                productId: Number(x.id || 0),
+                qty: Number(x.qty || 0),
+                variantId: Number(x.variantId || 0)
+            }));
+
+            if (items.some(i => !i.productId || !i.qty)) {
+                msg.textContent = "❌ Panier invalide";
+                msg.style.color = "#ef4444";
+                msg.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+
+            const payload = { fullName, phone, email, city, address, note, deliveryFee, items };
+
+            window.__sending = true;
+
+            try {
+                if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = "⏳ Envoi...";
+                }
+
+                msg.textContent = "⏳ Confirmation en cours...";
+                msg.style.color = "#9ca3af";
+
+                const res = await apiCreateOrderSafe(payload);
+                if (!res) return;
+
+                if (window.saveCart) window.saveCart([]);
+                else localStorage.removeItem("ranita_cart");
+
+                if (window.__fullProdCache) {
+                    window.__fullProdCache.clear();
+                }
+
+                const id = res?.orderId || res?.id || "";
+                location.href = "/thankyou.html?id=" + encodeURIComponent(id);
+            } catch (e) {
+                console.error("ORDER ERROR:", e);
+                msg.textContent = "❌ " + (e.message || e);
+                msg.style.color = "#ef4444";
+                alert((e && e.message) ? e.message : "Erreur commande");
+            } finally {
+                window.__sending = false;
+
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = "✅ Confirmer la commande";
+                }
+            }
+        }
+
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            fillCityDatalist();
+
+            // ✅ Auth au chargement
+            const token = getClientToken();
+            const user = getClientUser();
+            const isAuthed = !!token && !!user;
+
+            if (isAuthed) {
+                fillClientFieldsFromUser(user);
+                applyAuthUI(true);
+            } else {
+                setClientToken("");
+                setClientUser(null);
+                applyAuthUI(false);
+
+                ["fullName", "phone", "email", "city", "address", "note"].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = "";
+                });
+            }
+
+            // ✅ Tabs
+            document.getElementById("tabLogin")?.addEventListener("click", (e) => { e.preventDefault(); showTab("login"); });
+            document.getElementById("tabRegister")?.addEventListener("click", (e) => { e.preventDefault(); showTab("register"); });
+
+            // ✅ Boutons login/register
+            document.getElementById("btnLogin")?.addEventListener("click", (e) => { e.preventDefault(); doLogin(); });
+            document.getElementById("btnRegister")?.addEventListener("click", (e) => { e.preventDefault(); doRegister(); });
+
+            showTab("login");
+
+            // ✅ Livraison recalcul si ville change
+            const cityEl = document.getElementById("city");
+            if (cityEl) {
+                cityEl.addEventListener("input", renderCartSummary);
+                cityEl.addEventListener("change", renderCartSummary);
+            }
+
+            await renderCartSummary();
+
+            // ✅ Confirmer commande
+            document.getElementById("btnSend")?.addEventListener("click", (e) => {
+                e.preventDefault();
+                sendOrder();
+            });
+        });
+
+
+    </script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita - Mes retours</title>
+    <link rel="stylesheet" href="/css/base.css?v=1" />
+</head>
+<body>
+
+    <div id="siteHeader"></div>
+
+    <main class="wrap" style="padding:18px 16px">
+        <div class="box">
+            <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+                <div style="font-weight:950;font-size:22px">↩️ Mes retours</div>
+
+                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end">
+                    <select id="status" class="btn btnGhost">
+                        <option value="">Tous</option>
+                        <option value="Requested">En attente</option>
+                        <option value="Approved">Accepté</option>
+                        <option value="Rejected">Refusé</option>
+                        <option value="Received">Reçu</option>
+                        <option value="Refunded">Remboursé</option>
+                        <option value="Closed">Clôturé</option>
+                    </select>
+
+                    <input id="q" class="btn btnGhost" placeholder="Recherche (retourId, commandeId…)"
+                           style="min-width:260px;text-align:left" />
+
+                    <button class="btn btnGhost" id="btnReload">Rafraîchir</button>
+                </div>
+            </div>
+
+            <div id="list" class="muted" style="margin-top:10px">Chargement…</div>
+        </div>
+    </main>
+
+    <!-- modal détail -->
+    <div id="modal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:9999">
+        <div style="width:min(860px,94vw);max-height:86vh;overflow:auto;background:#0b1220;border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:14px;box-shadow:0 18px 50px rgba(0,0,0,.45);color:#e5e7eb">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                <div style="font-weight:900">↩️ Détail du retour</div>
+                <button id="mClose" class="btn btnGhost" type="button">Fermer</button>
+            </div>
+            <div id="mBody" style="margin-top:12px;display:grid;gap:10px"></div>
+        </div>
+    </div>
+
+    <script src="/assets/js/app.js?v=1" defer></script>
+    <script src="/assets/js/client-auth.js?v=1" defer></script>
+    <script src="/assets/js/client-guard.js?v=1" defer></script>
+    <script src="/assets/js/my-returns.js?v=1" defer></script>
+
+
+
+
+</body>
+</html>

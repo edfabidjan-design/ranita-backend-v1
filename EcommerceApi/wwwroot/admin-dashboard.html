@@ -1,0 +1,506 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranita Admin - Dashboard</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <style>
+        :root {
+            --bg: #0b1220;
+            --panel: #0f172a;
+            --card: #111c31;
+            --border: rgba(255,255,255,.10);
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --accent: #22c55e;
+            --accent2: #38bdf8;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 10px 30px rgba(0,0,0,.25);
+            --radius: 18px;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        .wrap {
+            max-width: 1450px;
+            margin: 0 auto;
+            padding: 18px;
+        }
+
+        .dashHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .dashTitle {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: .2px;
+        }
+
+        .dashSub {
+            color: var(--muted);
+            margin-top: 4px;
+            font-size: 14px;
+        }
+
+        .btnRefresh {
+            border: 1px solid var(--border);
+            background: #162032;
+            color: var(--text);
+            border-radius: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+            .btnRefresh:hover {
+                background: #1b2940;
+            }
+
+        .kpiGrid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .kpiCard {
+            padding: 16px;
+            min-height: 112px;
+        }
+
+        .kpiLabel {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .kpiValue {
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .kpiFoot {
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .gridCharts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .panel {
+            padding: 16px;
+        }
+
+        .panelTitle {
+            font-size: 18px;
+            font-weight: 900;
+            margin-bottom: 14px;
+        }
+
+        .chartBox {
+            height: 320px;
+        }
+
+        .list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .item {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(255,255,255,.02);
+        }
+
+        .itemTop {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .itemTitle {
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .itemMeta {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 800;
+            border: 1px solid transparent;
+        }
+
+        .bPending {
+            background: rgba(245, 158, 11, .15);
+            color: #fbbf24;
+            border-color: rgba(245, 158, 11, .25);
+        }
+
+        .bDelivery {
+            background: rgba(56, 189, 248, .15);
+            color: #7dd3fc;
+            border-color: rgba(56, 189, 248, .25);
+        }
+
+        .bDone {
+            background: rgba(34, 197, 94, .15);
+            color: #86efac;
+            border-color: rgba(34, 197, 94, .25);
+        }
+
+        .bDanger {
+            background: rgba(239, 68, 68, .15);
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, .25);
+        }
+
+        .alertItem {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,.02);
+        }
+
+        .alertLeft {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .alertSeverity {
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+        }
+
+        .sev-info {
+            color: #7dd3fc;
+        }
+
+        .sev-warning {
+            color: #fbbf24;
+        }
+
+        .sev-danger {
+            color: #fca5a5;
+        }
+
+        a.linkBtn {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .emptyState {
+            color: var(--muted);
+            font-size: 14px;
+            padding: 10px 0;
+        }
+
+        #dashboardError {
+            margin-top: 10px;
+            color: #fca5a5;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1200px) {
+            .kpiGrid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .grid2, .gridCharts {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .kpiGrid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .lastUpdate {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(255,255,255,.03);
+        }
+
+        .btnRefresh {
+            border: 1px solid rgba(34, 197, 94, .25);
+            background: linear-gradient(180deg, rgba(34,197,94,.18), rgba(34,197,94,.08));
+            color: #dcfce7;
+            border-radius: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 800;
+            transition: .2s ease;
+        }
+
+            .btnRefresh:hover {
+                transform: translateY(-1px);
+                background: linear-gradient(180deg, rgba(34,197,94,.25), rgba(34,197,94,.12));
+                box-shadow: 0 10px 20px rgba(34,197,94,.12);
+            }
+
+        .gridNotifAlert {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+            align-items: start;
+        }
+
+        @media (max-width: 1100px) {
+            .gridNotifAlert {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+
+        .mapBox {
+            height: 600px;
+        }
+
+        #salesMap {
+            width: 100%;
+            height: 100%;
+            min-height: 600px;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+
+        .city-label {
+            background: rgba(15,23,42,.92);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,.18);
+            padding: 3px 6px;
+            font-size: 12px;
+            border-radius: 6px;
+            box-shadow: 0 6px 16px rgba(0,0,0,.25);
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+
+        <header class="admin-header">
+            <div id="appHeader"></div>
+        </header>
+
+        <main class="admin-content">
+            <div class="page-admin">
+                <div class="container">
+
+                    <section class="dashboard-head">
+                        <h1 id="pageTitle"></h1>
+                        <p class="dashboard-subtitle">
+                            Vue globale des ventes, commissions, commandes et alertes Ranita
+                        </p>
+                    </section>
+
+                    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px">
+                        <div id="lastDashboardUpdate" class="lastUpdate">Dernière mise à jour : --:--:--</div>
+                        <button class="btnRefresh" id="btnRefreshDashboard">Actualiser</button>
+                    </div>
+
+                    <div id="dashboardError"></div>
+
+                    <section class="kpiGrid">
+                        <div class="card kpiCard">
+                            <div class="kpiLabel">Commandes aujourd’hui</div>
+                            <div class="kpiValue" id="kpiOrdersToday">-</div>
+                            <div class="kpiFoot">Nombre de commandes créées aujourd’hui</div>
+                        </div>
+
+                        <div class="card kpiCard">
+                            <div class="kpiLabel">Commandes du mois</div>
+                            <div class="kpiValue" id="kpiOrdersMonth">-</div>
+                            <div class="kpiFoot">Total commandes du mois en cours</div>
+                        </div>
+
+                        <div class="card kpiCard">
+                            <div class="kpiLabel">CA aujourd’hui</div>
+                            <div class="kpiValue" id="kpiRevenueToday">-</div>
+                            <div class="kpiFoot">Montant brut validé aujourd’hui</div>
+                        </div>
+
+                        <div class="card kpiCard">
+                            <div class="kpiLabel">CA du mois</div>
+                            <div class="kpiValue" id="kpiRevenueMonth">-</div>
+                            <div class="kpiFoot">Montant brut du mois en cours</div>
+                        </div>
+
+                        <div class="card kpiCard">
+                            <div class="kpiLabel">Commission aujourd’hui</div>
+                            <div class="kpiValue" id="kpiCommissionToday">-</div>
+                            <div class="kpiFoot">Gain plateforme du jour</div>
+                        </div>
+
+                        <div class="card kpiCard">
+                            <div class="kpiLabel">Commission du mois</div>
+                            <div class="kpiValue" id="kpiCommissionMonth">-</div>
+                            <div class="kpiFoot">Gain plateforme du mois</div>
+                        </div>
+
+                        <div class="card kpiCard">
+                            <div class="kpiLabel">Commandes en attente</div>
+                            <div class="kpiValue" id="kpiPendingOrders">-</div>
+                            <div class="kpiFoot">À traiter rapidement</div>
+                        </div>
+
+                        <div class="card kpiCard">
+                            <div class="kpiLabel">Retours à traiter</div>
+                            <div class="kpiValue" id="kpiReturnsToProcess">-</div>
+                            <div class="kpiFoot">Demandes clients en attente</div>
+                        </div>
+
+                        <div class="card kpiCard">
+                            <div class="kpiLabel">Produits actifs</div>
+                            <div class="kpiValue" id="kpiActiveProducts">-</div>
+                            <div class="kpiFoot">Catalogue actuellement actif</div>
+                        </div>
+
+                        <div class="card kpiCard">
+                            <div class="kpiLabel">Vendeurs actifs</div>
+                            <div class="kpiValue" id="kpiActiveVendors">-</div>
+                            <div class="kpiFoot">Comptes vendeurs opérationnels</div>
+                        </div>
+                    </section>
+
+                    <section class="gridCharts">
+                        <div class="card panel">
+                            <div class="panelTitle">Ventes par jour (7 jours)</div>
+                            <div class="chartBox">
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card panel">
+                            <div class="panelTitle">Commissions par jour (7 jours)</div>
+                            <div class="chartBox">
+                                <canvas id="commissionsChart"></canvas>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="gridCharts">
+                        <div class="card panel">
+                            <div class="panelTitle">Top produits vendus</div>
+                            <div class="chartBox">
+                                <canvas id="topProductsChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card panel">
+                            <div class="panelTitle">Top vendeurs</div>
+                            <div class="chartBox">
+                                <canvas id="topVendorsChart"></canvas>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div class="card panel" style="margin-bottom:18px">
+                            <div class="panelTitle">Carte Côte d’Ivoire — ventes par ville</div>
+                            <div class="chartBox" style="height:600px">
+                                <div id="salesMap"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="gridNotifAlert">
+                        <div class="card panel">
+                            <div class="panelTitle">Notifications admin</div>
+                            <div id="notificationsList" class="list"></div>
+                        </div>
+
+                        <div class="card panel">
+                            <div class="panelTitle">Alertes opérationnelles</div>
+                            <div id="alertsList" class="list"></div>
+                        </div>
+                    </section>
+
+                </div>
+        </main>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- 🔥 FIREBASE (OBLIGATOIRE) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+
+    <!-- TON APP -->
+    <script src="/assets/js/app.js?v=2"></script>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="/assets/js/admin-dashboard.js"></script>
+
+
+</body>
+</html>
