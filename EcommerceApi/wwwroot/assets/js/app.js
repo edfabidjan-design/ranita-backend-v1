@@ -8,7 +8,7 @@
     const TOKEN_KEY = "ranita_admin_token";
     const USER_KEY = "ranita_user";
     // ✅ API_BASE = même domaine que la page (localhost sur PC, ngrok sur mobile)
-    const API_BASE = location.origin;
+    const API_BASE = "https://ranita-backend-v1.onrender.com";
     window.API_BASE = API_BASE;
     window.API = API_BASE;
 
