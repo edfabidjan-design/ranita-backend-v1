@@ -212,44 +212,21 @@ app.MapGet("/debug/connection", (AppDbContext db) =>
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
     //await DbSeeder.SeedCommissionSettingsAsync(db);
 }
 
-// ✅ Bootstrap SuperAdmin
+// ✅ Bootstrap SuperAdmin désactivé temporairement
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
-
-    var superName = builder.Configuration["BootstrapAdmin:Username"] ?? "superadmin";
-    var superPwd = builder.Configuration["BootstrapAdmin:Password"] ?? "admin1234";
-
-    var exists = db.Users.Any(u => u.Username == superName);
-    if (!exists)
-    {
-        db.Users.Add(new User
-        {
-            Username = superName,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(superPwd),
-            Role = "SuperAdmin",
-            IsActive = true
-        });
-
-        db.SaveChanges();
-        Console.WriteLine($"✅ SuperAdmin créé: {superName}");
-    }
+    // db.Database.Migrate();
 }
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
-
-
-// wwwroot
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
@@ -261,8 +238,8 @@ Directory.CreateDirectory(uploadsPath);
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(uploadsPath),
-    RequestPath = "/uploads"
+FileProvider = new PhysicalFileProvider(uploadsPath),
+RequestPath = "/uploads"
 });
 // /uploads
 
