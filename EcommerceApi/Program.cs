@@ -219,12 +219,24 @@ using (var scope = app.Services.CreateScope())
 // ✅ Bootstrap SuperAdmin désactivé temporairement
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    //db.Database.Migrate();
+        Console.WriteLine("🚀 MIGRATION DB...");
+        db.Database.Migrate();
 
-    await DbSeeder.SeedSuperAdminAsync(db); // 🔥 AJOUT IMPORTANT
+        Console.WriteLine("🚀 SEED ADMIN...");
+        await DbSeeder.SeedSuperAdminAsync(db);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("❌ ERREUR STARTUP");
+        Console.WriteLine(ex.ToString());
+    }
 }
+
+
 
 app.UseSwagger();
 app.UseSwaggerUI();
