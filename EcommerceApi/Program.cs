@@ -252,6 +252,13 @@ app.MapControllers();
 app.MapHub<EcommerceApi.Hubs.ClientNotifHub>("/hubs/client-notifs");
 
 // SEO fallbacks (TOUJOURS EN DERNIER)
+app.MapControllers();
+
+// 🔥 Swagger DOIT être avant fallback
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// SEO fallbacks (APRÈS TOUT)
 app.MapFallbackToFile("/c/{*slug}", "products.html");
 app.MapFallbackToFile("{*path:nonfile}", "home.html");
 
