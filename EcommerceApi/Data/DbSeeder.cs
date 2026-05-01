@@ -15,10 +15,38 @@ public static class DbSeeder
             db.Settings.Add(new Setting
             {
                 Key = key,
-                Value = "0.10", // 10% par défaut
+                Value = "0.10",
                 UpdatedAt = DateTime.UtcNow
             });
+
             await db.SaveChangesAsync();
         }
+    }
+
+    public static async Task SeedSuperAdminAsync(AppDbContext db)
+    {
+        Console.WriteLine("🔎 Vérification SuperAdmin...");
+
+        var exists = await db.Users.AnyAsync(u =>
+            u.Username == "superadmin" || u.Role == "SuperAdmin");
+
+        if (exists)
+        {
+            Console.WriteLine("ℹ️ SuperAdmin existe déjà.");
+            return;
+        }
+
+        db.Users.Add(new User
+        {
+            Username = "superadmin",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
+            Role = "SuperAdmin",
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
+        });
+
+        await db.SaveChangesAsync();
+
+        Console.WriteLine("✅ SuperAdmin créé automatiquement : superadmin / admin123");
     }
 }
