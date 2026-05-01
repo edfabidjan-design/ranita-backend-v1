@@ -13,7 +13,7 @@ using QuestPDF.Infrastructure;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-s
+
 QuestPDF.Settings.License = LicenseType.Community;
 
 var projectRoot = Path.GetFullPath(
