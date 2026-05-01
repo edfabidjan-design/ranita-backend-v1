@@ -5,7 +5,7 @@
 namespace EcommerceApi.Migrations
 {
     /// <inheritdoc />
-    public partial class SyncExistingDatabase : Migration
+    public partial class InitClean2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

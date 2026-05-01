@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcommerceApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260315160155_AddHomeEventCampaigns")]
-    partial class AddHomeEventCampaigns
+    [Migration("20260501182450_InitClean2")]
+    partial class InitClean2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -328,6 +328,47 @@ namespace EcommerceApi.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("EcommerceApi.Models.CustomerPasswordReset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsUsed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("LoginValue")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ResetCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("CustomerPasswordResets", (string)null);
+                });
+
             modelBuilder.Entity("EcommerceApi.Models.CustomerReview", b =>
                 {
                     b.Property<int>("Id")
@@ -590,6 +631,112 @@ namespace EcommerceApi.Migrations
                     b.HasIndex("IsActive", "DisplayOrder");
 
                     b.ToTable("HeroSlides", (string)null);
+                });
+
+            modelBuilder.Entity("EcommerceApi.Models.HomeEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AutoActivate")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AutoScheduleType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BackgroundColor")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("BadgeText")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<string>("ButtonLink")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ButtonText")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DayEnd")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DayStart")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DesktopImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSeasonal")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MobileImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("MonthEnd")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MonthStart")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SeasonKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Subtitle")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("TargetType")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("TextColor")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("HomeEvents");
                 });
 
             modelBuilder.Entity("EcommerceApi.Models.HomeEventCampaign", b =>
@@ -1058,6 +1205,9 @@ namespace EcommerceApi.Migrations
                     b.Property<string>("DimensionsSnapshot")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsSeenByVendor")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsVendorPaid")
                         .HasColumnType("bit");
 
@@ -1101,6 +1251,9 @@ namespace EcommerceApi.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("VariantId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("VendorAmount")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -1131,6 +1284,8 @@ namespace EcommerceApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("VariantId");
 
                     b.HasIndex("VendorId");
 
@@ -2004,6 +2159,41 @@ namespace EcommerceApi.Migrations
                     b.ToTable("VendorDailyStats");
                 });
 
+            modelBuilder.Entity("EcommerceApi.Models.VendorPasswordReset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ResetCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VendorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VendorId");
+
+                    b.ToTable("VendorPasswordResets");
+                });
+
             modelBuilder.Entity("EcommerceApi.Models.VendorPayout", b =>
                 {
                     b.Property<int>("Id")
@@ -2311,6 +2501,9 @@ namespace EcommerceApi.Migrations
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal(5,2)");
 
+                    b.Property<string>("ContractPdfPath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -2330,12 +2523,30 @@ namespace EcommerceApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("SignedAgreementReceived")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("SignedAgreementReceivedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SignedContractPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("SignedContractReceivedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<bool>("TermsEmailSent")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("TermsEmailSentAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("WalletUpdatedAt")
                         .HasColumnType("datetime2");
@@ -2507,6 +2718,17 @@ namespace EcommerceApi.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("EcommerceApi.Models.CustomerPasswordReset", b =>
+                {
+                    b.HasOne("EcommerceApi.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("EcommerceApi.Models.District", b =>
                 {
                     b.HasOne("EcommerceApi.Models.City", "City")
@@ -2546,6 +2768,16 @@ namespace EcommerceApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("EcommerceApi.Models.HomeEvent", b =>
+                {
+                    b.HasOne("EcommerceApi.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("EcommerceApi.Models.HomeEventCampaign", b =>
@@ -2620,6 +2852,11 @@ namespace EcommerceApi.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EcommerceApi.Models.ProductVariant", "Variant")
+                        .WithMany()
+                        .HasForeignKey("VariantId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Vendor", "Vendor")
                         .WithMany()
                         .HasForeignKey("VendorId")
@@ -2634,6 +2871,8 @@ namespace EcommerceApi.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Variant");
 
                     b.Navigation("Vendor");
 
@@ -2833,6 +3072,17 @@ namespace EcommerceApi.Migrations
                 });
 
             modelBuilder.Entity("EcommerceApi.Models.VendorDailyStat", b =>
+                {
+                    b.HasOne("Vendor", "Vendor")
+                        .WithMany()
+                        .HasForeignKey("VendorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vendor");
+                });
+
+            modelBuilder.Entity("EcommerceApi.Models.VendorPasswordReset", b =>
                 {
                     b.HasOne("Vendor", "Vendor")
                         .WithMany()
