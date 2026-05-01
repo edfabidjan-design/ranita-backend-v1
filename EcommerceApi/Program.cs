@@ -13,7 +13,7 @@ using QuestPDF.Infrastructure;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
+s
 QuestPDF.Settings.License = LicenseType.Community;
 
 var projectRoot = Path.GetFullPath(
@@ -224,14 +224,14 @@ using (var scope = app.Services.CreateScope())
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         Console.WriteLine("🚀 MIGRATION DB...");
-        db.Database.Migrate();
+        await db.Database.MigrateAsync();
 
         Console.WriteLine("🚀 SEED ADMIN...");
         await DbSeeder.SeedSuperAdminAsync(db);
     }
     catch (Exception ex)
     {
-        Console.WriteLine("❌ ERREUR STARTUP");
+        Console.WriteLine("❌ ERREUR STARTUP DB");
         Console.WriteLine(ex.ToString());
     }
 }
